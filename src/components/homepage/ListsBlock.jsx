@@ -1,0 +1,26 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+function ListsBlock({ classname, title, items = [], buttonLabel, redirectTo }) {
+    const navigate = useNavigate(); 
+
+    const handleButtonClick = () => {
+        navigate(redirectTo); 
+    };
+
+    return (
+        <div className={classname}>
+            <h2 className="title">{title}</h2>
+            <ul>
+                {items.map((item) => (
+                    <li key={item.id}>{item.name}</li>
+                ))}
+            </ul>
+            {buttonLabel && redirectTo && (
+                <button className="bottom-button" onClick={handleButtonClick}>{buttonLabel}</button>
+            )}
+        </div>
+    );
+}
+
+export default ListsBlock;
