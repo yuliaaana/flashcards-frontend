@@ -13,7 +13,7 @@ function ListsBlock({ classname, title, items = [], buttonLabel, redirectTo }) {
             <h2 className="title">{title}</h2>
             <ul>
                 {items.map((item) => (
-                    <li key={item.id}>{item.name}</li>
+                    <li className="list" key={item.id}>{item.name}</li>
                 ))}
             </ul>
             {buttonLabel && redirectTo && (
