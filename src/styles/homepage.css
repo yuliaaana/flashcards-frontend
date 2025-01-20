@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(-45deg, #0330897a, #22abd97f, #8dd9e67f, #3daeb88a);
+    background: linear-gradient(-45deg, #033089a8, #22abd9a5, #8dd9e6ac, #3daeb8af);
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
     height: 100vh;
@@ -96,7 +96,7 @@ body {
 .div6-home {
     background: rgba(255, 255, 255, 0.39);
     border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(16.7px);
     -webkit-backdrop-filter: blur(16.7px);
 }
@@ -123,7 +123,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 100px 20px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
     text-align: center;
 
 }

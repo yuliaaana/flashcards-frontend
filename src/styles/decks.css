@@ -1,0 +1,155 @@
+html {
+    height:100%;
+  }
+  
+  body {
+    margin:0;
+  }
+  
+  .bg {
+    animation:slide 8s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #22abd97f 50%, #8dd9e67f 50%);
+    bottom:0;
+    left:-50%;
+    opacity:.5;
+    position:fixed;
+    right:-50%;
+    top:0;
+    z-index:-1;
+  }
+  
+  .bg2 {
+    animation-direction:alternate-reverse;
+    animation-duration:8s;
+  }
+  
+  .bg3 {
+    animation-duration:8s;
+  }
+  
+
+  
+  @keyframes slide {
+    0% {
+      transform:translateX(-25%);
+    }
+    100% {
+      transform:translateX(25%);
+    }
+  }
+
+
+.decks-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
+  }
+  
+  .decks-items:nth-child(1) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .decks-items:nth-child(2) {
+    display: block;
+    flex-grow: 4;
+    flex-shrink: 6;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+
+  }
+
+  .decks{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: normal;
+    align-items: normal;
+    align-content: normal;
+  }
+  
+  .deck{
+    padding: 10px 20px 10px 20px;
+    margin:25px;
+   
+    border: 5px; 
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+
+
+}
+
+
+  .decks-items:nth-child(3) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+
+
+
+  .buttons-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: normal;
+    align-items: normal;
+    align-content: normal;
+    border: 15px;
+  }
+
+
+  .buttons-items {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+    font-family: "Montserrat";
+    font-size: 14px;
+    padding: 15px 20px;
+    margin: 2.0rem 0.5rem 0.5rem 0.5rem;
+    border-radius: 10px;
+    border: 5px; 
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+  }
+  .buttons-items:hover {
+    
+    background: #20a0caa5;
+    
+  }
+  
+.title-deck {
+    font-family: "Montserrat", sans-serif;
+    color: #333; 
+    font-size: 2.5rem; 
+    font-weight: bold; 
+    text-align: center; 
+    margin: 20px 0; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+.name{
+    font-weight: bold;
+}
+  
