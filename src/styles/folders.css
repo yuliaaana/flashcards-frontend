@@ -176,7 +176,7 @@ html {
 
 
 
-li {
+.list {
   font-family: "Montserrat", sans-serif;
   color: #333; 
   font-size: 1rem;
@@ -186,7 +186,7 @@ li {
   transition: all 0.3s ease; 
 }
 
-li::before {
+.list::before {
   content: "•";
   position: absolute;
   left: 0;
@@ -197,12 +197,12 @@ li::before {
   transition: all 0.3s ease; 
 }
 
-li:hover {
+.list:hover {
   font-weight: bold;
   color: #033089a8;
 }
 
-li:hover::before {
+.list:hover::before {
   content: "▸"; 
   font-size: 1.7rem; 
   color: #033089a8; 

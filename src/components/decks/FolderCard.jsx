@@ -14,7 +14,7 @@ export default function FolderCard({className,created_at,name,decks}){
                 <h6>Decks:</h6>
                 <ul>
                     {decks.map((item) => (
-                        <li key={item.id}>{item.name}</li>
+                        <li className="list" key={item.id}>{item.name}</li>
                     ))}
                 </ul>
                 </div>

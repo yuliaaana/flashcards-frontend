@@ -1,0 +1,262 @@
+
+
+.createfolder-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: normal;
+    
+
+  }
+  
+  .createfolder-items:nth-child(1) {
+    display: block;
+    flex-grow: 2;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+
+  }
+  
+  .createfolder-items:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 2;
+    flex-shrink: 6;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+    padding: 25px;
+    margin:25px 25px 55px 25px;
+
+    border: 5px; 
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+
+  }
+  
+.inputs{
+  flex-grow: 1;
+  
+  display: flex;
+    flex-direction: column;
+}
+
+.title-main {
+  font-family: "Montserrat", sans-serif;
+  color: #34678f; 
+  font-size: 2.0rem; 
+  font-weight: bold; 
+  text-align: center; 
+}
+
+
+.title-checkbox {
+  font-family: "Montserrat", sans-serif;
+  color: #34678f; 
+  font-size: 1.4rem; 
+  font-weight: bold; 
+  
+}
+.inputs section {
+  margin-top: 25px;
+}
+
+
+.description{
+  height: 20rem;
+}
+
+.decks-bullet{
+  flex-grow: 1;
+  margin-left: 100px;
+  margin-top: 45px;
+
+  padding-left: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+
+  background: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(25.7px);
+    -webkit-backdrop-filter: blur(25.7px);
+
+}
+
+
+
+
+  .createfolder-items:nth-child(3) {
+    display: block;
+    flex-grow: 2;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+
+  }
+
+/*label 
+{
+    
+    
+    transition: transform 0.3s ease,
+    color 0.3s ease
+}
+
+input:focus+label{
+    transform: translateY(-25px);
+    color:blue
+}*/
+
+.did-floating-label-content { 
+  position:relative; 
+  margin-bottom:20px; 
+  
+}
+.did-floating-label {
+ 
+  font-size:13px;
+  font-weight:normal;
+  position:absolute;
+  pointer-events:none;
+  left:15px;
+  top:11px;
+  padding:0 5px;
+  background:#fff;
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+  font-family: "Montserrat", sans-serif;
+  color: #333333bc; 
+  font-weight: bold;
+}
+.did-floating-input, .did-floating-select {
+  font-size: 12px;
+  display: block;
+  width: 100%;
+  height: 36px;
+  padding: 20px 20px;
+  background: #fff;
+  
+  color: #323840;
+  border: 2px solid #468dc3;
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+.did-floating-input:focus,
+.did-floating-select:focus,
+.did-floating-input:not(:placeholder-shown),
+.did-floating-select:not(:placeholder-shown) {
+  outline: none;
+}
+
+.did-floating-input:focus ~ .did-floating-label,
+.did-floating-select:focus ~ .did-floating-label,
+.did-floating-input:not(:placeholder-shown) ~ .did-floating-label,
+.did-floating-select:not(:placeholder-shown) ~ .did-floating-label {
+  top: -8px;
+  font-size: 13px;
+  color: #468dc3;
+}
+
+
+
+/* Скидаємо стандартні стилі для списку (буллети) */
+.checkbox-list {
+  list-style-type: none;  /* Прибирає маркери (буллети) */
+  padding: 0;  /* Забирає відступи для списку */
+  margin: 0;  /* Забирає відступи для списку */
+  
+}
+
+
+
+/* Можна додати додаткове стилізування для елементів списку */
+.checkbox-list li {
+  padding: 8px 0;  /* Відстань між елементами */
+  font-family: "Montserrat", sans-serif;
+  color: #333; 
+  font-size: 1rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.2s ease;
+}
+
+.checkbox-text {
+  margin-left: 8px;
+  transition: color 0.2s ease;
+}
+
+.checkbox-label:hover .checkbox-text {
+  color: #1d8cb1;
+}
+
+/* Optional: style the checkbox itself */
+.checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+}
+
+/* Optional: style for selected items */
+.checkbox-label input[type="checkbox"]:checked + .checkbox-text {
+  color: #1d8cb1;
+  font-weight: 500;
+}
+
+
+
+.title {
+
+  font-family: "Montserrat", sans-serif;
+  color: #333; 
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+
+.checkbox-list input[type="checkbox"] {
+  margin-right: 10px; /* Відстань між чекбоксом та текстом */
+}
+
+
+.create-button{display:flex;
+  margin-top: auto;
+}
+
+.create-button button{
+  padding: 10px 20px;
+  width: 100%;
+    background-color: #1d8cb1b1;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s;}
+
+    .create-button button:hover {
+      background-color: #468dc3;
+  }
+  
+
+
+
+
+  @keyframes move {
+    100% {
+        transform: translate3d(0, 0, 1px) rotate(360deg);
+    }
+}
+
