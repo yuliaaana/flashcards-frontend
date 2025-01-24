@@ -1,45 +1,35 @@
-import React from "react";
-import "../../styles/createdeck.css";
+import "../../styles/decks.css";
+import React, { useEffect, useState } from 'react';
 
 // Modified to accept props
-export default function Flashcard({ id, onChange }) {
-  const handleInputChange = (field, value) => {
-    onChange(id, field, value);
+export default function Flashcard({ back_description, back_title, confidence_level, created_at, deck_id, front_title, id, image_url, last_reviewed, review_count }) {
+  const [isFlipped, setIsFlipped] = useState(false); // Стан для відображення front або back
+
+  const handleCardClick = () => {
+    setIsFlipped(!isFlipped); // Перемикаємо стан при натисканні
   };
 
   return (
-    <div className="flashcard">
-      <div className="flashcard-input-group flashcard-items">
-        <label className="flashcard-input-underlined">
-          <input 
-            required 
-            onChange={(e) => handleInputChange('front', e.target.value)}
-          />
-          <span className="flashcard-input-label">Enter a front title</span>
-        </label>
+    <div className="flashcard-deck">
+  <div className={`flashcard-deck-items ${isFlipped ? "flipped" : ""}`} onClick={handleCardClick}>
+    {!isFlipped ? (
+      <div className="front">
+        <h5>{front_title}</h5>
       </div>
-
-      <div className="flashcard-back flashcard-items">
-        <div className="flashcard-input-group flashcard-items">
-          <label className="flashcard-input-underlined">
-            <input 
-              required 
-              onChange={(e) => handleInputChange('back', e.target.value)}
-            />
-            <span className="flashcard-input-label">Enter a back title</span>
-          </label>
-        </div>
-
-        <div className="flashcard-input-group flashcard-items">
-          <label className="flashcard-input-underlined">
-            <input 
-              required 
-              onChange={(e) => handleInputChange('description', e.target.value)}
-            />
-            <span className="flashcard-input-label">Enter description</span>
-          </label>
-        </div>
+    ) : (
+      <div className="back">
+        <h5>{back_title}</h5>
+        <p>{back_description}</p>
       </div>
-    </div>
+    )}
+  </div>
+
+  <div className="flashcard-actions">
+    <button className="btn"><i className="material-icons">edit</i></button>
+    <button className="btn"><i className="material-icons">delete</i></button>
+  </div>
+</div>
+
+
   );
 }

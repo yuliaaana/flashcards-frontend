@@ -2,7 +2,7 @@ import Header from './components/homepage/Header';
 import './styles/createdeck.css';
 import "./styles/createfolderbackground.css";
 import React, { useState, useEffect } from "react";
-import Flashcard from './components/creates/Flashcard';
+import FlashcardInput from './components/creates/FlashcardInput';
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateDeckPage(){
@@ -93,7 +93,7 @@ export default function CreateDeckPage(){
 
               <section className="flashcards">
                 {flashcards.map(card => (
-                  <Flashcard
+                  <FlashcardInput
                     key={card.id}
                     id={card.id}
                     onChange={handleFlashcardChange}

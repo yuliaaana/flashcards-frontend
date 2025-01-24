@@ -1,0 +1,94 @@
+.deck-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
+    margin: 20px;
+    
+  }
+  
+  .deck-items:nth-child(1) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .deck-items:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 6;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+    padding: 25px 25px 0px 25px;
+    margin-bottom: 15px;
+  }
+
+  .deck-items:nth-child(3) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+
+  .flashcard-deck {
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .flashcard-deck-items {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .flashcard-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: auto;
+  }
+  
+  .btn {
+    margin: 5px;
+  }
+  
+
+  .flashcard-deck{
+    border: 5px; 
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10.7px);
+      -webkit-backdrop-filter: blur(16.7px);
+
+  }
+
+  h4.title-deck {
+    font-family: "Montserrat", sans-serif;
+    color: #333; 
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    text-align: center; 
+    margin: 20px 0; 
+    text-transform: uppercase;
+  }
+

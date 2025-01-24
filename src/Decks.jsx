@@ -22,6 +22,8 @@ export default function Decks(){
             })
             .then((data) => {
               if (data.decks) {
+                console.log("xexe")
+                console.log(data.decks)
                 setDecks(data.decks);
               } else {
                 console.error('Invalid data format:', data);
