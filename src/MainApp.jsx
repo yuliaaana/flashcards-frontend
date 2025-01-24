@@ -5,6 +5,7 @@ import CreateDeckPage from './CreateDeckPage';
 import Profile from './Profile'; 
 import CreateFolderPage from './CreateFolderPage'; 
 import Decks from './Decks'; 
+import Deck from './Deck'; 
 import Folders from './Folders'; 
 
 
@@ -18,6 +19,7 @@ export default function MainApp() {
       <Route path="/create-folder" element={<CreateFolderPage />} />
 
       <Route path="/decks" element={<Decks />} />
+      <Route path="/deck/:deckId" element={<Deck />} />
       <Route path="/folders" element={<Folders />} />
     </Routes>
   );
