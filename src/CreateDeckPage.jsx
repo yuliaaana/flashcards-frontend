@@ -10,7 +10,6 @@ export default function CreateDeckPage(){
   const [deckName, setDeckName] = useState("");
   const [flashcards, setFlashcards] = useState([{ id: 1, front: '', back: '', description: '' }]);
 
-  // Handle flashcard input changes
   const handleFlashcardChange = (id, field, value) => {
     setFlashcards(prevCards => 
       prevCards.map(card => 
@@ -19,7 +18,6 @@ export default function CreateDeckPage(){
     );
   };
 
-  // Add new flashcard
   const addFlashcard = () => {
     setFlashcards(prev => [...prev, {
       id: prev.length + 1,
@@ -41,8 +39,6 @@ export default function CreateDeckPage(){
       alert('Please add at least one complete flashcard');
       return;
     }
-
-    // Filter out empty flashcards
     const validFlashcards = flashcards.filter(card => card.front && card.back);
 
     fetch('http://127.0.0.1:5000/api/create-deck', {

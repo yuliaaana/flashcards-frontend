@@ -5,7 +5,7 @@ export default function DeckCard({ className, created_at, creator, name, terms, 
   const navigate = useNavigate();
 
   const handleStartStudying = () => {
-    navigate(`/deck/${id}`); // Перехід на сторінку дека
+    navigate(`/deck/${id}`); 
   };
 
   return (
