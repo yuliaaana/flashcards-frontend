@@ -1,4 +1,4 @@
-import "../../styles/decks.css";
+import "../../styles/deck.css";
 import React, { useEffect, useState } from 'react';
 
 // Modified to accept props

@@ -3,6 +3,7 @@ import Header from './components/homepage/Header';
 import ListsBlock from './components/homepage/ListsBlock';
 import DecksBlock from './components/homepage/DecksBlock';
 import './styles/homepage.css';
+/*import "./styles/createfolderbackground.css";*/
 
 function HomePage() {
   const [folders, setFolders] = useState([]);
@@ -39,12 +40,56 @@ function HomePage() {
 
   return (
     <>
+    
       <Header />
+      <div class="background"> 
+      <section><span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   </section>
       <div className="parent-home">
           <ListsBlock classname="div3-home" title="Your decks" items={decks} buttonLabel="Go to Decks" redirectTo="/decks"/>
           <ListsBlock classname="div4-home" title="Your folders" items={folders} buttonLabel="Go to Folders" redirectTo="/folders"/>
           <DecksBlock classname="div5-home" title="Last viewed"/>
           <DecksBlock classname="div6-home" title="Popular public decks"/>
+      </div>
       </div>
     </>
   );
