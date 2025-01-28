@@ -4,10 +4,9 @@ import "./styles/createfolderbackground.css";
 import ListsCheckbox from './components/creates/ListsCheckbox';
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import AnimatedBackground from './components/AnimatedBackground';
 
 //нижній відступ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-
-
 
 export default function CreateFolderPage() {
   const [decks, setDecks] = useState([]);
@@ -40,7 +39,6 @@ export default function CreateFolderPage() {
   const handleSubmit = () => {
     const userId = localStorage.getItem('user_id');
 
-    // Validation
     if (!userId || !folderName) {
       alert('Please enter a folder name');
       return;
@@ -51,7 +49,6 @@ export default function CreateFolderPage() {
       return;
     }
 
-    // Create folder with selected decks
     fetch('http://127.0.0.1:5000/api/create-folder', {
       method: 'POST',
       headers: {
@@ -77,51 +74,9 @@ export default function CreateFolderPage() {
 
   return (
     <>
-    
       <Header />
       <div class="background"> 
-      <section><span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   </section>
-
+     <AnimatedBackground />
       <div className="createfolder-container">
         <div className="createfolder-items"></div>
         <div className="createfolder-items">

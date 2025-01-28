@@ -1,0 +1,149 @@
+.learn-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: normal;
+    align-items: normal;
+    align-content: normal;
+}
+
+.learn-items:nth-child(1) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+}
+
+.learn-items:nth-child(2) {
+    display: flex;
+    /* Встановлюємо контейнер flexbox */
+    flex-direction: column;
+    /* Розташування елементів у колонку */
+    
+    /*align-items: center;
+     Центрування по горизонталі */
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+    margin-top: 25px;
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+    padding: 30px 10px 0px 10px;
+    /*margin-bottom: 15px;*/
+    width: 300px;
+    min-width: 300px;
+    min-height: 200px;
+}
+
+.learn-items:nth-child(3) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+}
+
+.learn-back{
+    min-height: 120px;
+    width:100%;
+    
+}
+
+
+/*
+.confidence-buttons{
+    justify-self: flex-end;
+    margin-top: auto;
+
+}*/
+
+
+
+.confidence-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap:10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: auto;
+    margin-bottom: 0;
+    
+
+  }
+  
+  .btn-conf:nth-child(1) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .btn-conf:nth-child(2) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .btn-conf:nth-child(3) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .btn-conf:nth-child(4) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+
+  .btn-conf{
+    background-color: #1f96bed1;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+    height: 35px;
+
+}
+
+    .btn-conf:hover {
+      background-color: #3887c4;
+  }
+
+/* Батьківський блок */
+.back-content {
+    display: flex; /* Встановлюємо flex-контейнер */
+    flex-direction: column; /* Розташування елементів у колонку 
+    justify-content: space-around;*/
+   
+}
+
+.flashcard-learning{
+    padding:10px;
+    padding-bottom: 18px;
+}
+
+h5,p{
+    text-align: center;
+}

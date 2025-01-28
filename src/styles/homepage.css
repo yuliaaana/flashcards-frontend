@@ -133,7 +133,7 @@ body {
     margin-top: auto;
 
     padding: 10px 20px;
-    background-color: #22abd9dc;
+    background-color: #0e81c8a8;
     color: white;
     border: none;
     cursor: pointer;
@@ -179,5 +179,5 @@ body {
 
 .div3-home .bottom-button:hover,
 .div4-home .bottom-button:hover {
-    background-color: #1d8cb1cb;
+    background-color: #033089a8;
 }

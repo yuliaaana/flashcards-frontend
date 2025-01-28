@@ -7,6 +7,7 @@ import CreateFolderPage from './CreateFolderPage';
 import Decks from './Decks'; 
 import Deck from './Deck'; 
 import Folders from './Folders'; 
+import LearningMode from './LearningMode'; 
 
 
 export default function MainApp() {
@@ -20,6 +21,7 @@ export default function MainApp() {
 
       <Route path="/decks" element={<Decks />} />
       <Route path="/deck/:deckId" element={<Deck />} />
+      <Route path="/learn/:deckId" element={<LearningMode />} />
       <Route path="/folders" element={<Folders />} />
     </Routes>
   );
