@@ -1,0 +1,80 @@
+.completed-session {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(10.7px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding-bottom: 1rem;
+    font-family: "Montserrat", sans-serif;
+}
+
+.completed-content {
+    height: 14rem;
+    padding: 2.5rem;
+
+    border: 5px;
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 25px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+    text-align: center;
+}
+
+.completion-buttons {
+    margin-top: 4.5rem;
+    display: flex;
+    
+    gap: 2rem;
+    justify-content: center;
+}
+
+.restart-btn,
+.exit-btn {
+    padding: 0.8rem 1.5rem;
+    margin-bottom: 1rem;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 3px 30px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    font-size: 1rem;
+    width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: max-content; /* Ensures button width matches content */
+}
+
+.exit-btn {
+
+    color: white;
+    background-color: #1d8cb1b1;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+.restart-btn:hover {
+    background-color: #468dc3;
+}
+
+
+.restart-btn {
+    color: white;
+    background-color: #1f6ebed1;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+.restart-btn:hover {
+    background-color: #1f6ebe;
+}
