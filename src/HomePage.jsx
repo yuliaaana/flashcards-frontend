@@ -4,7 +4,6 @@ import ListsBlock from './components/homepage/ListsBlock';
 import DecksBlock from './components/homepage/DecksBlock';
 import AnimatedBackground from './components/AnimatedBackground';
 import './styles/homepage.css';
-/*import "./styles/createfolderbackground.css";*/
 
 function HomePage() {
   const [folders, setFolders] = useState([]);

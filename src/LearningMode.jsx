@@ -79,13 +79,13 @@ export default function LearningMode() {
     initializeRound(flashcards, 1);
   };
 
+  // Fix selectNextCard function
   const selectNextCard = () => {
     console.log(`Current round: ${round}`);
     const unreviewed = currentRoundCards.filter(card => !reviewedCards.has(card.id));
     console.log(`Unreviewed cards in round ${round}:`, unreviewed.length);
     
     if (unreviewed.length === 0) {
-      // Round complete, move to next round
       const nextRound = round + 1;
       console.log(`Moving to round ${nextRound}`);
       setRound(nextRound);
@@ -94,6 +94,7 @@ export default function LearningMode() {
     }
     
     const nextCard = unreviewed[0];
+    setReviewedCards(prev => new Set([...prev, nextCard.id])); // Add this line
     setCurrentCard(nextCard);
   };
 
@@ -118,6 +119,7 @@ export default function LearningMode() {
     selectNextCard();
   };
 
+  // Fix handleConfidence function
   const handleConfidence = (level) => {
     const confidenceMapping = {
       'fail': 1,
@@ -132,8 +134,6 @@ export default function LearningMode() {
       next_review: calculateNextReviewDate(level).toISOString()
     };
 
-    console.log('Updating flashcard:', updatedCard);
-
     fetch(`http://127.0.0.1:5000/api/update-flashcard/${currentCard.id}`, {
       method: 'PUT',
       headers: {
@@ -145,8 +145,7 @@ export default function LearningMode() {
       .then(data => {
         console.log('Flashcard updated:', data);
         setFlashcards(prevCards => prevCards.map(card => card.id === data.id ? data : card));
-        setReviewedCards(prev => new Set([...prev, currentCard.id]));
-        selectNextCard();
+        selectNextCard(); // Remove setReviewedCards from here since it's now in selectNextCard
       })
       .catch(error => {
         console.error('Error updating flashcard:', error);
@@ -171,7 +170,6 @@ export default function LearningMode() {
             
           </div>
           <div className='learn-items'>
-          <h3>Round {round}</h3>
             <div className="learning-mode">
               <div 
                 className={`flashcard-learning ${isFlipped ? 'flipped-learning' : ''}`}
@@ -204,4 +202,4 @@ export default function LearningMode() {
       </div>
     </>
   );
-}
+}//////////////////finish screenHHH

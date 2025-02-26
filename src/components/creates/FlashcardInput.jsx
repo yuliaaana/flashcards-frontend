@@ -1,7 +1,6 @@
 import React from "react";
 import "../../styles/createdeck.css";
 
-// Modified to accept props
 export default function FlashcardInput({ id, onChange }) {
   const handleInputChange = (field, value) => {
     onChange(id, field, value);

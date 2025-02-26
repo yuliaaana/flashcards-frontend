@@ -59,8 +59,6 @@ body {
 .div3-home {
     padding: 15px 15px 0px 15px;
     margin: 0px 15px 0px 30px;
-    /* From https://css.glass */
-
 }
 
 
@@ -144,27 +142,27 @@ body {
 .div3-home,
 .div4-home {
     display: flex;
-    flex-direction: column; /* Розміщення елементів по вертикалі */
+    flex-direction: column;
     padding: 15px 15px 0px 15px;
     margin: 0px 15px 0px 30px;
-    height: 100%; /* Встановлюємо висоту контейнера */
-    max-height: 300px; /* Наприклад, обмежуємо висоту до 300px */
+    height: 100%; 
+    max-height: 300px;
 
 }
 
 .div3-home ul,
 .div4-home ul {
-    flex: 1; /* Займає весь доступний простір */
+    flex: 1; 
     margin: 0;
     padding-left: 5px;
     list-style: none;
-    overflow-y: auto; /* Додаємо вертикальний скрол */
-    max-height: 100%; /* Забезпечує адаптацію до контейнера */
+    overflow-y: auto; 
+    max-height: 100%; 
 }
 
 .div3-home .bottom-button,
 .div4-home .bottom-button {
-    margin-top: 15px; /* Закріпити кнопку внизу */
+    margin-top: 15px; 
 
     margin-bottom: 15px;
 
