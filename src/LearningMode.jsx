@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Header from './components/homepage/Header';
 import AnimatedBackground from './components/AnimatedBackground';
 import CompletedSession from './components/CompletedSession';
+import {saveRecentDecks} from './components/utils';
 import './styles/learning.css';
 
 export default function LearningMode() {
@@ -24,6 +25,7 @@ export default function LearningMode() {
         return response.json();
       })
       .then((data) => {
+        saveRecentDecks(data);
         setFlashcards(data.flashcards);
         initializeRound(data.flashcards, 1);
       })
@@ -31,38 +33,38 @@ export default function LearningMode() {
   }, [deckId]);
 
   const initializeRound = (cards, roundNumber) => {
-    console.log(`Initializing round ${roundNumber}`);
+    //console.log(`Initializing round ${roundNumber}`);
     let roundCards = [];
     
     switch(roundNumber) {
       case 1:
         roundCards = [...cards];
-        console.log('Round 1: All cards:', roundCards.length);
+        //console.log('Round 1: All cards:', roundCards.length);
         break;
       case 2:
         roundCards = cards.filter(card => card.confidence_level < 4);
-        console.log('Round 2: Without excellent:', roundCards.length);
+        //console.log('Round 2: Without excellent:', roundCards.length);
         break;
       case 3:
         roundCards = cards.filter(card => card.confidence_level <= 2);
-        console.log('Round 3: Only hard and fail:', roundCards.length);
+        //console.log('Round 3: Only hard and fail:', roundCards.length);
         break;
       case 4:
         roundCards = cards.filter(card => card.confidence_level === 1);
-        console.log('Round 4: Only fail:', roundCards.length);
+        //console.log('Round 4: Only fail:', roundCards.length);
         break;
       default:
-        console.log('Resetting to round 1');
+        //console.log('Resetting to round 1');
         roundCards = [...cards];
         roundNumber = 1;
     }
     
     if (roundCards.length === 0) {
       if (roundNumber < 4) {
-        console.log(`No cards for round ${roundNumber}, moving to next round`);
+        //console.log(`No cards for round ${roundNumber}, moving to next round`);
         initializeRound(cards, roundNumber + 1);
       } else {
-        console.log('Learning session complete');
+        //console.log('Learning session complete');
         setShowCompletion(true);
       }
       return;
@@ -81,9 +83,9 @@ export default function LearningMode() {
 
   // Fix selectNextCard function
   const selectNextCard = () => {
-    console.log(`Current round: ${round}`);
+    //console.log(`Current round: ${round}`);
     const unreviewed = currentRoundCards.filter(card => !reviewedCards.has(card.id));
-    console.log(`Unreviewed cards in round ${round}:`, unreviewed.length);
+    //console.log(`Unreviewed cards in round ${round}:`, unreviewed.length);
     
     if (unreviewed.length === 0) {
       const nextRound = round + 1;
@@ -143,7 +145,7 @@ export default function LearningMode() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Flashcard updated:', data);
+        //console.log('Flashcard updated:', data);
         setFlashcards(prevCards => prevCards.map(card => card.id === data.id ? data : card));
         selectNextCard(); // Remove setReviewedCards from here since it's now in selectNextCard
       })

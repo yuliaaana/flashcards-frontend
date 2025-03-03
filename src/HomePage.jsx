@@ -27,7 +27,7 @@ function HomePage() {
           if (data.folders && data.decks) {
             setFolders(data.folders);
             setDecks(data.decks);
-            console.log(folders)
+            //console.log(folders)
           } else {
             console.error('Invalid data format:', data);
           }

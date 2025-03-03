@@ -22,8 +22,8 @@ export default function Decks(){
             })
             .then((data) => {
               if (data.decks) {
-                console.log("xexe")
-                console.log(data.decks)
+                //console.log("xexe")
+                //console.log(data.decks)
                 setDecks(data.decks);
               } else {
                 console.error('Invalid data format:', data);
@@ -32,7 +32,7 @@ export default function Decks(){
             .catch((error) => console.error('Error fetching data:', error));
         }
       }, []); 
-      console.log(decks)
+      //console.log(decks)
 
     return (
       <>
