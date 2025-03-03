@@ -63,7 +63,7 @@ export default function CreateFolderPage() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Folder created:', data);
+        //console.log('Folder created:', data);
         navigate('/folders');
       })
       .catch(error => {

@@ -1,12 +1,12 @@
 import "../../styles/deck.css";
 import React, { useEffect, useState } from 'react';
 
-// Modified to accept props
+
 export default function Flashcard({ back_description, back_title, confidence_level, created_at, deck_id, front_title, id, image_url, last_reviewed, review_count }) {
-  const [isFlipped, setIsFlipped] = useState(false); // Стан для відображення front або back
+  const [isFlipped, setIsFlipped] = useState(false); 
 
   const handleCardClick = () => {
-    setIsFlipped(!isFlipped); // Перемикаємо стан при натисканні
+    setIsFlipped(!isFlipped); 
   };
 
   return (

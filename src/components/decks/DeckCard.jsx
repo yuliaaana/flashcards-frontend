@@ -1,11 +1,18 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function DeckCard({ className, created_at, creator, name, terms, id }) {
+export default function DeckCard({
+  className,
+  created_at,
+  creator,
+  name,
+  terms,
+  id,
+}) {
   const navigate = useNavigate();
 
   const handleStartStudying = () => {
-    navigate(`/deck/${id}`); 
+    navigate(`/deck/${id}`);
   };
 
   return (
@@ -15,11 +22,19 @@ export default function DeckCard({ className, created_at, creator, name, terms, 
       <h5>Created by: {creator}</h5>
       <h5>Created at: {created_at}</h5>
       <div className="buttons-container">
-        <button className="buttons-items" type="button" onClick={handleStartStudying}>
+        <button
+          className="buttons-items"
+          type="button"
+          onClick={handleStartStudying}
+        >
           Start studying
         </button>
-        <button className="buttons-items" type="button">Edit</button>
-        <button className="buttons-items" type="button">Delete</button>
+        <button className="buttons-items" type="button">
+          Edit
+        </button>
+        <button className="buttons-items" type="button">
+          Delete
+        </button>
       </div>
     </div>
   );

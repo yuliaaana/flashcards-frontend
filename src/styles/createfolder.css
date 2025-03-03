@@ -104,18 +104,6 @@
 
   }
 
-/*label 
-{
-    
-    
-    transition: transform 0.3s ease,
-    color 0.3s ease
-}
-
-input:focus+label{
-    transform: translateY(-25px);
-    color:blue
-}*/
 
 .did-floating-label-content { 
   position:relative; 
@@ -169,21 +157,16 @@ input:focus+label{
   color: #468dc3;
 }
 
-
-
-/* Скидаємо стандартні стилі для списку (буллети) */
 .checkbox-list {
-  list-style-type: none;  /* Прибирає маркери (буллети) */
-  padding: 0;  /* Забирає відступи для списку */
-  margin: 0;  /* Забирає відступи для списку */
+  list-style-type: none;  
+  padding: 0;  
+  margin: 0; 
   
 }
 
 
-
-/* Можна додати додаткове стилізування для елементів списку */
 .checkbox-list li {
-  padding: 8px 0;  /* Відстань між елементами */
+  padding: 8px 0; 
   font-family: "Montserrat", sans-serif;
   color: #333; 
   font-size: 1rem;
@@ -206,12 +189,10 @@ input:focus+label{
   color: #1d8cb1;
 }
 
-/* Optional: style the checkbox itself */
 .checkbox-label input[type="checkbox"] {
   cursor: pointer;
 }
 
-/* Optional: style for selected items */
 .checkbox-label input[type="checkbox"]:checked + .checkbox-text {
   color: #1d8cb1;
   font-weight: 500;
@@ -229,7 +210,7 @@ input:focus+label{
 
 
 .checkbox-list input[type="checkbox"] {
-  margin-right: 10px; /* Відстань між чекбоксом та текстом */
+  margin-right: 10px; 
 }
 
 
@@ -239,7 +220,7 @@ input:focus+label{
 
 
 .checkbox-list {
-  max-height: 425px; /* Adjust the height as needed */
+  max-height: 425px; 
   overflow-y: auto;
   
 }

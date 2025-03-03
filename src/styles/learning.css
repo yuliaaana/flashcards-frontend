@@ -18,12 +18,7 @@
 
 .learn-items:nth-child(2) {
     display: flex;
-    /* Встановлюємо контейнер flexbox */
     flex-direction: column;
-    /* Розташування елементів у колонку */
-    
-    /*align-items: center;
-     Центрування по горизонталі */
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: auto;
@@ -36,7 +31,6 @@
     backdrop-filter: blur(10.7px);
     -webkit-backdrop-filter: blur(16.7px);
     padding: 30px 10px 0px 10px;
-    /*margin-bottom: 15px;*/
     width: 300px;
     min-width: 300px;
     min-height: 200px;
@@ -58,12 +52,6 @@
 }
 
 
-/*
-.confidence-buttons{
-    justify-self: flex-end;
-    margin-top: auto;
-
-}*/
 
 
 
@@ -131,12 +119,9 @@
       background-color: #3887c4;
   }
 
-/* Батьківський блок */
 .back-content {
-    display: flex; /* Встановлюємо flex-контейнер */
-    flex-direction: column; /* Розташування елементів у колонку 
-    justify-content: space-around;*/
-   
+    display: flex; 
+    flex-direction: column; 
 }
 
 .flashcard-learning{

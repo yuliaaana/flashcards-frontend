@@ -4,7 +4,6 @@ import ListsBlock from './components/homepage/ListsBlock';
 import DecksBlock from './components/homepage/DecksBlock';
 import AnimatedBackground from './components/AnimatedBackground';
 import './styles/homepage.css';
-/*import "./styles/createfolderbackground.css";*/
 
 function HomePage() {
   const [folders, setFolders] = useState([]);
@@ -28,7 +27,7 @@ function HomePage() {
           if (data.folders && data.decks) {
             setFolders(data.folders);
             setDecks(data.decks);
-            console.log(folders)
+            //console.log(folders)
           } else {
             console.error('Invalid data format:', data);
           }

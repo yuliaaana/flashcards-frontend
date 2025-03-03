@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from './components/homepage/Header';
+import visitDeck from './components/homepage/DecksBlock';
 import './styles/deck.css';
 import Flashcard from './components/creates/Flashcard';
+
 
 export default function Deck() {
   const { deckId } = useParams(); 
@@ -17,13 +19,18 @@ export default function Deck() {
         }
         return response.json();
       })
-      .then((data) => setDeck(data))
+      .then((data) => {
+        setDeck(data)
+        //visitDeck(data)
+      })
       .catch((error) => console.error('Error fetching deck data:', error));
   }, [deckId]);
 
   if (!deck) {
     return <div>Loading...</div>;
   }
+
+  
 
   return (
     <>

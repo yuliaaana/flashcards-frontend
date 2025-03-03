@@ -38,10 +38,6 @@ function Header() {
             <NavDropdown title="Create" id="navbarScrollingDropdown">
               <NavDropdown.Item onClick={handleCreateFolderClick}>Folder</NavDropdown.Item>
               <NavDropdown.Item onClick={handleCreateDeckClick}>Deck</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
-              </NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Form className="d-flex">
