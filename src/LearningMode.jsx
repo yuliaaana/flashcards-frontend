@@ -6,6 +6,8 @@ import CompletedSession from './components/CompletedSession';
 import {saveRecentDecks} from './components/utils';
 import './styles/learning.css';
 
+//reset after 4
+
 export default function LearningMode() {
   const { deckId } = useParams();
   const [flashcards, setFlashcards] = useState([]);
@@ -33,7 +35,7 @@ export default function LearningMode() {
   }, [deckId]);
 
   const initializeRound = (cards, roundNumber) => {
-    //console.log(`Initializing round ${roundNumber}`);
+    console.log(`Initializing round ${roundNumber}`);
     let roundCards = [];
     
     switch(roundNumber) {
@@ -54,14 +56,15 @@ export default function LearningMode() {
         //console.log('Round 4: Only fail:', roundCards.length);
         break;
       default:
-        //console.log('Resetting to round 1');
+        /*console.log('Resetting to round 1');
         roundCards = [...cards];
-        roundNumber = 1;
+        roundNumber = 1;*/
+        setShowCompletion(true);
     }
     
     if (roundCards.length === 0) {
       if (roundNumber < 4) {
-        //console.log(`No cards for round ${roundNumber}, moving to next round`);
+        console.log(`No cards for round ${roundNumber}, moving to next round`);
         initializeRound(cards, roundNumber + 1);
       } else {
         //console.log('Learning session complete');
@@ -173,6 +176,7 @@ export default function LearningMode() {
           </div>
           <div className='learn-items'>
             <div className="learning-mode">
+              <h3>Round {round}</h3>
               <div 
                 className={`flashcard-learning ${isFlipped ? 'flipped-learning' : ''}`}
                 onClick={() => setIsFlipped(!isFlipped)}
