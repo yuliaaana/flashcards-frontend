@@ -1,53 +1,48 @@
 import React from 'react';
 import { Button, Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useTranslation } from "react-i18next";
+import '../../styles/languages.css';
+import "../../i18n"; 
+
 
 function Header() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
-  const handleCreateDeckClick = () => {
-    navigate('/create-deck'); 
-  };
-
-  const handleCreateFolderClick = () => {
-    navigate('/create-folder'); 
-  };
-
-  const handleHomeClick = () => {
-    navigate('/homepage');
-  };
-
-  const handleProfileClick = () => {
-    navigate('/profile'); 
+  const changeLanguage = () => {
+    const newLang = i18n.language === "en" ? "uk" : "en";
+    i18n.changeLanguage(newLang);
   };
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
-        <Navbar.Brand href="#" onClick={handleHomeClick}>FlashCards</Navbar.Brand> 
+        <Navbar.Brand onClick={() => navigate('/homepage')}>FlashCards</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: '100px' }}
-            navbarScroll
-          >
-            <Nav.Link onClick={handleHomeClick}>Home</Nav.Link> 
-            <Nav.Link onClick={handleProfileClick}>Profile</Nav.Link> 
+          <Nav className="me-auto my-2 my-lg-0" navbarScroll>
+            <Nav.Link onClick={() => navigate('/homepage')}>Home</Nav.Link>
+            <Nav.Link onClick={() => navigate('/profile')}>Profile</Nav.Link>
             <NavDropdown title="Create" id="navbarScrollingDropdown">
-              <NavDropdown.Item onClick={handleCreateFolderClick}>Folder</NavDropdown.Item>
-              <NavDropdown.Item onClick={handleCreateDeckClick}>Deck</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => navigate('/create-folder')}>Folder</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => navigate('/create-deck')}>Deck</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
+            <div className="switch">
+              <input 
+                id="language-toggle" 
+                className="check-toggle check-toggle-round-flat" 
+                type="checkbox" 
+                checked={i18n.language === "en"} 
+                onChange={changeLanguage} 
+              />
+              <label htmlFor="language-toggle"></label>
+              <span className="on">UKR</span>
+              <span className="off">ENG</span>
+            </div>
           </Form>
         </Navbar.Collapse>
       </Container>
