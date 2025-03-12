@@ -1,0 +1,94 @@
+.profile-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: normal;
+    align-items: normal;
+    align-content: normal;
+}
+
+.profile-items:nth-child(1) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+}
+
+img{
+    width: 60%;
+    height: 60%;
+    border-radius: 100%;
+    margin-left: 15%;
+    border: 2px solid #000;
+
+}
+
+.profile-items:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 2;
+    flex-wrap: wrap;
+    justify-content: normal;
+    align-items: normal;
+    align-content: normal;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+    margin-top: 25px;
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 24px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+    padding: 30px 10px 0px 10px;
+    width: 300px;
+    min-width: 300px;
+    min-height: 200px;
+}
+
+.profile-data{
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    text-align: left;
+    /*display: flex;
+    flex-direction: column;
+    /*justify-content: center; /* Вирівнювання по горизонталі 
+    align-items: center;     /* Вирівнювання по вертикалі */ 
+    text-align: left;   
+    margin-bottom: 15px;       
+}
+
+h1{
+    text-align: center;
+    margin-top: 15px;
+}
+h5{
+    text-align: left;
+}
+.pp{
+    /*margin-right: auto;
+    /*padding: 0;*/
+    margin-left: 10%;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    text-align: left;
+}
+.profile-other{
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.profile-items:nth-child(3) {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+}
