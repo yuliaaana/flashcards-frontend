@@ -5,6 +5,8 @@ import ListsCheckbox from './components/creates/ListsCheckbox';
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import AnimatedBackground from './components/AnimatedBackground';
+import { useTranslation } from "react-i18next";
+import "./i18n"; 
 
 //нижній відступ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 
@@ -14,6 +16,7 @@ export default function CreateFolderPage() {
   const [folderDescription, setFolderDescription] = useState("");
   const [selectedDecks, setSelectedDecks] = useState([]);
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation("create");
 
   useEffect(() => {
     const userId = localStorage.getItem('user_id');
@@ -81,7 +84,7 @@ export default function CreateFolderPage() {
         <div className="createfolder-items"></div>
         <div className="createfolder-items">
           <div className="inputs">
-            <h4 className="title-main">New Folder</h4>
+            <h4 className="title-main">{t("newfolder")}</h4>
             <section>
               <div className="did-floating-label-content">
                 <input 
@@ -91,7 +94,7 @@ export default function CreateFolderPage() {
                   value={folderName} 
                   onChange={(e) => setFolderName(e.target.value)}
                 />
-                <label className="did-floating-label">Name of new folder</label>
+                <label className="did-floating-label">{t("namenewfolder")}</label>
               </div>
               <div className="did-floating-label-content">
                 <input 
@@ -101,13 +104,13 @@ export default function CreateFolderPage() {
                   value={folderDescription} 
                   onChange={(e) => setFolderDescription(e.target.value)}
                 />
-                <label className="did-floating-label">Description</label>
+                <label className="did-floating-label">{t("description")}</label>
               </div>
             </section>
 
               <div className="create-button">
               <button className="submit-button" onClick={handleSubmit}>
-              Create Folder
+              {t("createfolder")}
             </button>
               </div>
           </div>
@@ -115,7 +118,7 @@ export default function CreateFolderPage() {
           <div className="decks-bullet">
             <ListsCheckbox
               classname="5"
-              title="Add existing decks:"
+              title={t("addexistingdecks")}
               items={decks}
               onSelectionChange={setSelectedDecks}
             />

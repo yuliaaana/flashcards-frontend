@@ -4,11 +4,14 @@ import "./styles/createfolderbackground.css";
 import React, { useState, useEffect } from "react";
 import FlashcardInput from './components/creates/FlashcardInput';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
+import "./i18n"; 
 
 export default function CreateDeckPage(){
     const navigate = useNavigate();
   const [deckName, setDeckName] = useState("");
   const [flashcards, setFlashcards] = useState([{ id: 1, front: '', back: '', description: '' }]);
+  const { t, i18n } = useTranslation("create");
 
   const handleFlashcardChange = (id, field, value) => {
     setFlashcards(prevCards => 
@@ -73,7 +76,7 @@ export default function CreateDeckPage(){
         <div className='createdeck-container'>
         <div className='createdeck-items'></div>
         <div className='createdeck-items'>
-            <h4 className='title-deck-main'>New deck</h4>
+            <h4 className='title-deck-main'>{t("newdeck")}</h4>
 
             <div className="did-floating-label-content">
                 <input 
@@ -83,7 +86,7 @@ export default function CreateDeckPage(){
                   value={deckName} 
                   onChange={(e) => setDeckName(e.target.value)}
                 />
-                <label className="did-floating-label">Name of new deck</label>
+                <label className="did-floating-label">{t("namenewdeck")}</label>
               </div>
 
 
@@ -99,13 +102,13 @@ export default function CreateDeckPage(){
               <section className='buttons'>
               <div className='buttons1'>
                 <button className="create-folder-buttons" onClick={addFlashcard}>
-                  Add Another Card
+                {t("addcard")}
                 </button>
               </div>
 
               <div  className='buttons1'>
                 <button className="create-folder-buttons" onClick={handleSubmit}>
-                  Create Deck
+                {t("createdeck")}
                 </button>
               </div></section>
 

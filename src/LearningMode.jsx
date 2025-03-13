@@ -5,6 +5,8 @@ import AnimatedBackground from './components/AnimatedBackground';
 import CompletedSession from './components/CompletedSession';
 import {saveRecentDecks} from './components/utils';
 import './styles/learning.css';
+import { useTranslation } from "react-i18next";
+import "./i18n"; 
 
 //reset after 4
 
@@ -17,6 +19,7 @@ export default function LearningMode() {
   const [currentRoundCards, setCurrentRoundCards] = useState([]);
   const [reviewedCards, setReviewedCards] = useState(new Set());
   const [showCompletion, setShowCompletion] = useState(false);
+  const { t, i18n } = useTranslation("learn");
 
   useEffect(() => {
     fetch(`http://127.0.0.1:5000/api/deck/${deckId}`)
@@ -148,9 +151,8 @@ export default function LearningMode() {
     })
       .then(response => response.json())
       .then(data => {
-        //console.log('Flashcard updated:', data);
         setFlashcards(prevCards => prevCards.map(card => card.id === data.id ? data : card));
-        selectNextCard(); // Remove setReviewedCards from here since it's now in selectNextCard
+        selectNextCard(); 
       })
       .catch(error => {
         console.error('Error updating flashcard:', error);
@@ -176,7 +178,7 @@ export default function LearningMode() {
           </div>
           <div className='learn-items'>
             <div className="learning-mode">
-              <h3>Round {round}</h3>
+              {/*<h3>Round {round}</h3>*/}
               <div 
                 className={`flashcard-learning ${isFlipped ? 'flipped-learning' : ''}`}
                 onClick={() => setIsFlipped(!isFlipped)}
@@ -192,10 +194,10 @@ export default function LearningMode() {
                       <p>{currentCard.back_description}</p>
                     </div>
                     <div className="confidence-buttons">
-                      <button className="btn-conf" onClick={() => handleConfidence('fail')}>Fail</button>
-                      <button className="btn-conf" onClick={() => handleConfidence('hard')}>Hard</button>
-                      <button className="btn-conf" onClick={() => handleConfidence('good')}>Good</button>
-                      <button className="btn-conf" onClick={() => handleConfidence('excellent')}>Excellent</button>
+                      <button className="btn-conf" onClick={() => handleConfidence('fail')}>{t("fail")}</button>
+                      <button className="btn-conf" onClick={() => handleConfidence('hard')}>{t("hard")}</button>
+                      <button className="btn-conf" onClick={() => handleConfidence('good')}>{t("good")}</button>
+                      <button className="btn-conf" onClick={() => handleConfidence('excellent')}>{t("excellent")}</button>
                     </div>
                   </div>
                 )}
@@ -208,4 +210,4 @@ export default function LearningMode() {
       </div>
     </>
   );
-}//////////////////finish screenHHH
+}

@@ -2,9 +2,12 @@ import Header from './components/homepage/Header';
 import FolderCard from './components/decks/FolderCard';
 import React, { useEffect, useState } from 'react';
 import './styles/folders.css';
+import { useTranslation } from "react-i18next";
+import "./i18n";
 
 export default function Folders(){
      const [folders, setFolders] = useState([]);
+     const { t, i18n } = useTranslation();
     
       useEffect(() => {
         console.log('Component mounted');
@@ -43,7 +46,7 @@ export default function Folders(){
           <div className="folders-container">
             <div className="folders-items"></div>
             <div className="folders-items folders">
-              <h2 className='title-deck'>Your folders</h2>
+              <h2 className='title-deck'>{t("folders:yourFolder")}</h2>
               {folders.map((folder) => (
                 <FolderCard key={folder.id} className="folder" {...folder} />
               ))}

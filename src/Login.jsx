@@ -55,10 +55,6 @@ export default function Login() {
 
   return (
     <div className="App parent">
-      {/*<h1>{t("hello")}</h1>
-      <button onClick={() => i18n.changeLanguage("en")}>English</button>
-      <button onClick={() => i18n.changeLanguage("uk")}>Українська</button>*/}
-
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       <form className='div3' onSubmit={handleSubmit}>
       <div><h1 >Login</h1></div>

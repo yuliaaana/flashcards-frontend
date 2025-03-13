@@ -1,10 +1,13 @@
 import React from "react";
 import "../../styles/createdeck.css";
+import { useTranslation } from "react-i18next";
+import "../../i18n"; 
 
 export default function FlashcardInput({ id, onChange }) {
   const handleInputChange = (field, value) => {
     onChange(id, field, value);
   };
+  const { t, i18n } = useTranslation("create");
 
   return (
     <div className="flashcard">
@@ -14,7 +17,7 @@ export default function FlashcardInput({ id, onChange }) {
             required 
             onChange={(e) => handleInputChange('front', e.target.value)}
           />
-          <span className="flashcard-input-label">Enter a front title</span>
+          <span className="flashcard-input-label">{t("enterfront")}</span>
         </label>
       </div>
 
@@ -25,7 +28,7 @@ export default function FlashcardInput({ id, onChange }) {
               required 
               onChange={(e) => handleInputChange('back', e.target.value)}
             />
-            <span className="flashcard-input-label">Enter a back title</span>
+            <span className="flashcard-input-label">{t("enterback")}</span>
           </label>
         </div>
 
@@ -35,7 +38,7 @@ export default function FlashcardInput({ id, onChange }) {
               required 
               onChange={(e) => handleInputChange('description', e.target.value)}
             />
-            <span className="flashcard-input-label">Enter description</span>
+            <span className="flashcard-input-label">{t("enterdescription")}</span>
           </label>
         </div>
       </div>
