@@ -2,9 +2,13 @@ import Header from './components/homepage/Header';
 import DeckCard from './components/decks/DeckCard';
 import React, { useEffect, useState } from 'react';
 import './styles/decks.css';
+import { useTranslation } from "react-i18next";
+import "./i18n";
+
 
 export default function Decks(){
      const [decks, setDecks] = useState([]);
+     const { t, i18n } = useTranslation();
     
       useEffect(() => {
         console.log('Component mounted');
@@ -44,7 +48,7 @@ export default function Decks(){
           <div className="decks-container">
             <div className="decks-items"></div>
             <div className="decks-items decks">
-              <h2 className='title-deck'>Your decks</h2>
+              <h2 className='title-deck'>{t("folders:yourDecks")}</h2>
               {decks.map((deck) => (
                 <DeckCard key={deck.id} className="deck" {...deck} />
               ))}

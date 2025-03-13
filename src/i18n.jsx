@@ -2,23 +2,30 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import homeUK from "./locales/uk/home.json";
 import homeEN from "./locales/en/home.json";
+import foldersEN from "./locales/en/folders.json";
+import foldersUK from "./locales/uk/folders.json";
+import createsUK from "./locales/uk/create.json";
+import createsEN from "./locales/en/create.json";
 import recentEN from "./locales/en/recent.json";
 import recentUK from "./locales/uk/recent.json";
+import learnUK from "./locales/uk/learn.json";
+import learnEN from "./locales/en/learn.json";
+
 
 const resources = {
     en: {
-      //common: commonEN,
       home: homeEN,
       recent: recentEN,
-      //profile: profileEN,
-      //settings: settingsEN,
+      folders: foldersEN,
+      create: createsEN,
+      learn: learnEN
     },
     uk: {
-      //common: commonUK,
       home: homeUK,
-      //profile: profileUK,
-      //settings: settingsUK,
+      folders: foldersUK,
+      create: createsUK,
       recent: recentUK,
+      learn: learnUK
     },
   };
 
@@ -26,8 +33,8 @@ const resources = {
     resources,
     lng: "uk",
     fallbackLng: "en",
-    //ns: ["common", "home", "profile", "settings"], // Використовуємо простори імен (namespaces)
-    ns: [ "home","recent"],
+    //ns: ["common", "home", "profile", "settings"],
+    ns: [ "home","recent","folders"],
     //defaultNS: "common",
     interpolation: { escapeValue: false },
   });
