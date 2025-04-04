@@ -10,6 +10,8 @@ import recentEN from "./locales/en/recent.json";
 import recentUK from "./locales/uk/recent.json";
 import learnUK from "./locales/uk/learn.json";
 import learnEN from "./locales/en/learn.json";
+import headerUK from "./locales/uk/header.json";
+import headerEN from "./locales/en/header.json";
 
 
 const resources = {
@@ -18,14 +20,16 @@ const resources = {
       recent: recentEN,
       folders: foldersEN,
       create: createsEN,
-      learn: learnEN
+      learn: learnEN,
+      header: headerEN,
     },
     uk: {
       home: homeUK,
       folders: foldersUK,
       create: createsUK,
       recent: recentUK,
-      learn: learnUK
+      learn: learnUK,
+      header: headerUK,
     },
   };
 

@@ -1,6 +1,4 @@
 {
-
-
     "fail":"Fail",
     "hard":"Hard",
     "good":"Good",
@@ -8,5 +6,4 @@
     "complete":"Learning Session Complete!",
     "restart":"Restart Session",
     "exit":"Exit to Homepage"
-
 }

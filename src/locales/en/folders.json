@@ -9,5 +9,8 @@
     "createdBy":"Created by : " ,
     "startStudying": "Start studying",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+
+    "add_new_deck": "Add new deck :",
+    "addSelectedDecks": "Add selected decks"
 }

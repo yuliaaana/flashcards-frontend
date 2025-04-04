@@ -9,7 +9,7 @@ import "../../i18n";
 
 function Header() {
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("header");
 
   const changeLanguage = () => {
     const newLang = i18n.language === "en" ? "uk" : "en";
@@ -23,11 +23,11 @@ function Header() {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-            <Nav.Link onClick={() => navigate('/homepage')}>Home</Nav.Link>
-            <Nav.Link onClick={() => navigate('/profile')}>Profile</Nav.Link>
-            <NavDropdown title="Create" id="navbarScrollingDropdown">
-              <NavDropdown.Item onClick={() => navigate('/create-folder')}>Folder</NavDropdown.Item>
-              <NavDropdown.Item onClick={() => navigate('/create-deck')}>Deck</NavDropdown.Item>
+            <Nav.Link onClick={() => navigate('/homepage')}>{t("home")}</Nav.Link>
+            <Nav.Link onClick={() => navigate('/profile')}>{t("profile")}</Nav.Link>
+            <NavDropdown title={t("create")} id="navbarScrollingDropdown">
+              <NavDropdown.Item onClick={() => navigate('/create-folder')}>{t("folder")}</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => navigate('/create-deck')}>{t("deck")}</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Form className="d-flex">
