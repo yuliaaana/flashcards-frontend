@@ -30,7 +30,9 @@ export default function CreateFolderPage() {
         })
         .then(data => {
           if (data.folders && data.decks) {
-            setDecks(data.decks);
+            // Фільтруємо лише ті деки, у яких folder_id порожній або відсутній
+            const filteredDecks = data.decks.filter(deck => !deck.folder_id);
+            setDecks(filteredDecks);
           } else {
             console.error('Invalid data format:', data);
           }
@@ -38,7 +40,7 @@ export default function CreateFolderPage() {
         .catch(error => console.error('Error fetching data:', error));
     }
   }, []);
-
+  
   const handleSubmit = () => {
     const userId = localStorage.getItem('user_id');
 
