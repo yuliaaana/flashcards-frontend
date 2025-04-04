@@ -11,5 +11,6 @@
     "edit": "Edit",
     "delete": "Delete",
 
-    "add_new_deck": "Add new deck :"
+    "add_new_deck": "Add new deck :",
+    "addSelectedDecks": "Add selected decks"
 }
