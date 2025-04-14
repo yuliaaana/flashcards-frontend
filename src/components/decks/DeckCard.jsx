@@ -15,7 +15,11 @@ export default function DeckCard({
   const { t, i18n } = useTranslation();
 
   const handleStartStudying = () => {
-    navigate(`/deck/${id}`);
+    navigate(`/learn/${id}`);
+  };
+
+  const handleEditDeck = () => {
+    navigate(`/edit-deck/${id}`);
   };
 
   return (
@@ -32,7 +36,7 @@ export default function DeckCard({
         >
           {t("folders:startStudying")}
         </button>
-        <button className="buttons-items" type="button">
+        <button className="buttons-items" type="button" onClick={handleEditDeck}>
         {t("folders:edit")}
         </button>
         <button className="buttons-items" type="button">

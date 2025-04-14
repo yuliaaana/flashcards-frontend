@@ -25,6 +25,7 @@ export default function Decks(){
               return response.json();
             })
             .then((data) => {
+              console.log(data)
               if (data.decks) {
                 //console.log("xexe")
                 //console.log(data.decks)

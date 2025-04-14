@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from './components/homepage/Header';
 import ListsBlock from './components/homepage/ListsBlock';
 import DecksBlock from './components/homepage/DecksBlock';
+import PublicDecksBlock from './components/homepage/PublicDecksBlock';
 import AnimatedBackground from './components/AnimatedBackground';
 import './styles/homepage.css';
 import { useTranslation } from "react-i18next";
@@ -11,6 +12,7 @@ function HomePage() {
   const [folders, setFolders] = useState([]);
   const [decks, setDecks] = useState([]);
   const { t, i18n } = useTranslation();
+  const userId=localStorage.getItem('user_id')
 
   useEffect(() => {
     console.log('Component mounted');
@@ -50,7 +52,7 @@ function HomePage() {
       <ListsBlock classname="div3-home" title={t("yourDecks")} items={decks} buttonLabel={t("goToDecks")} redirectTo="/decks"/>
       <ListsBlock classname="div4-home" title={t("yourFolders")} items={folders} buttonLabel={t("goToFolders")} redirectTo="/folders"/>
       <DecksBlock classname="div5-home" title={t("lastViewed")}/>
-      <DecksBlock classname="div6-home" title={t("popularPublicDecks")}/>
+      <PublicDecksBlock classname="div6-home"  title={t("popularPublicDecks")}/>
 
       </div>
       </div>

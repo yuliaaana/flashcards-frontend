@@ -12,7 +12,12 @@
     "createdeck":"Створити дек",
     "enterfront":"Введіть заголовок спереду",
     "enterback":"Введіть заголовок ззаду",
-    "enterdescription":"Введіть опис"
+    "enterdescription":"Введіть опис",
+    "publicdeck": "Публічний дек",
+    "privatedeck": "Приватний дек",
+    "editdeck": "Редагувати дек",
+    "updatedeck": "Оновити дек"
+    
 
 
 
