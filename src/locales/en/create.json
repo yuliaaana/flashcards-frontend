@@ -12,7 +12,12 @@
     "createdeck":"Create Deck",
     "enterfront":"Enter a front title",
     "enterback":"Enter a back title",
-    "enterdescription":"Enter description"
+    "enterdescription":"Enter description",
+    "publicdeck": "Public deck",
+    "privatedeck": "Private deck",
+    "editdeck": "Edit deck",
+    "updatedeck": "Update deck"
+
 
 
 

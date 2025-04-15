@@ -9,6 +9,7 @@ import Deck from './Deck';
 import Folders from './Folders'; 
 import Folder from './Folder'; 
 import LearningMode from './LearningMode'; 
+import EditDeckPage from './EditDeckPage'; 
 
 
 export default function MainApp() {
@@ -25,6 +26,8 @@ export default function MainApp() {
       <Route path="/learn/:deckId" element={<LearningMode />} />
       <Route path="/folders" element={<Folders />} />
       <Route path="/folder/:folderId" element={<Folder />} />
+      <Route path="/edit-deck/:deckId" element={<EditDeckPage />} />
+
     </Routes>
   );
 }

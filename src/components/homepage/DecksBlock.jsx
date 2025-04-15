@@ -11,7 +11,7 @@ export default function DecksBlock({ classname, title, hehe }) {
   const getRecentDecks = () => {
     
     const savedDecks = localStorage.getItem('recentDecks');
-    console.log( JSON.parse(savedDecks))
+    console.log( "уууу",JSON.parse(savedDecks))
     return savedDecks ? JSON.parse(savedDecks) : [];
   };
 

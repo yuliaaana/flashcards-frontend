@@ -8,9 +8,10 @@ import { useTranslation } from "react-i18next";
 import "./i18n"; 
 
 export default function CreateDeckPage(){
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [deckName, setDeckName] = useState("");
   const [flashcards, setFlashcards] = useState([{ id: 1, front: '', back: '', description: '' }]);
+  const [isPublic, setIsPublic] = useState(false); // ← додано
   const { t, i18n } = useTranslation("create");
 
   const handleFlashcardChange = (id, field, value) => {
@@ -42,6 +43,7 @@ export default function CreateDeckPage(){
       alert('Please add at least one complete flashcard');
       return;
     }
+
     const validFlashcards = flashcards.filter(card => card.front && card.back);
 
     fetch('http://127.0.0.1:5000/api/create-deck', {
@@ -52,6 +54,7 @@ export default function CreateDeckPage(){
       body: JSON.stringify({
         user_id: userId,
         name: deckName,
+        is_public: isPublic, // ← передаємо нове поле
         flashcards: validFlashcards.map(card => ({
           front: card.front,
           back: card.back,
@@ -70,56 +73,61 @@ export default function CreateDeckPage(){
       });
   };
 
-    return (<>
-        <Header />
-        
-        <div className='createdeck-container'>
+  return (
+    <>
+      <Header />
+      <div className='createdeck-container'>
         <div className='createdeck-items'></div>
         <div className='createdeck-items'>
-            <h4 className='title-deck-main'>{t("newdeck")}</h4>
+          <h4 className='title-deck-main'>{t("newdeck")}</h4>
 
-            <div className="did-floating-label-content">
-                <input 
-                  className="did-floating-input" 
-                  type="text" 
-                  placeholder=" " 
-                  value={deckName} 
-                  onChange={(e) => setDeckName(e.target.value)}
-                />
-                <label className="did-floating-label">{t("namenewdeck")}</label>
-              </div>
+          <div className="did-floating-label-content">
+            <input 
+              className="did-floating-input" 
+              type="text" 
+              placeholder=" " 
+              value={deckName} 
+              onChange={(e) => setDeckName(e.target.value)}
+            />
+            <label className="did-floating-label">{t("namenewdeck")}</label>
+          </div>
+          <div className="public-toggle">
+            <label className="public-toggle-label">
+              <input 
+                type="checkbox" 
+                checked={isPublic} 
+                onChange={() => setIsPublic(!isPublic)} 
+              />
+              <span className="public-label-text">{isPublic ? t("publicdeck") : t("privatedeck")}
+              </span>
+            </label>
+          </div>
 
+          <section className="flashcards">
+            {flashcards.map(card => (
+              <FlashcardInput
+                key={card.id}
+                id={card.id}
+                onChange={handleFlashcardChange}
+              />
+            ))}
+          </section>
 
-              <section className="flashcards">
-                {flashcards.map(card => (
-                  <FlashcardInput
-                    key={card.id}
-                    id={card.id}
-                    onChange={handleFlashcardChange}
-                  />
-                ))}
-              </section>
-              <section className='buttons'>
-              <div className='buttons1'>
-                <button className="create-folder-buttons" onClick={addFlashcard}>
+          <section className='buttons'>
+            <div className='buttons1'>
+              <button className="create-folder-buttons" onClick={addFlashcard}>
                 {t("addcard")}
-                </button>
-              </div>
-
-              <div  className='buttons1'>
-                <button className="create-folder-buttons" onClick={handleSubmit}>
+              </button>
+            </div>
+            <div className='buttons1'>
+              <button className="create-folder-buttons" onClick={handleSubmit}>
                 {t("createdeck")}
-                </button>
-              </div></section>
-
-
+              </button>
+            </div>
+          </section>
         </div>
         <div className='createdeck-items'></div>
-
-        
-        </div>
-
-        
-    
-    </>)
+      </div>
+    </>
+  )
 }
