@@ -45,7 +45,7 @@ export default function Profile() {
       {user ? (
         <div >
           
-          <img className='1'
+          <img className='image'
                       src={profile_default}
                       alt="Main Logo"
                       

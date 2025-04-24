@@ -1,7 +1,6 @@
-import './styles/login1.css';
+import './styles/login1.css'; 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Route, Routes } from 'react-router-dom';
 import logo from './assets/logo2.png';
 import { useTranslation } from "react-i18next";
 import "./i18n"; // Підключаємо i18n
@@ -57,8 +56,9 @@ export default function Login() {
     <div className="App parent">
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       <form className='div3' onSubmit={handleSubmit}>
-      <div><h1 >Login</h1></div>
+        <div><h1>Login</h1></div>
         <input
+          className="input-field"
           type="text"
           required
           value={userInput.username}
@@ -66,6 +66,7 @@ export default function Login() {
           placeholder="Enter your username"
         />
         <input
+          className="input-field"
           type="password"
           required
           value={userInput.password}
@@ -73,15 +74,29 @@ export default function Login() {
           placeholder="Enter your password"
         />
         <button type="submit">Login</button>
+
+        {/* Кнопка переходу на реєстрацію */}
+        <button
+          type="button"
+          onClick={() => navigate('/register')}
+          style={{
+            marginTop: '10px',
+            background: 'none',
+            border: 'none',
+            color: 'blue',
+            textDecoration: 'underline',
+            cursor: 'pointer'
+          }}
+        >
+          New user? Register
+        </button>
       </form>
 
-      <img className='div1'
-            src={logo}
-            alt="Main Logo"
-            
-          />
+      <div className="div1">
+        <h2>Welcome to FlashApp!</h2>
+        <h2>Register or login to continue</h2>
+        <img className="img-logo" src={logo} alt="Main Logo" />
+      </div>
     </div>
   );
 }
-
-

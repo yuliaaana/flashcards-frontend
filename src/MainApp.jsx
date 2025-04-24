@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Login from './Login'; 
+import Register from './Register'; 
 import HomePage from './HomePage'; 
 import CreateDeckPage from './CreateDeckPage'; 
 import Profile from './Profile'; 
@@ -16,6 +17,7 @@ export default function MainApp() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/homepage" element={<HomePage />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/create-deck" element={<CreateDeckPage />} />
