@@ -44,10 +44,14 @@
     width: 100%;
     gap: 20px;
   }
+
+ 
   
   .profile-left-column {
-    flex: 1;
+    flex: 6;
+    text-align: left;
     display: flex;
+    
     flex-direction: column;
     align-items: center;
     padding-right: 10px;
@@ -55,7 +59,7 @@
   }
   
   .profile-right-column {
-    flex: 2;
+    flex: 5;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -63,12 +67,13 @@
   
   .user-info {
     width: 100%;
-    text-align: center;
+    text-align: left;
     margin-top: 10px;
   }
   
   .user-info p {
     margin: 8px 0;
+    text-align: left;
     font-size: 16px;
   }
   
@@ -167,4 +172,8 @@
       padding-bottom: 10px;
       margin-bottom: 10px;
     }
+  }
+
+  .p{
+    text-align: left;
   }

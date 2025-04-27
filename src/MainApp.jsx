@@ -3,6 +3,7 @@ import Login from './Login';
 import Register from './Register'; 
 import HomePage from './HomePage'; 
 import CreateDeckPage from './CreateDeckPage'; 
+import EditProfile from './EditProfile'; 
 import Profile from './Profile'; 
 import CreateFolderPage from './CreateFolderPage'; 
 import Decks from './Decks'; 
@@ -19,7 +20,8 @@ export default function MainApp() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/homepage" element={<HomePage />} />
-      <Route path="/profile" element={<Profile />} />
+      <Route path="/edit-profile" element={<EditProfile />} />
+      <Route path="/profile/:userId" element={<Profile />} />
       <Route path="/create-deck" element={<CreateDeckPage />} />
       <Route path="/create-folder" element={<CreateFolderPage />} />
 

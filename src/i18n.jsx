@@ -16,6 +16,8 @@ import loginUK from "./locales/uk/login.json";
 import loginEN from "./locales/en/login.json";
 import profileEN from "./locales/en/profile.json";
 import profileUK from "./locales/uk/profile.json";
+import profilepublicEN from "./locales/en/profilepublic.json";
+import profilepublicUK from "./locales/uk/profilepublic.json";
 
 
 const resources = {
@@ -27,7 +29,8 @@ const resources = {
       learn: learnEN,
       header: headerEN,
       login: loginEN,
-      profile: profileEN
+      profile: profileEN,
+      profilepublic: profilepublicEN
     },
     uk: {
       home: homeUK,
@@ -37,7 +40,8 @@ const resources = {
       learn: learnUK,
       header: headerUK,
       login: loginUK,
-      profile: profileUK
+      profile: profileUK,
+      profilepublic: profilepublicUK
     },
   };
 
@@ -46,7 +50,7 @@ const resources = {
     lng: "uk",
     fallbackLng: "en",
     //ns: ["common", "home", "profile", "settings"],
-    ns: [ "home","recent","folders","login","profile"],
+    ns: [ "home","recent","folders","login","profile","profilepublic"],
     //defaultNS: "common",
     interpolation: { escapeValue: false },
   });
