@@ -30,6 +30,7 @@ export default function LearningMode() {
         return response.json();
       })
       .then((data) => {
+        console.log(data)
         saveRecentDecks(data);
         setFlashcards(data.flashcards);
         initializeRound(data.flashcards, 1);

@@ -2,9 +2,13 @@ import './styles/login1.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from './assets/logo2.png';
+import InitialHeader from './components/homepage/InitialHeader';
+import { useTranslation } from "react-i18next";
+import "./i18n";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation("login");
   const [userInput, setUserInput] = useState({
     username: '',
     email: '',
@@ -29,8 +33,10 @@ export default function Register() {
       const data = await response.json();
 
       if (response.ok) {
-        // Після успішної реєстрації перенаправляємо на логін
-        navigate('/login');
+        if (data.user_id) {
+          localStorage.setItem('user_id', data.user_id);
+        }
+        navigate('/homepage');
       } else {
         setErrorMessage(data.message);
       }
@@ -41,17 +47,20 @@ export default function Register() {
   }
 
   return (
+    <div>
+      <InitialHeader />
     <div className="App parent">
+      
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       <form className="div3" onSubmit={handleSubmit}>
-        <div><h1>Register</h1></div>
+        <div><h1>{t("register")}</h1></div>
         <input
           className="input-field"
           type="text"
           required
           value={userInput.username}
           onChange={(e) => handleChange('username', e.target.value)}
-          placeholder="Choose a username"
+          placeholder={t("chooseUsername")}
         />
         <input
           className="input-field"
@@ -59,7 +68,7 @@ export default function Register() {
           required
           value={userInput.email}
           onChange={(e) => handleChange('email', e.target.value)}
-          placeholder="Enter your email"
+          placeholder={t("enterEmail")}
         />
         <input
           className="input-field"
@@ -67,9 +76,9 @@ export default function Register() {
           required
           value={userInput.password}
           onChange={(e) => handleChange('password', e.target.value)}
-          placeholder="Choose a password"
+          placeholder={t("choosePassword")}
         />
-        <button type="submit">Register</button>
+        <button type="submit">{t("register")}</button>
 
         {/* Кнопка повернення на логін */}
         <button
@@ -84,15 +93,16 @@ export default function Register() {
             cursor: 'pointer'
           }}
         >
-          Already have an account? Login
+          {t("moveToLogin")}
         </button>
       </form>
 
       <div className="div1">
-        <h2>Welcome to FlashApp!</h2>
-        <h2>Register or login to continue</h2>
+        <h2> {t("welcome")}</h2>
+        <h2> {t("regOrLog")}</h2>
         <img className="img-logo" src={logo} alt="Main Logo" />
       </div>
+    </div>
     </div>
   );
 }

@@ -20,7 +20,7 @@
     max-width: 50px;
   }
   
-  .main-profile-content {
+  .profile-items:nth-child(2) {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -34,52 +34,15 @@
     -webkit-backdrop-filter: blur(16.7px);
     padding: 20px;
     width: 100%;
-    max-width: 900px; /* Ширша ширина для двоколонкового макету */
+    max-width: 700px;
     box-sizing: border-box;
   }
   
-  .profile-two-columns {
+  .profile-data {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
-    gap: 20px;
-  }
-  
-  .profile-left-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-right: 10px;
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
-  }
-  
-  .profile-right-column {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
     gap: 10px;
-  }
-  
-  .user-info {
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
-  }
-  
-  .user-info p {
-    margin: 8px 0;
-    font-size: 16px;
-  }
-  
-  .image {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    margin: 0 auto 10px;
-    display: block;
-    border: 2px solid #000;
-    object-fit: cover;
   }
   
   .profile-section {
@@ -95,24 +58,32 @@
     border-bottom: none;
   }
   
+  .image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: block;
+    border: 2px solid #000;
+    object-fit: cover;
+  }
+  
   h1 {
     text-align: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 25px;
+    margin-bottom: 25px;
   }
   
   h3 {
     margin-top: 0;
     margin-bottom: 15px;
     font-size: 18px;
-    font-weight: bold;
-
   }
   
   label {
     display: block;
     margin-bottom: 8px;
-    font-weight: 600;
+    font-weight: 500;
   }
   
   .input-group {
@@ -120,7 +91,7 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     box-sizing: border-box;
   }
   
@@ -134,37 +105,24 @@
     align-self: flex-start;
     font-weight: 500;
     transition: background-color 0.2s;
-    margin-top: 10px;
   }
   
   .save-button:hover {
     background-color: #033089a8;
   }
   
-  /* Респонсивні налаштування */
+  /* Responsive adjustments */
   @media (max-width: 768px) {
     .profile-items:nth-child(1),
     .profile-items:nth-child(3) {
       display: none;
     }
     
-    .main-profile-content {
-      margin: 0 0px;
+    .profile-items:nth-child(2) {
+      margin: 0 10px;
     }
     
     .profile-container {
       padding: 10px;
-    }
-    
-    .profile-two-columns {
-      flex-direction: column;
-    }
-    
-    .profile-left-column {
-      padding-right: 0;
-      border-right: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      padding-bottom: 10px;
-      margin-bottom: 10px;
     }
   }

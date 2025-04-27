@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Header from './components/homepage/Header';
 import './styles/profile.css';
 import profile_default from './assets/profile_default.png';
-import { useTranslation } from "react-i18next";
-import "./i18n";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
@@ -11,7 +9,6 @@ export default function Profile() {
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [newPassword, setNewPassword] = useState('');
   const fileInputRef = useRef(null);
-  const { t, i18n } = useTranslation("profile");
 
   useEffect(() => {
     const userId = localStorage.getItem('user_id');
@@ -41,7 +38,6 @@ export default function Profile() {
   };
 
   const handleSave = async () => {
-    /*e.preventDefault();*/
     try {
       const userId = localStorage.getItem('user_id');
       const response = await fetch(`http://127.0.0.1:5000/api/update-user/${userId}`, {
@@ -75,21 +71,20 @@ export default function Profile() {
 
   const handleUploadAvatar = async (file) => {
     if (!file) return;
-  
+
     const formData = new FormData();
     formData.append('avatar', file);
-  
+
     const userId = localStorage.getItem('user_id');
-  
+
     try {
       const response = await fetch(`http://127.0.0.1:5000/api/upload-avatar/${userId}`, {
         method: 'POST',
         body: formData,
       });
-  
+
       if (response.ok) {
         alert('Avatar updated!');
-        window.location.reload(); // Оновлює сторінку після завантаження аватара
       } else {
         alert('Failed to upload avatar');
       }
@@ -97,6 +92,7 @@ export default function Profile() {
       console.error('Error uploading avatar:', error);
     }
   };
+
   const handleChangePassword = async () => {
     if (!newPassword) return alert('Please enter new password');
 
@@ -122,98 +118,77 @@ export default function Profile() {
     }
   };
 
-  // Отримуємо аватар з поля `avatar`
-  // Отримуємо аватар з поля `avatar`
-const getAvatarUrl = () => {
-  return user && user.avatar
-    ? `data:image/png;base64,${user.avatar}`  // Використовуємо base64-кодований аватар
-    : profile_default; // Якщо аватар не задано, показуємо дефолтне фото
-};
-
-
   return (
     <>
       <Header />
-      <h1>{t("yourProfile")}</h1>
+      <h1>Profile Information</h1>
       <div className="profile-container">
         <div className="profile-items"></div>
-        <div className="profile-items main-profile-content">
+        <div className="profile-items">
           {user ? (
-            <div className="profile-two-columns">
-              {/* Left Column - User Info */}
-              <div className="profile-left-column">
-                {/* Відображення аватара з БД */}
-                <img
-                  className="image"
-                  src={getAvatarUrl()} // Використовуємо аватар або дефолтний
-                  alt="Avatar"
-                />
-                <div className="user-info">
-                  <h3>{t("infoProfile")}</h3>
-                  <p><strong>{t("username")}</strong> {user.username}</p>
-                  <p><strong>{t("email")}</strong> {user.email}</p>
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    style={{ display: 'none' }}
-                    onChange={handleAvatarChange}
-                  />
-                  <button onClick={handleUploadClick} className="save-button">
-                  {t("changeAvatar")}
-                  </button>
-                </div>
-              </div>
-
-              {/* Right Column - Edit Forms */}
-              <div className="profile-right-column">
-                {/* Edit Profile Section */}
-                <div className="profile-section">
-                  <h3>{t("editProfile")}</h3>
-                  <div>
-                    <label>{t("username")}</label>
-                    <input
-                      className="input-group"
-                      type="text"
-                      name="username"
-                      value={editedUser.username}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div>
-                    <label>{t("email")}</label>
-                    <input
-                      className="input-group"
-                      type="email"
-                      name="email"
-                      value={editedUser.email}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <button onClick={handleSave} className="save-button">
-                  {t("saveChanges")}
-                  </button>
-                </div>
-                
-                {/* Password Change Section */}
-                <div className="profile-section">
-                  <h3>{t("changePass")}</h3>
-                  <label>{t("newPassword")}</label>
+            <div className="profile-data">
+              <img className="image" src={profile_default} alt="Avatar" />
+              
+              {/* Profile Information Section */}
+              <div className="profile-section">
+                <div>
+                  <label>Username:</label>
                   <input
                     className="input-group"
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
+                    type="text"
+                    name="username"
+                    value={editedUser.username}
+                    onChange={handleChange}
                   />
-                  <button onClick={handleChangePassword} className="save-button">
-                  {t("saveChanges")}
-                  </button>
                 </div>
+
+                <div>
+                  <label>Email:</label>
+                  <input
+                    className="input-group"
+                    type="email"
+                    name="email"
+                    value={editedUser.email}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <button onClick={handleSave} className="save-button">
+                  Save Changes
+                </button>
+              </div>
+              
+              {/* Avatar Upload Section */}
+              <div className="profile-section">
+                <h3>Change Profile Picture</h3>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
+                  onChange={handleAvatarChange}
+                />
+                <button onClick={handleUploadClick} className="save-button">
+                  Upload Avatar
+                </button>
+              </div>
+              
+              {/* Password Change Section */}
+              <div className="profile-section">
+                <h3>Change Password</h3>
+                <label>New Password:</label>
+                <input
+                  className="input-group"
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <button onClick={handleChangePassword} className="save-button">
+                  Change Password
+                </button>
               </div>
             </div>
           ) : (
-            <p>{t("loading")}</p>
+            <p>Loading user data...</p>
           )}
         </div>
         <div className="profile-items"></div>

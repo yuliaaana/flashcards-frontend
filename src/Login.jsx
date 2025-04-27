@@ -4,12 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import logo from './assets/logo2.png';
 import { useTranslation } from "react-i18next";
 import "./i18n"; // Підключаємо i18n
+import InitialHeader from './components/homepage/InitialHeader';
 
 function Dashboard() {
   return <h1>Welcome to your Dashboard!</h1>;
 }
 
 export default function Login() {
+  
   const navigate = useNavigate(); 
   const [userInput, setUserInput] = useState({
     username: '',
@@ -17,7 +19,7 @@ export default function Login() {
   });
 
   const [errorMessage, setErrorMessage] = useState('');
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("login");
 
   function handleChange(inputIdentifier, newValue) {
     setUserInput(prevUserInput => ({
@@ -53,17 +55,19 @@ export default function Login() {
   }
 
   return (
+    <div>
+       <InitialHeader />
     <div className="App parent">
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       <form className='div3' onSubmit={handleSubmit}>
-        <div><h1>Login</h1></div>
+        <div><h1> {t("login")}</h1></div>
         <input
           className="input-field"
           type="text"
           required
           value={userInput.username}
           onChange={(event) => handleChange('username', event.target.value)}
-          placeholder="Enter your username"
+          placeholder={t("enterUsername")}
         />
         <input
           className="input-field"
@@ -71,9 +75,9 @@ export default function Login() {
           required
           value={userInput.password}
           onChange={(event) => handleChange('password', event.target.value)}
-          placeholder="Enter your password"
+          placeholder={t("enterPassword")}
         />
-        <button type="submit">Login</button>
+        <button type="submit"> {t("login")}</button>
 
         {/* Кнопка переходу на реєстрацію */}
         <button
@@ -88,15 +92,16 @@ export default function Login() {
             cursor: 'pointer'
           }}
         >
-          New user? Register
+          {t("newUserReg")}
         </button>
       </form>
 
       <div className="div1">
-        <h2>Welcome to FlashApp!</h2>
-        <h2>Register or login to continue</h2>
+        <h2> {t("welcome")}</h2>
+        <h2> {t("regOrLog")}</h2>
         <img className="img-logo" src={logo} alt="Main Logo" />
       </div>
+    </div>
     </div>
   );
 }

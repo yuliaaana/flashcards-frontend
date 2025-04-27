@@ -64,6 +64,7 @@
     margin-right: 5px;
     margin-top: auto;
     margin-bottom: 0;
+
     
 
   }
@@ -104,7 +105,7 @@
     order: 0;
   }
 
-  .btn-conf{
+  .btn-conf {
     background-color: #1f96bed1;
     color: white;
     border: none;
@@ -112,7 +113,10 @@
     border-radius: 10px;
     transition: background-color 0.3s;
     height: 35px;
-
+    padding: 0 10px;  /* Забезпечить відступи з боків */
+    display: flex;  /* Встановлює flex-контейнер для кнопки */
+    align-items: center;  /* Вирівнює текст по вертикалі */
+    justify-content: center;  /* Вирівнює текст по горизонталі */
 }
 
     .btn-conf:hover {
