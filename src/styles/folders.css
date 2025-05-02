@@ -1,11 +1,15 @@
 html {
     height:100%;
+
   }
   
   body {
     margin:0;
+
   }
-  
+  /*.title-deck{
+    color: #34678f;
+  }*/
   .bg {
     animation:slide 8s ease-in-out infinite alternate;
     background-image: linear-gradient(-60deg, #22abd97f 50%, #8dd9e67f 50%);
@@ -137,7 +141,7 @@ html {
   width: 30%;
   height: auto;
   display: block;
-  padding: 10px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
   box-sizing: border-box;
 }
 

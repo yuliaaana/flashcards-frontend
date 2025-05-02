@@ -5,12 +5,24 @@ import visitDeck from './components/homepage/DecksBlock';
 import './styles/deck.css';
 import Flashcard from './components/creates/Flashcard';
 
+// Функція форматування дати
+
+
 
 export default function Deck() {
   const { deckId } = useParams(); 
   const [deck, setDeck] = useState(null);
   const navigate = useNavigate();
 
+  function formatDate(httpDateString) {
+  const date = new Date(httpDateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // місяці починаються з 0
+  const year = date.getFullYear();
+  return `${day}.${month}.${year}`;
+}
+
+  
   useEffect(() => {
     fetch(`http://127.0.0.1:5000/api/deck/${deckId}`)
       .then((response) => {
@@ -41,7 +53,7 @@ export default function Deck() {
           <div className="deck-details">
             <h4 className='title-deck'>{deck.deck.name}</h4>
             <p>Created by: {deck.deck.creator}</p>
-            <p>Created at: {deck.deck.created_at}</p>
+            <p>Created at: {formatDate(deck.deck.created_at)}</p>
             {deck.flashcards.map(card => (
               <Flashcard
                 key={card.id}

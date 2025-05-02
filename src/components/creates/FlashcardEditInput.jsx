@@ -41,7 +41,6 @@ export default function FlashcardEditInput({ id, onChange, onDelete, front, back
             value={frontValue}
             onChange={(e) => handleInputChange('front', e.target.value)}
             readOnly={!isEditing}  // Якщо не в режимі редагування - input тільки для перегляду
-            placeholder={t("enterfront")} // Підказка для введення
           />
           <span className="flashcard-input-label">{t("enterfront")}</span>
         </label>
@@ -54,7 +53,6 @@ export default function FlashcardEditInput({ id, onChange, onDelete, front, back
               value={backValue}
               onChange={(e) => handleInputChange('back', e.target.value)}
               readOnly={!isEditing}
-              placeholder={t("enterback")} // Підказка для введення
             />
             <span className="flashcard-input-label">{t("enterback")}</span>
           </label>
@@ -66,7 +64,6 @@ export default function FlashcardEditInput({ id, onChange, onDelete, front, back
               value={descriptionValue}
               onChange={(e) => handleInputChange('description', e.target.value)}
               readOnly={!isEditing}
-              placeholder={t("enterdescription")} // Підказка для введення
             />
             <span className="flashcard-input-label">{t("enterdescription")}</span>
           </label>

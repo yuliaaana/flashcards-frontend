@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/homepage/Header';
+import AnimatedBackground from './components/AnimatedBackground';
 import './styles/profile.css';
 import './styles/publicprofile.css';
 import profile_default from './assets/profile_default.png';
@@ -64,6 +65,9 @@ export default function Profile() {
   return (
     <>
       <Header />
+      <div class="bg"></div>
+        <div class="bg bg2"></div>
+        <div class="bg bg3"></div>
       <h1>{t("profileTitle")}</h1>
       <div className="profile-container">
         <div className="profile-items"></div>
@@ -92,7 +96,7 @@ export default function Profile() {
                   {folders.length > 0 ? (
                     <ul>
                       {folders.map((folder) => (
-                        <li key={folder.id}>{folder.name}</li>
+                        <li key={folder.id} style={{cursor: 'pointer'}} className="deck-name" >{folder.name}</li>
                       ))}
                     </ul>
                   ) : (
@@ -102,19 +106,25 @@ export default function Profile() {
 
                 {/* Decks Section */}
                 <div className="profile-section">
-                  <h3>{t("decks")}</h3>
-                  {decks.length > 0 ? (
-                    <ul>
-                      {decks.map((deck) => (
-                        <li key={deck.id} onClick={() => handleDeckClick(deck)} style={{cursor: 'pointer'}}>
-                          {deck.name}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>{t("noDecks")}</p>
-                  )}
-                </div>
+  <h3>{t("decks")}</h3>
+  {decks.length > 0 ? (
+    <ul>
+      {decks.map((deck) => (
+        <li 
+          key={deck.id} 
+          onClick={() => handleDeckClick(deck)} 
+          style={{cursor: 'pointer'}}
+          className="deck-name"  // Додаємо клас для синього кольору та ховера
+        >
+          {deck.name}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>{t("noDecks")}</p>
+  )}
+</div>
+
               </div>
             </div>
           ) : (
@@ -129,7 +139,7 @@ export default function Profile() {
   <div className="modal">
     <div className="modal-content">
       <h4>{t("confirmNavigation")}</h4>
-      <p>{t("confirmText")} {selectedDeck?.name}?</p>
+      <p>{t("confirmText")} {selectedDeck?.name}' ?</p>
       <div className="buttons">
         <button onClick={handleConfirmNavigation}>{t("yes")}</button>
         <button onClick={handleCancelNavigation}>{t("no")}</button>

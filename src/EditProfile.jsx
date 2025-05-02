@@ -134,6 +134,9 @@ const getAvatarUrl = () => {
   return (
     <>
       <Header />
+      <div class="bg"></div>
+        <div class="bg bg2"></div>
+        <div class="bg bg3"></div>
       <h1>{t("yourProfile")}</h1>
       <div className="profile-container">
         <div className="profile-items"></div>

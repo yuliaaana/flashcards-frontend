@@ -44,16 +44,14 @@ function HomePage() {
 
   return (
     <>
-    
       <Header />
       <div class="background"> 
-     <AnimatedBackground/>
+      <AnimatedBackground/>
       <div className="parent-home">
       <ListsBlock classname="div3-home" title={t("yourDecks")} items={decks} buttonLabel={t("goToDecks")} redirectTo="/decks"/>
       <ListsBlock classname="div4-home" title={t("yourFolders")} items={folders} buttonLabel={t("goToFolders")} redirectTo="/folders"/>
       <DecksBlock classname="div5-home" title={t("lastViewed")}/>
       <PublicDecksBlock classname="div6-home"  title={t("popularPublicDecks")}/>
-
       </div>
       </div>
     </>

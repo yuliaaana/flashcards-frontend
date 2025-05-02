@@ -16,7 +16,7 @@
 .modal-content {
   background: white;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 18px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   width: 500px;
 }
@@ -28,6 +28,10 @@
   gap: 10px; /* Add gap between buttons */
   margin-top: 20px; /* Optional, adds some space above buttons */
   width: 100%; /* Ensure buttons take up full container width */
+}
+
+h4{
+  text-align: center;
 }
 
 /* Styling individual buttons */
@@ -44,4 +48,17 @@
 
 .modal button:hover {
   background-color: #033089a8;
+}
+
+/* Додаємо синій колір для назви деки */
+.deck-name {
+  color: #08659ed6;
+  transition: color 0.3s ease; /* Додаємо плавний перехід */
+  font-weight: 500;
+}
+
+/* Колір змінюється при наведенні */
+.deck-name:hover {
+  color: #033089db;
+  font-weight: 600;
 }

@@ -4,13 +4,17 @@
     "createdAt":"Створено : " ,
     "decks": "Деки : ",
     "eeee": "ukrainian",
-
+    "yourCards": "Карток : ",
     "yourDecks": "Ваші деки",
-    "createdBy":"Створив : " ,
+    "createdBy":"Автор : " ,
     "startStudying": "Вивчати цей дек",
     "edit": "Редагувати",
     "delete": "Видалити",
 
     "add_new_deck": "Додати новий дек :",
-    "addSelectedDecks": "Додати вибрані деки"
+    "addSelectedDecks": "Додати вибрані деки",
+
+    "editFolder": "Редагувати папку",
+    "name": "Назва",
+    "addexistingdecks": "Додати існуючі деки"
 }

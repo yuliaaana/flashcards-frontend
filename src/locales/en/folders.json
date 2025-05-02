@@ -6,11 +6,19 @@
     "eeee": "english",
 
     "yourDecks": "Your decks",
+    "yourCards": "Your cards",
     "createdBy":"Created by : " ,
     "startStudying": "Start studying",
     "edit": "Edit",
     "delete": "Delete",
 
     "add_new_deck": "Add new deck :",
-    "addSelectedDecks": "Add selected decks"
+    "addSelectedDecks": "Add selected decks",
+
+    "editFolder": "Edit folder",
+    "addexistingdecks": "Add existing decks",
+
+    "name": "Name",
+    "addexistingdecs": "Add existing decks"
+
 }
