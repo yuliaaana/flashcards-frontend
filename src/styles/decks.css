@@ -59,7 +59,7 @@ html {
   
   .decks-items:nth-child(2) {
     display: block;
-    flex-grow: 4;
+    flex-grow:2;
     flex-shrink: 6;
     flex-basis: auto;
     align-self: auto;
@@ -126,7 +126,7 @@ html {
     margin: 2.0rem 0.5rem 0.5rem 0.5rem;
     border-radius: 10px;
     border: 5px; 
-    background: rgba(255, 255, 255, 0.25);
+    background-color:  #0e81c8a8;
     border-radius: 10px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10.7px);
@@ -134,19 +134,19 @@ html {
   }
   .buttons-items:hover {
     
-    background: #20a0caa5;
+    background-color: #033089a8;
     
   }
   
 .title-deck {
     font-family: "Montserrat", sans-serif;
     color: #333; 
-    font-size: 2.5rem; 
+    font-size: 2rem; 
     font-weight: bold; 
     text-align: center; 
     margin: 20px 0; 
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    /*text-transform: uppercase;
+    letter-spacing: 2px;*/
   }
   
 .name{

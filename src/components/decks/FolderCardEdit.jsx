@@ -32,6 +32,7 @@ export default function FolderCardEdit({ className, created_at, name, decks, fol
         .then(data => {
           if (data.folders && data.decks) {
             const filteredDecks = data.decks.filter(deck => !deck.folder_id);
+            console.log(data)
             setNewDecks(filteredDecks);
           } else {
             console.error('Invalid data format:', data);
@@ -72,7 +73,7 @@ export default function FolderCardEdit({ className, created_at, name, decks, fol
   return (
     <div className={`${className} foldercard-container`}>
       <div className="foldercard-items">
-        <h4 className="name">{name}</h4>
+        <h4 className="name">{`${t("folders:name")} : ${name}`}</h4>
         <h5>{`${t("folders:createdAt")} ${formattedDate}`}</h5>
       </div>
       <div className="foldercard-items">
@@ -92,7 +93,7 @@ export default function FolderCardEdit({ className, created_at, name, decks, fol
         <div className="decks-bullet">
           <ListsCheckbox
             className="custom-checkbox"
-            title={t("addexistingdecks")}
+            title={t("folders:addexistingdecks")}
             items={new_decks}
             onSelectionChange={setSelectedDecks}
           />

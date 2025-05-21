@@ -1,0 +1,15 @@
+{
+  "profileTitle": "User Profile",
+  "infoProfile": "Profile Information",
+  "username": "Username :",
+  "email": "Email :",
+  "folders": "Folders :",
+  "noFolders": "No folders available",
+  "decks": "Decks :",
+  "noDecks": "No decks available",
+  "loading": "Loading...",
+  "confirmNavigation": "Confirm Navigation",
+  "confirmText": "Do you want to navigate to the deck",
+  "yes": "Yes",
+  "no": "No"
+}

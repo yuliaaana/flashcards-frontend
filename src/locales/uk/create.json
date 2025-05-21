@@ -5,18 +5,18 @@
     "namenewfolder": "Назва нової папки",
     "description":"Опис",
     "createfolder":"Створити папку",
-    "addexistingdecks":"Додати існуючі деки:",
-    "newdeck":"Новий дек",
-    "namenewdeck":"Ім'я нового деку",
+    "addexistingdecks":"Додати існуючі набори карток:",
+    "newdeck":"Новий набір карток",
+    "namenewdeck":"Ім'я нового набору карток",
     "addcard":"Додати нову картку",
-    "createdeck":"Створити дек",
+    "createdeck":"Створити набір карток",
     "enterfront":"Введіть заголовок спереду",
     "enterback":"Введіть заголовок ззаду",
     "enterdescription":"Введіть опис",
-    "publicdeck": "Публічний дек",
-    "privatedeck": "Приватний дек",
-    "editdeck": "Редагувати дек",
-    "updatedeck": "Оновити дек"
+    "publicdeck": "Публічний набір карток",
+    "privatedeck": "Приватний набір карток",
+    "editdeck": "Редагувати набір карток",
+    "updatedeck": "Оновити набір карток"
     
 
 

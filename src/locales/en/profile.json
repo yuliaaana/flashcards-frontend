@@ -1,0 +1,12 @@
+{
+    "yourProfile":"Your Profile",
+    "infoProfile":"Profile Information",
+    "username":"Username :",
+    "email":"Email :",
+    "changeAvatar":"Change Photo",
+    "editProfile":"Edit Profile",
+    "saveChanges":"Save Changes",
+    "changePass":"Change Password",
+    "newPassword":"New Password :",
+    "loading":"Loading user data..."
+}

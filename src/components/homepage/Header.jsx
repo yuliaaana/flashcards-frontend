@@ -24,7 +24,7 @@ function Header() {
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" navbarScroll>
             <Nav.Link onClick={() => navigate('/homepage')}>{t("home")}</Nav.Link>
-            <Nav.Link onClick={() => navigate('/profile')}>{t("profile")}</Nav.Link>
+            <Nav.Link onClick={() => navigate('/edit-profile')}>{t("profile")}</Nav.Link>
             <NavDropdown title={t("create")} id="navbarScrollingDropdown">
               <NavDropdown.Item onClick={() => navigate('/create-folder')}>{t("folder")}</NavDropdown.Item>
               <NavDropdown.Item onClick={() => navigate('/create-deck')}>{t("deck")}</NavDropdown.Item>

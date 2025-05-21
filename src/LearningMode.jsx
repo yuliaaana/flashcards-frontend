@@ -30,6 +30,7 @@ export default function LearningMode() {
         return response.json();
       })
       .then((data) => {
+        console.log(data)
         saveRecentDecks(data);
         setFlashcards(data.flashcards);
         initializeRound(data.flashcards, 1);
@@ -44,24 +45,17 @@ export default function LearningMode() {
     switch(roundNumber) {
       case 1:
         roundCards = [...cards];
-        //console.log('Round 1: All cards:', roundCards.length);
         break;
       case 2:
         roundCards = cards.filter(card => card.confidence_level < 4);
-        //console.log('Round 2: Without excellent:', roundCards.length);
         break;
       case 3:
         roundCards = cards.filter(card => card.confidence_level <= 2);
-        //console.log('Round 3: Only hard and fail:', roundCards.length);
         break;
       case 4:
         roundCards = cards.filter(card => card.confidence_level === 1);
-        //console.log('Round 4: Only fail:', roundCards.length);
         break;
       default:
-        /*console.log('Resetting to round 1');
-        roundCards = [...cards];
-        roundNumber = 1;*/
         setShowCompletion(true);
     }
     
@@ -70,12 +64,11 @@ export default function LearningMode() {
         console.log(`No cards for round ${roundNumber}, moving to next round`);
         initializeRound(cards, roundNumber + 1);
       } else {
-        //console.log('Learning session complete');
         setShowCompletion(true);
       }
       return;
     }
-    
+  
     setRound(roundNumber);
     setCurrentRoundCards(roundCards);
     setReviewedCards(new Set());
@@ -89,9 +82,7 @@ export default function LearningMode() {
 
   // Fix selectNextCard function
   const selectNextCard = () => {
-    //console.log(`Current round: ${round}`);
     const unreviewed = currentRoundCards.filter(card => !reviewedCards.has(card.id));
-    //console.log(`Unreviewed cards in round ${round}:`, unreviewed.length);
     
     if (unreviewed.length === 0) {
       const nextRound = round + 1;
@@ -102,7 +93,7 @@ export default function LearningMode() {
     }
     
     const nextCard = unreviewed[0];
-    setReviewedCards(prev => new Set([...prev, nextCard.id])); // Add this line
+    setReviewedCards(prev => new Set([...prev, nextCard.id])); 
     setCurrentCard(nextCard);
   };
 

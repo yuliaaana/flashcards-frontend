@@ -15,6 +15,8 @@ export default function Folder() {
     const [folders, setFolders] = useState([]);
     const [folder, setFolder] = useState(null);
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
+
 
     useEffect(() => {
         const userId = localStorage.getItem('user_id');
@@ -50,7 +52,7 @@ export default function Folder() {
           <div className="folders-container">
             <div className="folders-items"></div>
             <div className="folders-items folders">
-              <h2 className="title-deck">Папка</h2>
+              <h2 className="title-deck">{t("folders:editFolder")}</h2>
               {folder ? (
                 <FolderCard key={folder.id} className="folder" {...folder} folder_id={folderId} />
               ) : (

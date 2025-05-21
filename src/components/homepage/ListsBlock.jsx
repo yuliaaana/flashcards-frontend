@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 function ListsBlock({ classname, title, items = [], buttonLabel, redirectTo }) {
   const navigate = useNavigate();
-
+  console.log(items)
   const handleItemClick = (item) => {
-    // Перевірка назви масиву items
+
     if (Array.isArray(items) && items.length > 0) {
-      const isDecks = items[0]?.folder_id ? true : false; // Перевірка, чи є у першого елемента 'name'
+      const isDecks = items[0]?.creator ? true : false;
       
       if (isDecks) {
         navigate(`/learn/${item.id}`);
@@ -17,8 +17,6 @@ function ListsBlock({ classname, title, items = [], buttonLabel, redirectTo }) {
     }
   };
   
-  //console.log(items);
-
   const handleButtonClick = () => {
     navigate(redirectTo);
   };

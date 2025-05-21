@@ -2,15 +2,19 @@
     "yourFolder": "Ваші папки",
     "terms" : "Терміни : " ,
     "createdAt":"Створено : " ,
-    "decks": "Деки : ",
+    "decks": "Набори карток : ",
     "eeee": "ukrainian",
-
-    "yourDecks": "Ваші деки",
-    "createdBy":"Створив : " ,
-    "startStudying": "Вивчати цей дек",
+    "yourCards": "Карток : ",
+    "yourDecks": "Ваші набори карток",
+    "createdBy":"Автор : " ,
+    "startStudying": "Вивчати цей набір",
     "edit": "Редагувати",
     "delete": "Видалити",
 
-    "add_new_deck": "Додати новий дек :",
-    "addSelectedDecks": "Додати вибрані деки"
+    "add_new_deck": "Додати новий набір карток :",
+    "addSelectedDecks": "Додати вибрані набори карток",
+
+    "editFolder": "Редагувати папку",
+    "name": "Назва",
+    "addexistingdecks": "Додати існуючі набори карток"
 }

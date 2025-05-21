@@ -25,7 +25,7 @@ export default function DeckCard({
   return (
     <div className={className}>
       <h4 className="name">{name}</h4>
-      <h5>{t("folders:yourDecks")} {terms}</h5>
+      <h5>{t("folders:yourCards")} {terms}</h5>
       <h5>{t("folders:createdBy")} {creator}</h5>
       <h5>{t("folders:createdAt")} {created_at}</h5>
       <div className="buttons-container">

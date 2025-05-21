@@ -1,65 +1,94 @@
-    .parent {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(5, 1fr);
-      grid-column-gap: 30px;
-      grid-row-gap: 20px;
-    }
+.parent {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+}
 
-    .div1 {
-      grid-area: 1 / 2 / 6 / 3;
-      width: 100%;
-    }
+.div1 {
+  font-family: "Montserrat", sans-serif;
+  margin-top: 10%;
+  grid-area: 1 / 2 / 6 / 3;
+}
 
-    .div2 {
-      grid-area: 1 / 1 / 2 / 2;
-      margin: auto;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
+.img-logo {
+  width: 70%;
+}
 
-    .div3 {
-      grid-area: 2 / 1 / 5 / 2;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 10%;
-      width: 80%;
-      margin: auto;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      max-width: 500px;
-      background: rgba(255, 255, 255, 0.39);
-      border-radius: 16px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(16.7px);
-      -webkit-backdrop-filter: blur(16.7px);
+.div3 {
+  font-family: "Montserrat", sans-serif;
+  grid-area: 1 / 1 / 5 / 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5%;
+  width: 80%;
+  margin: auto;
+  margin-top: 10%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.39);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(16.7px);
+  -webkit-backdrop-filter: blur(16.7px);
+  height: 500px;
+}
 
-    }
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 12px; /* Збільшено скруглення країв інпутів */
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
 
-    @keyframes gradient {
-      0% {
-        background-position: 0% 50%;
-      }
+.input-field:focus {
+  border-color: #007bff; /* Зміна кольору бордера при фокусі */
+  outline: none;
+}
 
-      50% {
-        background-position: 100% 50%;
-      }
+button {
+  width: 100%; /* Розтягуємо кнопку на всю ширину інпутів */
+  padding: 12px; /* Трохи більше відступів */
+  margin-top: 10px;
+  border-radius: 12px; /* Збільшено скруглення кнопки */
+  background-color: #22abd9;
+  color: white;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
 
-      100% {
-        background-position: 0% 50%;
-      }
-    }
+button:hover {
+  background-color: #1b8eb4;
+}
 
-    @media (max-width: 800px) {
-      .div3 {
-        width: 90%;
-        padding: 10%;
-      }
-    }
+button:focus {
+  outline: none;
+}
 
-    .div4 {
-      grid-area: 5 / 1 / 6 / 2;
-    }
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (max-width: 800px) {
+  .div3 {
+    width: 90%;
+    padding: 10%;
+  }
+}

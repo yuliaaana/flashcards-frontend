@@ -1,0 +1,20 @@
+{
+
+    "register":"Register",
+    "chooseUsername":"Choose a username",
+    "enterEmail":"Enter your email",
+    "choosePassword":"Choose a password",
+    "moveToLogin":"Already have an account? Login",
+    "welcome":"Welcome to FlashApp!",
+    "regOrLog":"Register or login to continue",
+
+    "login":"Login",
+    "enterUsername":"Enter your username",
+    "enterPassword":"Enter your password",
+    "newUserReg":"New user? Register"
+
+
+
+
+
+}

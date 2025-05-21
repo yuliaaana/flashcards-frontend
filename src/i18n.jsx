@@ -12,6 +12,12 @@ import learnUK from "./locales/uk/learn.json";
 import learnEN from "./locales/en/learn.json";
 import headerUK from "./locales/uk/header.json";
 import headerEN from "./locales/en/header.json";
+import loginUK from "./locales/uk/login.json";
+import loginEN from "./locales/en/login.json";
+import profileEN from "./locales/en/profile.json";
+import profileUK from "./locales/uk/profile.json";
+import profilepublicEN from "./locales/en/profilepublic.json";
+import profilepublicUK from "./locales/uk/profilepublic.json";
 
 
 const resources = {
@@ -22,6 +28,9 @@ const resources = {
       create: createsEN,
       learn: learnEN,
       header: headerEN,
+      login: loginEN,
+      profile: profileEN,
+      profilepublic: profilepublicEN
     },
     uk: {
       home: homeUK,
@@ -30,6 +39,9 @@ const resources = {
       recent: recentUK,
       learn: learnUK,
       header: headerUK,
+      login: loginUK,
+      profile: profileUK,
+      profilepublic: profilepublicUK
     },
   };
 
@@ -38,7 +50,7 @@ const resources = {
     lng: "uk",
     fallbackLng: "en",
     //ns: ["common", "home", "profile", "settings"],
-    ns: [ "home","recent","folders"],
+    ns: [ "home","recent","folders","login","profile","profilepublic"],
     //defaultNS: "common",
     interpolation: { escapeValue: false },
   });
