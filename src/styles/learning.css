@@ -51,10 +51,6 @@
     
 }
 
-
-
-
-
 .confidence-buttons {
     display: flex;
     flex-direction: row;
@@ -113,10 +109,10 @@
     border-radius: 10px;
     transition: background-color 0.3s;
     height: 35px;
-    padding: 0 10px;  /* Забезпечить відступи з боків */
-    display: flex;  /* Встановлює flex-контейнер для кнопки */
-    align-items: center;  /* Вирівнює текст по вертикалі */
-    justify-content: center;  /* Вирівнює текст по горизонталі */
+    padding: 0 10px;  
+    display: flex;  
+    align-items: center;  
+    justify-content: center;  
 }
 
     .btn-conf:hover {

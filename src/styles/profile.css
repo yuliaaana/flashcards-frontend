@@ -67,7 +67,7 @@
     -webkit-backdrop-filter: blur(16.7px);
     padding: 20px;
     width: 100%;
-    max-width: 900px; /* Ширша ширина для двоколонкового макету */
+    max-width: 900px; 
     box-sizing: border-box;
   }
   

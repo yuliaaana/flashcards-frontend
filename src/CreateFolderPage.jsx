@@ -30,7 +30,6 @@ export default function CreateFolderPage() {
         })
         .then(data => {
           if (data.folders && data.decks) {
-            // Фільтруємо лише ті деки, у яких folder_id порожній або відсутній
             const filteredDecks = data.decks.filter(deck => !deck.folder_id);
             setDecks(filteredDecks);
           } else {
@@ -68,7 +67,6 @@ export default function CreateFolderPage() {
     })
       .then(response => response.json())
       .then(data => {
-        //console.log('Folder created:', data);
         navigate('/folders');
       })
       .catch(error => {

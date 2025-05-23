@@ -54,7 +54,7 @@ export default function CreateDeckPage(){
       body: JSON.stringify({
         user_id: userId,
         name: deckName,
-        is_public: isPublic, // ← передаємо нове поле
+        is_public: isPublic, 
         flashcards: validFlashcards.map(card => ({
           front: card.front,
           back: card.back,

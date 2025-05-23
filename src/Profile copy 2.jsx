@@ -118,11 +118,10 @@ export default function Profile() {
     }
   };
 
-  // Отримуємо аватар з поля `avatar`
   const getAvatarUrl = () => {
     return user && user.avatar
       ? `http://127.0.0.1:5000/uploads/${user.avatar}`
-      : profile_default; // Якщо аватар не задано, показуємо дефолтне фото
+      : profile_default; 
   };
 
   return (

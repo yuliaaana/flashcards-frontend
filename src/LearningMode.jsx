@@ -169,7 +169,6 @@ export default function LearningMode() {
           </div>
           <div className='learn-items'>
             <div className="learning-mode">
-              {/*<h3>Round {round}</h3>*/}
               <div 
                 className={`flashcard-learning ${isFlipped ? 'flipped-learning' : ''}`}
                 onClick={() => setIsFlipped(!isFlipped)}

@@ -41,7 +41,6 @@ export default function EditProfile() {
   };
 
   const handleSave = async () => {
-    /*e.preventDefault();*/
     try {
       const userId = localStorage.getItem('user_id');
       const response = await fetch(`http://127.0.0.1:5000/api/update-user/${userId}`, {
@@ -89,7 +88,7 @@ export default function EditProfile() {
   
       if (response.ok) {
         alert('Avatar updated!');
-        window.location.reload(); // Оновлює сторінку після завантаження аватара
+        window.location.reload();
       } else {
         alert('Failed to upload avatar');
       }
@@ -122,12 +121,10 @@ export default function EditProfile() {
     }
   };
 
-  // Отримуємо аватар з поля `avatar`
-  // Отримуємо аватар з поля `avatar`
 const getAvatarUrl = () => {
   return user && user.avatar
-    ? `data:image/png;base64,${user.avatar}`  // Використовуємо base64-кодований аватар
-    : profile_default; // Якщо аватар не задано, показуємо дефолтне фото
+    ? `data:image/png;base64,${user.avatar}`  
+    : profile_default; 
 };
 
 
@@ -143,12 +140,10 @@ const getAvatarUrl = () => {
         <div className="profile-items main-profile-content">
           {user ? (
             <div className="profile-two-columns">
-              {/* Left Column - User Info */}
               <div className="profile-left-column">
-                {/* Відображення аватара з БД */}
                 <img
                   className="image"
-                  src={getAvatarUrl()} // Використовуємо аватар або дефолтний
+                  src={getAvatarUrl()} 
                   alt="Avatar"
                 />
                 <div className="user-info">
@@ -167,9 +162,7 @@ const getAvatarUrl = () => {
                 </div>
               </div>
 
-              {/* Right Column - Edit Forms */}
               <div className="profile-right-column">
-                {/* Edit Profile Section */}
                 <div className="profile-section">
                   <h3>{t("editProfile")}</h3>
                   <div>
@@ -199,7 +192,6 @@ const getAvatarUrl = () => {
                   </button>
                 </div>
                 
-                {/* Password Change Section */}
                 <div className="profile-section">
                   <h3>{t("changePass")}</h3>
                   <label>{t("newPassword")}</label>

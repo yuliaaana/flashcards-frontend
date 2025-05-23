@@ -145,8 +145,8 @@ body {
 }
 
 .btn-study {
-    margin-top: auto; /* Відсуває кнопку вниз */
-    width: 100%; /* Розтягує кнопку на всю ширину */
+    margin-top: auto; 
+    width: 100%; 
     padding: 10px;
     background-color: #0e81c8a8;
     color: rgb(255, 255, 255);

@@ -5,10 +5,6 @@ import visitDeck from './components/homepage/DecksBlock';
 import './styles/deck.css';
 import Flashcard from './components/creates/Flashcard';
 
-// Функція форматування дати
-
-
-
 export default function Deck() {
   const { deckId } = useParams(); 
   const [deck, setDeck] = useState(null);
@@ -17,7 +13,7 @@ export default function Deck() {
   function formatDate(httpDateString) {
   const date = new Date(httpDateString);
   const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // місяці починаються з 0
+  const month = String(date.getMonth() + 1).padStart(2, '0'); 
   const year = date.getFullYear();
   return `${day}.${month}.${year}`;
 }
@@ -33,7 +29,6 @@ export default function Deck() {
       })
       .then((data) => {
         setDeck(data)
-        //visitDeck(data)
       })
       .catch((error) => console.error('Error fetching deck data:', error));
   }, [deckId]);

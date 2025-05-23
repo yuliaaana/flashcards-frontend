@@ -4,14 +4,13 @@ import { useTranslation } from "react-i18next";
 import "../../i18n";
 
 export default function FlashcardEditInput({ id, onChange, onDelete, front, back, description }) {
-  const [isEditing, setIsEditing] = useState(true); // Стейт для редагування
+  const [isEditing, setIsEditing] = useState(true);
   const [frontValue, setFrontValue] = useState(front);
   const [backValue, setBackValue] = useState(back);
   const [descriptionValue, setDescriptionValue] = useState(description);
 
   const { t, i18n } = useTranslation("create");
 
-  // Оновлюємо значення, якщо змінився вхідний параметр
   useEffect(() => {
     setFrontValue(front);
     setBackValue(back);
@@ -30,7 +29,7 @@ export default function FlashcardEditInput({ id, onChange, onDelete, front, back
   };
 
   const handleDelete = () => {
-    onDelete(id);  // Викликає функцію onDelete, яку передано як пропс
+    onDelete(id); 
   };
 
   return (
@@ -40,7 +39,7 @@ export default function FlashcardEditInput({ id, onChange, onDelete, front, back
           <input
             value={frontValue}
             onChange={(e) => handleInputChange('front', e.target.value)}
-            readOnly={!isEditing}  // Якщо не в режимі редагування - input тільки для перегляду
+            readOnly={!isEditing}
           />
           <span className="flashcard-input-label">{t("enterfront")}</span>
         </label>

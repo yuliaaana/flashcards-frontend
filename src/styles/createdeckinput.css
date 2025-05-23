@@ -53,7 +53,7 @@
 .public-toggle label {
   display: flex;
   align-items: center;
-  gap: 8px; /* відстань між чекбоксом і текстом */
+  gap: 8px; 
   font-size: 16px;
   cursor: pointer;
   padding-bottom: 10px;
@@ -165,21 +165,18 @@ div.flashcard-input-group {
   color: #34678f;
 }
 
-/* Спочатку приховуємо лейбли */
 .flashcard-input-label {
   opacity: 0;
   transition: opacity 0.3s ease;
-  pointer-events: none; /* Запобігаємо взаємодії з лейблом */
+  pointer-events: none; 
 }
 
-/* Лейбл з'являється, коли інпут у фокусі */
 .flashcard-input-underlined input:focus + .flashcard-input-label,
 .flashcard-input-underlined input:not(:placeholder-shown) + .flashcard-input-label {
   opacity: 1;
-  pointer-events: all; /* Дозволяємо взаємодію */
+  pointer-events: all; 
 }
 
-/* Залишаємо невидимими лейбли, поки інпут не активований */
 .flashcard-input-underlined input {
   border: 1px solid #ccc;
   padding: 8px 12px;
