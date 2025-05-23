@@ -1,8 +1,23 @@
-# React + Vite
+# 📚 FlashCards
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**FlashCards** — це вебзастосунок для створення, організації та вивчення навчальних карток. Від іноземних слів і граматичних конструкцій до математичних формул та хімічних рівнянь — користувачі можуть створювати власні набори карток з будь-яким вмістом і вивчати їх у зручній, інтерактивній формі.
 
-Currently, two official plugins are available:
+## ✨ Основні можливості
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 📁 Створення та редагування власних наборів карток  
+- 🧠 Режим інтерактивного навчання  
+- 🎨 Інтуїтивний та доступний інтерфейс  
+- 🔍 Пошук і фільтрація карток  
+- 📊 Підготовка до розширення функціоналу (навчальні групи, рейтингування, спільна робота)
+
+## 🛠 Технології
+
+- **Frontend**: [React](https://reactjs.org/)
+- **Backend**: [Flask](https://flask.palletsprojects.com/)
+- **База даних**: [PostgreSQL](https://www.postgresql.org/)
+
+
+## 📌 [Посилання на backend](https://github.com/yuliaaana/coursework-backend)
+
+
+

@@ -48,7 +48,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-width: max-content; /* Ensures button width matches content */
+    min-width: max-content; 
 }
 
 .exit-btn {

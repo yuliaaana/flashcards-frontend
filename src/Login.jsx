@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from './assets/logo2.png';
 import { useTranslation } from "react-i18next";
-import "./i18n"; // Підключаємо i18n
+import "./i18n";
 import InitialHeader from './components/homepage/InitialHeader';
 
 function Dashboard() {
@@ -79,7 +79,6 @@ export default function Login() {
         />
         <button type="submit"> {t("login")}</button>
 
-        {/* Кнопка переходу на реєстрацію */}
         <button
           type="button"
           onClick={() => navigate('/register')}

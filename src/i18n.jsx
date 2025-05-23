@@ -49,9 +49,7 @@ const resources = {
     resources,
     lng: "uk",
     fallbackLng: "en",
-    //ns: ["common", "home", "profile", "settings"],
     ns: [ "home","recent","folders","login","profile","profilepublic"],
-    //defaultNS: "common",
     interpolation: { escapeValue: false },
   });
 

@@ -1,38 +1,3 @@
-/*import React, { useEffect, useState } from "react";
-import '../../styles/homepage.css';
-import RecentDeckCard from './RecentDeckCard';
-
-export default function PublicDecksBlock({ classname, title, currentUserId }) {
-  const [recentDecks, setRecentDecks] = useState([]);
-
-  useEffect(() => {
-    const fetchDecks = async () => {
-      try {
-        const response = await fetch(`/api/public-decks/${currentUserId}`);
-        const data = await response.json();
-        const decks = data.public_decks.slice(0, 4); // беремо лише 4
-        setRecentDecks(decks);
-      } catch (error) {
-        console.error("Помилка при завантаженні дек:", error);
-      }
-    };
-
-    if (currentUserId) {
-      fetchDecks();
-    }
-  }, [currentUserId]);
-
-  return (
-    <div className={classname}>
-      <h2 className="title">{title}</h2>
-      <div className="card-container">
-        {recentDecks.map((deck, index) => (
-          <RecentDeckCard key={deck.id || index} deck={deck} />
-        ))}
-      </div>
-    </div>
-  );
-}*/
 import React, { useEffect, useState } from "react";
 import '../../styles/homepage.css';
 import RecentDeckCard from './RecentDeckCard';

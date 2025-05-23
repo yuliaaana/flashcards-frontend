@@ -8,7 +8,6 @@ export default function RecentDeckCard({ deck }) {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation("recent");
 
-  // Логування для перевірки значень
   console.log(deck);
   console.log(deck.deck.creator_id);
 
@@ -22,9 +21,7 @@ export default function RecentDeckCard({ deck }) {
   };
 
   const handleUserProfileClick = (event, userId) => {
-    event.stopPropagation(); // Зупиняємо пропагування події кліка
-
-    // Перевірка наявності creator_id
+    event.stopPropagation(); 
     if (deck.deck.creator_id) {
       console.log(deck.deck.creator_id);
       navigate(`/profile/${deck.deck.creator_id}`);
@@ -36,7 +33,6 @@ export default function RecentDeckCard({ deck }) {
   return (
     <div className="card-recent cursor-pointer" onClick={handleClick}>
       <h5>{deck.deck.name}</h5>
-      {/* Додаємо можливість натискання на ім'я користувача */}
       <p 
         onClick={(event) => handleUserProfileClick(event, deck.deck.creator_id)} 
         

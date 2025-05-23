@@ -7,7 +7,6 @@ import RecentDeckCard from './RecentDeckCard';
 export default function DecksBlock({ classname, title, hehe }) {
   const [recentDecks, setRecentDecks] = useState([]);
 
-  // Функція для отримання останніх дек з локального сховища
   const getRecentDecks = () => {
     
     const savedDecks = localStorage.getItem('recentDecks');
@@ -15,20 +14,9 @@ export default function DecksBlock({ classname, title, hehe }) {
     return savedDecks ? JSON.parse(savedDecks) : [];
   };
 
-  // Збереження дек в локальне сховище
-
-  /*const saveRecentDecks = (deck) => {
-    let savedDecks = getRecentDecks();
-    console.log("eeeeeeeee")
-    console.log(savedDecks)
-    console.log("eeeeeeeee")
-    savedDecks = [deck, ...savedDecks.filter((d) => d.id !== deck.id)].slice(0, 4); // Обмежити до 4 останніх
-    localStorage.setItem('recentDecks', JSON.stringify(savedDecks));
-  };*/
-  // Встановлюємо стан з останніми деками, коли компонент монтується
+  
   useEffect(() => {
     setRecentDecks(getRecentDecks());
-    //console.log( JSON.parse(savedDecks))
   }, []);
 
   return (

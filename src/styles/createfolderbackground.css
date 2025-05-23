@@ -9,8 +9,6 @@
     overflow: hidden;
 }
 
-
-
 .background span {
   width: 50vmin;
   height: 50vmin;
@@ -22,7 +20,6 @@
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
-
 
 .background span:nth-child(0) {
   color: #55bac3;
