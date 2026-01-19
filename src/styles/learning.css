@@ -1,3 +1,58 @@
+/* Match Mode Styles */
+.match-mode-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 24px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10.7px);
+  -webkit-backdrop-filter: blur(16.7px);
+  padding: 20px;
+  width: 100%;
+  max-width: 900px; 
+  box-sizing: border-box;
+}
+.match-columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 32px;
+}
+.match-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.match-btn {
+  padding: 14px 0;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  background: #59befcc8;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.match-btn.selected {
+  background: #0e81c8a8;
+  color: #fff;
+}
+.match-btn.matched {
+  background: #42f89def;
+  color: #333;
+  cursor: default;
+}
+.match-complete {
+  margin-top: 32px;
+  font-size: 1.3rem;
+  color: #0bce5c;
+  font-weight: bold;
+}
 .learn-container {
     display: flex;
     flex-direction: row;
@@ -132,3 +187,60 @@
 h5,p{
     text-align: center;
 }
+
+.learning-modes-wrapper{
+  display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    margin: 35px 0px 0px 0px;
+
+}
+.learning-modes-container{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+    align-self: stretch;
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 24px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+    padding: 20px;
+    width: 100%;
+    max-width: 900px; 
+    box-sizing: border-box;
+  }
+
+  .ch-ttl {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.modes-list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap:15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: auto;
+    margin-bottom: 0;
+  }
+
+  .mode-btn {
+    background-color: #1f96bed1;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+    height: 50px;
+    padding: 0 10px;  
+    display: flex;
+    font-family: "Montserrat", sans-serif;
+    align-items: center;  
+    justify-content: center; 
+  }

@@ -17,8 +17,8 @@ export default function RecentDeckCard({ deck }) {
 
   const handleStudy = (event) => {
     event.stopPropagation();
-    navigate(`/learn/${deck.deck.id}`);
-  };
+    navigate(`/learn/${deck.deck.id}/modes`, { state: { deckName: deck.deck.name } });
+  }
 
   const handleUserProfileClick = (event, userId) => {
     event.stopPropagation(); 
