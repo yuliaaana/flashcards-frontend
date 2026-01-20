@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from './components/homepage/Header';
 import './styles/learning.css';
+import { useTranslation } from "react-i18next";
+import "./i18n";
 // save results of test to backend later
 
 function shuffle(array) {
@@ -20,6 +22,7 @@ export default function MatchMode() {
   const [matched, setMatched] = useState([]); // [{termId, defId}]
   const [shuffledTerms, setShuffledTerms] = useState([]);
   const [shuffledDefs, setShuffledDefs] = useState([]);
+  const { t, i18n } = useTranslation("learn");
 
   useEffect(() => {
     fetch(`http://127.0.0.1:5000/api/deck/${deckId}`)
@@ -68,10 +71,10 @@ export default function MatchMode() {
     <>
         <Header />
     <div className="match-mode-container">
-      <h2>Match Mode</h2>
+      <h2>{t("matchModeTitle", "Match Mode")}</h2>
       <div className="match-columns">
         <div className="match-col">
-          <h4>Terms</h4>
+          <h4>{t("terms", "Terms")}</h4>
           {shuffledTerms.map(({ id, text }) => (
             <button
               key={id}
@@ -84,7 +87,7 @@ export default function MatchMode() {
           ))}
         </div>
         <div className="match-col">
-          <h4>Definitions</h4>
+          <h4>{t("definitions", "Definitions")}</h4>
           {shuffledDefs.map(({ id, text }) => (
             <button
               key={id}
@@ -98,7 +101,7 @@ export default function MatchMode() {
         </div>
       </div>
       {matched.length === pairs.length && (
-        <div className="match-complete">Congratulations! All pairs matched!</div>
+        <div className="match-complete">{t("allPairsMatched", "Congratulations! All pairs matched!")}</div>
       )}
     </div>
     </>

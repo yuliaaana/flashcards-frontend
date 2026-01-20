@@ -13,6 +13,7 @@ import Folder from './Folder';
 import LearningMode from './LearningMode'; 
 import LearningModes from './LearningModes';
 import MatchMode from './MatchMode';
+import WrittenMode from './WrittenMode';
 import EditDeckPage from './EditDeckPage'; 
 
 
@@ -32,6 +33,7 @@ export default function MainApp() {
       <Route path="/learn/:deckId" element={<LearningMode />} />
       <Route path="/learn/:deckId/modes" element={<LearningModes />} />
       <Route path="/learn/:deckId/match" element={<MatchMode />} />
+      <Route path="/learn/:deckId/written" element={<WrittenMode />} />
       <Route path="/folders" element={<Folders />} />
       <Route path="/folder/:folderId" element={<Folder />} />
       <Route path="/edit-deck/:deckId" element={<EditDeckPage />} />

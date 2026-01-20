@@ -13,6 +13,22 @@
     "flashcardMode":"Режим карток",
     "matchMode":"Режим відповідностей",
     "writtenMode":"Письмовий режим",
-    "testMode":"Режим тестування"
+    "testMode":"Режим тестування",
+    "sessionComplete": "Сесію завершено!",
+    "finishedAllCards": "Ви завершили всі картки у цьому режимі.",
+    "backToLearningModes": "Повернутися до режимів навчання",
+    "selectWritingMode": "Оберіть режим написання:",
+    "writeDefinition": "Визначення",
+    "writeTerm": "Термін",
+    "check": "Перевірити",
+    "correct": "Вірно!",
+    "incorrectTryAgain": "Невірно. Спробуйте ще раз. Залишилось {{count}} спроби",
+    "incorrectAnswerWas": "Невірно. Правильна відповідь: <b>{{answer}}</b>",
+    "next": "Далі",
+    "cardOf": "Картка {{current}} з {{total}}",
+    "matchModeTitle": "Режим відповідностей",
+    "terms": "Терміни",
+    "definitions": "Визначення",
+    "allPairsMatched": "Вітаємо! Всі пари знайдено!"
 
 }
