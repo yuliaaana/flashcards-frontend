@@ -318,3 +318,45 @@ h5,p{
     align-items: center;  
     justify-content: center; 
   }
+
+
+  .test-modes-wrapper{
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    margin: 35px 10px 0px 0px;
+
+}
+.test-modes-container{
+   font-family: "Montserrat", sans-serif;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+    align-self: stretch;
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 24px;
+    box-shadow: 0 4px 30px rgba(130, 31, 31, 0.2);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+    padding: 20px 20px 20px 20px;
+    width: 100%;
+    max-width: 1000px; 
+    box-sizing: border-box;
+  }
+
+
+  .flc-cover{
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 24px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+    padding: 15px 15px 15px 15px;
+  }
+
+  .tst-btn{
+    height: 60px;
+    border-radius: 18px;
+
+  }
