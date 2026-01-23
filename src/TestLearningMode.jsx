@@ -26,15 +26,16 @@ export default function TestLearningMode() {
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
   const [attempts, setAttempts] = useState(0);
-  const [mode, setMode] = useState("definition");
+  // Removed mode state, now handled per-question in writtenQuestions
   const { t } = useTranslation("learn");
 
   // User task selection state
-  const [selectedTasks, setSelectedTasks] = useState({ mcq: true, match: true, written: true });
+  const [selectedTasks, setSelectedTasks] = useState({ mcq: true, match: true, writtenDef: true, writtenTerm: false });
   // Distribute terms across modes so each appears exactly twice in total, but only for selected modes
   const [mcqTerms, setMcqTerms] = useState([]);
   const [matchTerms, setMatchTerms] = useState([]);
-  const [writtenTerms, setWrittenTerms] = useState([]);
+  // For written, store array of {idx, type: 'definition'|'term'}
+  const [writtenQuestions, setWrittenQuestions] = useState([]);
   const [cardsLoaded, setCardsLoaded] = useState(false);
   useEffect(() => {
     fetch(`http://127.0.0.1:5000/api/deck/${deckId}`)
@@ -49,29 +50,34 @@ export default function TestLearningMode() {
   // When user confirms task selection, distribute cards
   const distributeCards = React.useCallback(() => {
     // Only use selected modes
-    const enabledModes = Object.entries(selectedTasks).filter(([k, v]) => v).map(([k]) => k);
+    const enabledModes = [];
+    if (selectedTasks.mcq) enabledModes.push('mcq');
+    if (selectedTasks.match) enabledModes.push('match');
+    // For written, we handle separately
     let allIndexes = Array(flashcards.length).fill(0).map((_, i) => i);
     let pool = [];
-    // Each card appears in as many modes as selected, but at least once if possible
     enabledModes.forEach(() => { pool = pool.concat(allIndexes); });
     pool = shuffle(pool);
-    const mcq = new Set(), match = new Set(), written = new Set();
+    const mcq = new Set(), match = new Set();
     while (pool.length) {
       const idx = pool.pop();
-      // Find which enabled modes this idx is not in yet
       const availableModes = [];
       if (selectedTasks.mcq && !mcq.has(idx)) availableModes.push('mcq');
       if (selectedTasks.match && !match.has(idx)) availableModes.push('match');
-      if (selectedTasks.written && !written.has(idx)) availableModes.push('written');
       if (availableModes.length === 0) continue;
       const mode = availableModes[Math.floor(Math.random() * availableModes.length)];
       if (mode === 'mcq') mcq.add(idx);
       else if (mode === 'match') match.add(idx);
-      else if (mode === 'written') written.add(idx);
     }
     setMcqTerms(Array.from(mcq));
     setMatchTerms(Array.from(match));
-    setWrittenTerms(Array.from(written));
+    // Written: for each card, add one or two written questions depending on which written types are selected
+    let writtenQ = [];
+    allIndexes.forEach(idx => {
+      if (selectedTasks.writtenDef) writtenQ.push({ idx, type: 'definition' });
+      if (selectedTasks.writtenTerm) writtenQ.push({ idx, type: 'term' });
+    });
+    setWrittenQuestions(shuffle(writtenQ));
   }, [flashcards, selectedTasks]);
 
   // When user clicks Start after selecting tasks
@@ -80,7 +86,7 @@ export default function TestLearningMode() {
     // Go to first enabled mode
     if (selectedTasks.mcq) setStep(2);
     else if (selectedTasks.match) setStep(3);
-    else if (selectedTasks.written) setStep(4);
+    else if (selectedTasks.writtenDef || selectedTasks.writtenTerm) setStep(4);
   };
 
   // --- Flashcard Mode (first pass) ---
@@ -154,7 +160,7 @@ export default function TestLearningMode() {
   useEffect(() => {
       if (step === 3 && matched.length === matchTerms.length && matchTerms.length > 0) {
         // If written is enabled, go to written, else go to result
-        if (selectedTasks.written) setStep(4);
+        if (selectedTasks.writtenDef || selectedTasks.writtenTerm) setStep(4);
         else setStep(5);
         setCurrentIndex(0);
         setInput("");
@@ -165,7 +171,7 @@ export default function TestLearningMode() {
     }, [matched, step, matchTerms, selectedTasks]);
 
   // --- Written Mode (third pass) ---
-  // --- Written Mode (third pass, exact copy of WrittenMode, but only for writtenTerms) ---
+  // --- Written Mode (third pass, now uses writtenQuestions for both types) ---
   const [writtenIndex, setWrittenIndex] = useState(0);
   const [writtenAttempts, setWrittenAttempts] = useState(0);
   const [writtenShowResult, setWrittenShowResult] = useState(false);
@@ -180,18 +186,18 @@ export default function TestLearningMode() {
   }, [step, writtenIndex]);
 
   const handleWrittenCheck = () => {
-    const cardIdx = writtenTerms[writtenIndex];
-    const currentCard = flashcards[cardIdx];
-    const correctAnswer = mode === "definition" ? currentCard.back_title : currentCard.front_title;
+    const { idx, type } = writtenQuestions[writtenIndex];
+    const currentCard = flashcards[idx];
+    const correctAnswer = type === "definition" ? currentCard.back_title : currentCard.front_title;
     if (input.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
       setWrittenIsCorrect(true);
       setWrittenShowResult(true);
-      setResults(prev => ([...prev, { id: currentCard.id, correct: true, mode: 'written', attempt: writtenAttempts + 1, points: 1 }]));
+      setResults(prev => ([...prev, { id: currentCard.id, correct: true, mode: 'written', attempt: writtenAttempts + 1, points: 1, type }]));
     } else {
       setWrittenIsCorrect(false);
       if (writtenAttempts + 1 >= 3) {
         setWrittenShowResult(true);
-        setResults(prev => ([...prev, { id: currentCard.id, correct: false, mode: 'written', attempt: 3, points: 0 }]));
+        setResults(prev => ([...prev, { id: currentCard.id, correct: false, mode: 'written', attempt: 3, points: 0, type }]));
       } else {
         setWrittenShowResult(false);
         setWrittenAttempts(writtenAttempts + 1);
@@ -203,16 +209,16 @@ export default function TestLearningMode() {
   };
 
   const handleWrittenNext = () => {
-      if (writtenIndex + 1 < writtenTerms.length) {
-        setWrittenIndex(writtenIndex + 1);
-        setInput("");
-        setWrittenShowResult(false);
-        setWrittenIsCorrect(null);
-        setWrittenAttempts(0);
-      } else {
-        setStep(5);
-      }
-    };
+    if (writtenIndex + 1 < writtenQuestions.length) {
+      setWrittenIndex(writtenIndex + 1);
+      setInput("");
+      setWrittenShowResult(false);
+      setWrittenIsCorrect(null);
+      setWrittenAttempts(0);
+    } else {
+      setStep(5);
+    }
+  };
 
   // (No random mode)
 
@@ -258,12 +264,16 @@ export default function TestLearningMode() {
                   <input type="checkbox" checked={selectedTasks.match} onChange={e => setSelectedTasks(s => ({...s, match: e.target.checked}))} />
                   {t('match', 'Match')}
                 </label>
+                <label style={{marginRight: 16}}>
+                  <input type="checkbox" checked={selectedTasks.writtenDef} onChange={e => setSelectedTasks(s => ({...s, writtenDef: e.target.checked}))} />
+                  {t('writeDefinition', 'Write Definition')}
+                </label>
                 <label>
-                  <input type="checkbox" checked={selectedTasks.written} onChange={e => setSelectedTasks(s => ({...s, written: e.target.checked}))} />
-                  {t('written', 'Written')}
+                  <input type="checkbox" checked={selectedTasks.writtenTerm} onChange={e => setSelectedTasks(s => ({...s, writtenTerm: e.target.checked}))} />
+                  {t('writeTerm', 'Write Term')}
                 </label>
               </div>
-              <button className="mode-btn btn-conf" onClick={handleStartTest} disabled={Object.values(selectedTasks).every(v => !v)}>
+              <button className="mode-btn btn-conf" onClick={handleStartTest} disabled={!(selectedTasks.mcq || selectedTasks.match || selectedTasks.writtenDef || selectedTasks.writtenTerm)}>
                 {t('startTest', 'Start Test')}
               </button>
             </div>
@@ -363,31 +373,16 @@ export default function TestLearningMode() {
             </div>
           )}
           {/* Written */}
-          {step === 4 && flashcards.length > 0 && writtenTerms.length > 0 && (
+          {step === 4 && flashcards.length > 0 && writtenQuestions.length > 0 && (selectedTasks.writtenDef || selectedTasks.writtenTerm) && (
             <div>
               <h3>{t("writtenMode", "Written Mode")}</h3>
               <div className="write-block">
-                <div className="write-subblock radio-block" style={{ marginBottom: 16 }}>
-                  <h3>{t("selectWritingMode", "Select writing mode:")}</h3>
-                  <label>
-                    <input
-                      type="radio"
-                      checked={mode === "definition"}
-                      onChange={() => setMode("definition")}
-                    />
-                    {t("writeDefinition", "Write Definition")}
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      checked={mode === "term"}
-                      onChange={() => setMode("term")}
-                    />
-                    {t("writeTerm", "Write Term")}
-                  </label>
-                </div>
                 <div className="write-subblock written-card">
-                  <div className="written-prompt">{mode === "definition" ? flashcards[writtenTerms[writtenIndex]].front_title : flashcards[writtenTerms[writtenIndex]].back_title}</div>
+                  <div className="written-prompt">
+                    {writtenQuestions[writtenIndex].type === "definition"
+                      ? flashcards[writtenQuestions[writtenIndex].idx].front_title
+                      : flashcards[writtenQuestions[writtenIndex].idx].back_title}
+                  </div>
                   <input
                     className="written-input"
                     type="text"
@@ -407,25 +402,15 @@ export default function TestLearningMode() {
                     <div className="written-incorrect">{t("incorrectTryAgain", { defaultValue: "Incorrect. Try again. {{count}} attempts left", count: 3 - writtenAttempts })}</div>
                   )}
                   {writtenShowResult && !writtenIsCorrect && writtenAttempts >= 3 && (
-                    <div className="written-incorrect">{t("incorrectAnswerWas", { defaultValue: "Incorrect. The correct answer was: <b>{{answer}}</b>", answer: mode === "definition" ? flashcards[writtenTerms[writtenIndex]].back_title : flashcards[writtenTerms[writtenIndex]].front_title })}</div>
+                    <div className="written-incorrect">{t("incorrectAnswerWas", { defaultValue: "Incorrect. The correct answer was: <b>{{answer}}</b>", answer: writtenQuestions[writtenIndex].type === "definition" ? flashcards[writtenQuestions[writtenIndex].idx].back_title : flashcards[writtenQuestions[writtenIndex].idx].front_title })}</div>
                   )}
                   {writtenShowResult && ((writtenIsCorrect) || (!writtenIsCorrect && writtenAttempts >= 3)) && (
-                    <button className="mode-btn" onClick={() => {
-                      if (writtenIndex + 1 < writtenTerms.length) {
-                        setWrittenIndex(writtenIndex + 1);
-                        setInput("");
-                        setWrittenShowResult(false);
-                        setWrittenIsCorrect(null);
-                        setWrittenAttempts(0);
-                      } else {
-                        setStep(5);
-                      }
-                    }}>
+                    <button className="mode-btn" onClick={handleWrittenNext}>
                       {t("next", "Next")}
                     </button>
                   )}
                   <div style={{ marginTop: 24 }}>
-                    {t("cardOf", { defaultValue: "Card {{current}} of {{total}}", current: writtenIndex + 1, total: writtenTerms.length })}
+                    {t("cardOf", { defaultValue: "Card {{current}} of {{total}}", current: writtenIndex + 1, total: writtenQuestions.length })}
                   </div>
                 </div>
               </div>
