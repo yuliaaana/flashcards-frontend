@@ -16,10 +16,9 @@ export default function TestLearningMode() {
   const { deckId } = useParams();
   const navigate = useNavigate();
   const [flashcards, setFlashcards] = useState([]);
-  // 0: loading, 1: multiple choice, 2: match, 3: written, 4: result
+  // 0: loading, 1: select tasks, 2: multiple choice, 3: match, 4: written, 5: result
   const [step, setStep] = useState(0);
   const [results, setResults] = useState([]); // [{id, correct, mode, attempt, points}]
-  // Remove random part
   const [finalScore, setFinalScore] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -30,41 +29,59 @@ export default function TestLearningMode() {
   const [mode, setMode] = useState("definition");
   const { t } = useTranslation("learn");
 
-  // Distribute terms across modes so each appears exactly twice in total
+  // User task selection state
+  const [selectedTasks, setSelectedTasks] = useState({ mcq: true, match: true, written: true });
+  // Distribute terms across modes so each appears exactly twice in total, but only for selected modes
   const [mcqTerms, setMcqTerms] = useState([]);
   const [matchTerms, setMatchTerms] = useState([]);
   const [writtenTerms, setWrittenTerms] = useState([]);
+  const [cardsLoaded, setCardsLoaded] = useState(false);
   useEffect(() => {
     fetch(`http://127.0.0.1:5000/api/deck/${deckId}`)
       .then((response) => response.json())
       .then((data) => {
         const cards = data.flashcards || [];
         setFlashcards(cards);
-        // Distribute each card to 2 different modes, never repeating in one mode
-        let allIndexes = Array(cards.length).fill(0).map((_, i) => i);
-        let pool = [...allIndexes, ...allIndexes]; // 2 times each index
-        pool = shuffle(pool);
-        const mcq = new Set(), match = new Set(), written = new Set();
-        // Assign each card to 2 different modes
-        while (pool.length) {
-          const idx = pool.pop();
-          // Find which modes this idx is not in yet
-          const availableModes = [];
-          if (!mcq.has(idx)) availableModes.push('mcq');
-          if (!match.has(idx)) availableModes.push('match');
-          if (!written.has(idx)) availableModes.push('written');
-          // Pick a random available mode
-          const mode = availableModes[Math.floor(Math.random() * availableModes.length)];
-          if (mode === 'mcq') mcq.add(idx);
-          else if (mode === 'match') match.add(idx);
-          else if (mode === 'written') written.add(idx);
-        }
-        setMcqTerms(Array.from(mcq));
-        setMatchTerms(Array.from(match));
-        setWrittenTerms(Array.from(written));
-        setStep(1);
+        setCardsLoaded(true);
       });
   }, [deckId]);
+
+  // When user confirms task selection, distribute cards
+  const distributeCards = React.useCallback(() => {
+    // Only use selected modes
+    const enabledModes = Object.entries(selectedTasks).filter(([k, v]) => v).map(([k]) => k);
+    let allIndexes = Array(flashcards.length).fill(0).map((_, i) => i);
+    let pool = [];
+    // Each card appears in as many modes as selected, but at least once if possible
+    enabledModes.forEach(() => { pool = pool.concat(allIndexes); });
+    pool = shuffle(pool);
+    const mcq = new Set(), match = new Set(), written = new Set();
+    while (pool.length) {
+      const idx = pool.pop();
+      // Find which enabled modes this idx is not in yet
+      const availableModes = [];
+      if (selectedTasks.mcq && !mcq.has(idx)) availableModes.push('mcq');
+      if (selectedTasks.match && !match.has(idx)) availableModes.push('match');
+      if (selectedTasks.written && !written.has(idx)) availableModes.push('written');
+      if (availableModes.length === 0) continue;
+      const mode = availableModes[Math.floor(Math.random() * availableModes.length)];
+      if (mode === 'mcq') mcq.add(idx);
+      else if (mode === 'match') match.add(idx);
+      else if (mode === 'written') written.add(idx);
+    }
+    setMcqTerms(Array.from(mcq));
+    setMatchTerms(Array.from(match));
+    setWrittenTerms(Array.from(written));
+  }, [flashcards, selectedTasks]);
+
+  // When user clicks Start after selecting tasks
+  const handleStartTest = () => {
+    distributeCards();
+    // Go to first enabled mode
+    if (selectedTasks.mcq) setStep(2);
+    else if (selectedTasks.match) setStep(3);
+    else if (selectedTasks.written) setStep(4);
+  };
 
   // --- Flashcard Mode (first pass) ---
   // --- Multiple Choice for Flashcard Step ---
@@ -73,17 +90,17 @@ export default function TestLearningMode() {
   const [mcqOptions, setMcqOptions] = useState([]);
   const [mcqShowResult, setMcqShowResult] = useState(false);
   useEffect(() => {
-    if (step === 1 && mcqTerms.length > 0 && flashcards.length > 0) {
-      const cardIdx = mcqTerms[mcqIndex];
-      const correct = flashcards[cardIdx]?.back_title;
-      let incorrect = flashcards.filter((c, i) => i !== cardIdx).map(c => c.back_title);
-      incorrect = shuffle(incorrect).slice(0, 3);
-      const options = shuffle([correct, ...incorrect]);
-      setMcqOptions(options);
-      setMcqSelected(null);
-      setMcqShowResult(false);
-    }
-  }, [step, mcqIndex, mcqTerms, flashcards]);
+      if (step === 2 && mcqTerms.length > 0 && flashcards.length > 0) {
+        const cardIdx = mcqTerms[mcqIndex];
+        const correct = flashcards[cardIdx]?.back_title;
+        let incorrect = flashcards.filter((c, i) => i !== cardIdx).map(c => c.back_title);
+        incorrect = shuffle(incorrect).slice(0, 3);
+        const options = shuffle([correct, ...incorrect]);
+        setMcqOptions(options);
+        setMcqSelected(null);
+        setMcqShowResult(false);
+      }
+    }, [step, mcqIndex, mcqTerms, flashcards]);
 
   const handleMcqSelect = (option) => {
     setMcqSelected(option);
@@ -110,14 +127,14 @@ export default function TestLearningMode() {
   const [shuffledTerms, setShuffledTerms] = useState([]);
   const [shuffledDefs, setShuffledDefs] = useState([]);
   useEffect(() => {
-    if (step === 2 && matchTerms.length > 0 && flashcards.length > 0) {
-      const pairs = matchTerms.map(idx => ({ id: flashcards[idx].id, term: flashcards[idx].front_title, definition: flashcards[idx].back_title }));
-      setShuffledTerms(shuffle(pairs.map(p => ({ id: p.id, text: p.term }))));
-      setShuffledDefs(shuffle(pairs.map(p => ({ id: p.id, text: p.definition }))));
-      setMatched([]);
-      setSelected([]);
-    }
-  }, [step, matchTerms, flashcards]);
+      if (step === 3 && matchTerms.length > 0 && flashcards.length > 0) {
+        const pairs = matchTerms.map(idx => ({ id: flashcards[idx].id, term: flashcards[idx].front_title, definition: flashcards[idx].back_title }));
+        setShuffledTerms(shuffle(pairs.map(p => ({ id: p.id, text: p.term }))));
+        setShuffledDefs(shuffle(pairs.map(p => ({ id: p.id, text: p.definition }))));
+        setMatched([]);
+        setSelected([]);
+      }
+    }, [step, matchTerms, flashcards]);
 
   const handleMatchSelect = (type, id) => {
     if (selected.length === 0) {
@@ -135,15 +152,17 @@ export default function TestLearningMode() {
   };
 
   useEffect(() => {
-    if (step === 2 && matched.length === matchTerms.length && matchTerms.length > 0) {
-      setStep(3);
-      setCurrentIndex(0);
-      setInput("");
-      setShowResult(false);
-      setIsCorrect(null);
-      setAttempts(0);
-    }
-  }, [matched, step, matchTerms]);
+      if (step === 3 && matched.length === matchTerms.length && matchTerms.length > 0) {
+        // If written is enabled, go to written, else go to result
+        if (selectedTasks.written) setStep(4);
+        else setStep(5);
+        setCurrentIndex(0);
+        setInput("");
+        setShowResult(false);
+        setIsCorrect(null);
+        setAttempts(0);
+      }
+    }, [matched, step, matchTerms, selectedTasks]);
 
   // --- Written Mode (third pass) ---
   // --- Written Mode (third pass, exact copy of WrittenMode, but only for writtenTerms) ---
@@ -184,39 +203,39 @@ export default function TestLearningMode() {
   };
 
   const handleWrittenNext = () => {
-    if (writtenIndex + 1 < writtenTerms.length) {
-      setWrittenIndex(writtenIndex + 1);
-      setInput("");
-      setWrittenShowResult(false);
-      setWrittenIsCorrect(null);
-      setWrittenAttempts(0);
-    } else {
-      setStep(4);
-    }
-  };
+      if (writtenIndex + 1 < writtenTerms.length) {
+        setWrittenIndex(writtenIndex + 1);
+        setInput("");
+        setWrittenShowResult(false);
+        setWrittenIsCorrect(null);
+        setWrittenAttempts(0);
+      } else {
+        setStep(5);
+      }
+    };
 
   // (No random mode)
 
   // --- Calculate Final Score ---
   useEffect(() => {
-    if (step === 4) {
-      let totalPoints = 0;
-      let maxPoints = results.length; // Each question is worth 1 point
-      results.forEach(r => {
-        if (r.mode === 'written') {
-          // Written: 1 for first try, 0.5 for second, 0.25 for third, 0 if never correct
-          if (r.correct && r.attempt === 1) totalPoints += 1;
-          else if (r.correct && r.attempt === 2) totalPoints += 0.5;
-          else if (r.correct && r.attempt === 3) totalPoints += 0.25;
-          // If incorrect after 3 attempts, 0 points
-        } else {
-          // MCQ and Match: 1 point for correct, 0 for incorrect
-          if (r.correct) totalPoints += 1;
-        }
-      });
-      setFinalScore({ total: totalPoints, max: maxPoints, percent: ((totalPoints / maxPoints) * 100).toFixed(2) });
-    }
-  }, [step, results, flashcards]);
+      if (step === 5 && results.length > 0) {
+        let totalPoints = 0;
+        let maxPoints = results.length; // Each question is worth 1 point
+        results.forEach(r => {
+          if (r.mode === 'written') {
+            // Written: 1 for first try, 0.5 for second, 0.25 for third, 0 if never correct
+            if (r.correct && r.attempt === 1) totalPoints += 1;
+            else if (r.correct && r.attempt === 2) totalPoints += 0.5;
+            else if (r.correct && r.attempt === 3) totalPoints += 0.25;
+            // If incorrect after 3 attempts, 0 points
+          } else {
+            // MCQ and Match: 1 point for correct, 0 for incorrect
+            if (r.correct) totalPoints += 1;
+          }
+        });
+        setFinalScore({ total: totalPoints, max: maxPoints, percent: ((totalPoints / maxPoints) * 100).toFixed(2) });
+      }
+    }, [step, results, flashcards]);
 
   // --- Render UI for each step ---
   return (
@@ -226,8 +245,31 @@ export default function TestLearningMode() {
         <div className="learning-block"></div>
         <div className="learning-block test-modes-container">
           <h2 className="ch-ttl">Test Learning Mode</h2>
-          {step === 0 && <div>Loading...</div>}
-          {step === 1 && flashcards.length > 0 && mcqTerms.length > 0 && (
+          {step === 0 && (!cardsLoaded ? <div>Loading...</div> : setStep(1))}
+          {step === 1 && cardsLoaded && (
+            <div>
+              <h3>{t('chooseTaskTypes', 'Choose which types of tasks you want:')}</h3>
+              <div style={{marginBottom: 24}}>
+                <label style={{marginRight: 16}}>
+                  <input type="checkbox" checked={selectedTasks.mcq} onChange={e => setSelectedTasks(s => ({...s, mcq: e.target.checked}))} />
+                  {t('multipleChoice', 'Multiple Choice')}
+                </label>
+                <label style={{marginRight: 16}}>
+                  <input type="checkbox" checked={selectedTasks.match} onChange={e => setSelectedTasks(s => ({...s, match: e.target.checked}))} />
+                  {t('match', 'Match')}
+                </label>
+                <label>
+                  <input type="checkbox" checked={selectedTasks.written} onChange={e => setSelectedTasks(s => ({...s, written: e.target.checked}))} />
+                  {t('written', 'Written')}
+                </label>
+              </div>
+              <button className="mode-btn btn-conf" onClick={handleStartTest} disabled={Object.values(selectedTasks).every(v => !v)}>
+                {t('startTest', 'Start Test')}
+              </button>
+            </div>
+          )}
+          {/* MCQ */}
+          {step === 2 && flashcards.length > 0 && mcqTerms.length > 0 && (
             <div>
               <h3>Multiple Choice: {mcqIndex + 1} / {mcqTerms.length}</h3>
               <div className="flashcard-learning flc-cover" style={{margin: '0 auto 16px auto'}}>
@@ -257,14 +299,27 @@ export default function TestLearningMode() {
                   </div>
                 )}
                 {mcqShowResult && (
-                  <button className="mode-btn btn-conf" style={{marginTop: 16}} onClick={handleMcqNext}>
-                    {mcqIndex + 1 === mcqTerms.length ? 'Next Mode' : 'Next'}
+                  <button className="mode-btn btn-conf" style={{marginTop: 16}} onClick={() => {
+                    setMcqShowResult(false);
+                    setMcqSelected(null);
+                    if (mcqIndex + 1 < mcqTerms.length) {
+                      setMcqIndex(mcqIndex + 1);
+                    } else {
+                      setMcqIndex(0);
+                      // Go to next enabled mode
+                      if (selectedTasks.match) setStep(3);
+                      else if (selectedTasks.written) setStep(4);
+                      else setStep(5);
+                    }
+                  }}>
+                    {mcqIndex + 1 === mcqTerms.length ? (selectedTasks.match ? t('nextMode', 'Next Mode') : selectedTasks.written ? t('nextMode', 'Next Mode') : t('finish', 'Finish')) : t('next', 'Next')}
                   </button>
                 )}
               </div>
             </div>
           )}
-          {step === 2 && flashcards.length > 0 && matchTerms.length > 0 && (
+          {/* Match */}
+          {step === 3 && flashcards.length > 0 && matchTerms.length > 0 && (
             <div>
               <h3>{t('matchModeTitle', 'Match Mode')}</h3>
               <div className="match-columns">
@@ -298,9 +353,17 @@ export default function TestLearningMode() {
               {matched.length === matchTerms.length && (
                 <div className="match-complete">{t('allPairsMatched', 'All pairs matched!')}</div>
               )}
+              {matched.length === matchTerms.length && (
+                <button className="mode-btn btn-conf" style={{marginTop: 16}} onClick={() => {
+                  // Go to next enabled mode
+                  if (selectedTasks.written) setStep(4);
+                  else setStep(5);
+                }}>{selectedTasks.written ? t('nextMode', 'Next Mode') : t('finish', 'Finish')}</button>
+              )}
             </div>
           )}
-          {step === 3 && flashcards.length > 0 && writtenTerms.length > 0 && (
+          {/* Written */}
+          {step === 4 && flashcards.length > 0 && writtenTerms.length > 0 && (
             <div>
               <h3>{t("writtenMode", "Written Mode")}</h3>
               <div className="write-block">
@@ -347,7 +410,17 @@ export default function TestLearningMode() {
                     <div className="written-incorrect">{t("incorrectAnswerWas", { defaultValue: "Incorrect. The correct answer was: <b>{{answer}}</b>", answer: mode === "definition" ? flashcards[writtenTerms[writtenIndex]].back_title : flashcards[writtenTerms[writtenIndex]].front_title })}</div>
                   )}
                   {writtenShowResult && ((writtenIsCorrect) || (!writtenIsCorrect && writtenAttempts >= 3)) && (
-                    <button className="mode-btn" onClick={handleWrittenNext}>
+                    <button className="mode-btn" onClick={() => {
+                      if (writtenIndex + 1 < writtenTerms.length) {
+                        setWrittenIndex(writtenIndex + 1);
+                        setInput("");
+                        setWrittenShowResult(false);
+                        setWrittenIsCorrect(null);
+                        setWrittenAttempts(0);
+                      } else {
+                        setStep(5);
+                      }
+                    }}>
                       {t("next", "Next")}
                     </button>
                   )}
@@ -358,8 +431,8 @@ export default function TestLearningMode() {
               </div>
             </div>
           )}
-          {/* No random part */}
-          {step === 4 && finalScore && (
+          {/* Result */}
+          {step === 5 && finalScore && (
             <div>
               <h3>Session Complete!</h3>
               <div>Total Points: {finalScore.total} / {finalScore.max}</div>
