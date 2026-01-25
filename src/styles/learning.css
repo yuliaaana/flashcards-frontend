@@ -360,3 +360,11 @@ h5,p{
     border-radius: 18px;
 
   }
+
+  .written-card-test {
+  min-width: 760px;
+}
+
+.written-input-test {
+  max-width: 760px;
+}

@@ -377,14 +377,14 @@ export default function TestLearningMode() {
             <div>
               <h3>{t("writtenMode", "Written Mode")}</h3>
               <div className="write-block">
-                <div className="write-subblock written-card">
+                <div className="write-subblock written-card written-card-test">
                   <div className="written-prompt">
                     {writtenQuestions[writtenIndex].type === "definition"
                       ? flashcards[writtenQuestions[writtenIndex].idx].front_title
                       : flashcards[writtenQuestions[writtenIndex].idx].back_title}
                   </div>
                   <input
-                    className="written-input"
+                    className="written-input written-input-test"
                     type="text"
                     value={input}
                     onChange={e => setInput(e.target.value)}
