@@ -224,24 +224,50 @@ export default function TestLearningMode() {
 
   // --- Calculate Final Score ---
   useEffect(() => {
-      if (step === 5 && results.length > 0) {
-        let totalPoints = 0;
-        let maxPoints = results.length; // Each question is worth 1 point
-        results.forEach(r => {
-          if (r.mode === 'written') {
-            // Written: 1 for first try, 0.5 for second, 0.25 for third, 0 if never correct
-            if (r.correct && r.attempt === 1) totalPoints += 1;
-            else if (r.correct && r.attempt === 2) totalPoints += 0.5;
-            else if (r.correct && r.attempt === 3) totalPoints += 0.25;
-            // If incorrect after 3 attempts, 0 points
-          } else {
-            // MCQ and Match: 1 point for correct, 0 for incorrect
-            if (r.correct) totalPoints += 1;
-          }
-        });
-        setFinalScore({ total: totalPoints, max: maxPoints, percent: ((totalPoints / maxPoints) * 100).toFixed(2) });
-      }
-    }, [step, results, flashcards]);
+    if (step === 5 && results.length > 0) {
+      let totalPoints = 0;
+      let maxPoints = results.length; // Each question is worth 1 point
+      results.forEach(r => {
+        if (r.mode === 'written') {
+          // Written: 1 for first try, 0.5 for second, 0.25 for third, 0 if never correct
+          if (r.correct && r.attempt === 1) totalPoints += 1;
+          else if (r.correct && r.attempt === 2) totalPoints += 0.5;
+          else if (r.correct && r.attempt === 3) totalPoints += 0.25;
+          // If incorrect after 3 attempts, 0 points
+        } else {
+          // MCQ and Match: 1 point for correct, 0 for incorrect
+          if (r.correct) totalPoints += 1;
+        }
+      });
+      setFinalScore({ total: totalPoints, max: maxPoints, percent: ((totalPoints / maxPoints) * 100).toFixed(2) });
+    }
+  }, [step, results, flashcards]);
+
+  // --- Save Result to Backend ---
+  useEffect(() => {
+    if (step === 5 && finalScore && results.length > 0) {
+      // Adjust the URL and payload as needed for your backend
+      fetch(`http://127.0.0.1:5000/api/deck/${deckId}/test-result`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          deckId,
+          results,
+          test_result:finalScore.percent,
+          timestamp: new Date().toISOString(),
+        })
+      })
+      .then(res => res.ok ? res.json() : Promise.reject(res))
+      .then(data => {
+        // Optionally handle response
+        // console.log('Result saved:', data);
+      })
+      .catch(err => {
+        // Optionally handle error
+        // console.error('Failed to save result', err);
+      });
+    }
+  }, [step, finalScore, results, deckId]);
 
   // --- Render UI for each step ---
   return (
@@ -377,14 +403,14 @@ export default function TestLearningMode() {
             <div>
               <h3>{t("writtenMode", "Written Mode")}</h3>
               <div className="write-block">
-                <div className="write-subblock written-card">
+                <div className="write-subblock written-card written-card-test">
                   <div className="written-prompt">
                     {writtenQuestions[writtenIndex].type === "definition"
                       ? flashcards[writtenQuestions[writtenIndex].idx].front_title
                       : flashcards[writtenQuestions[writtenIndex].idx].back_title}
                   </div>
                   <input
-                    className="written-input"
+                    className="written-input written-input-test"
                     type="text"
                     value={input}
                     onChange={e => setInput(e.target.value)}
