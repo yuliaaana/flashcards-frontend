@@ -5,5 +5,11 @@
     "excellent":"Excellent",
     "complete":"Learning Session Complete!",
     "restart":"Restart Session",
-    "exit":"Exit to Homepage"
+    "exit":"Exit to Homepage",
+    "chooseLearningMode":"Choose Learning Mode",
+    "for":"for set",
+    "flashcardMode":"Flashcard Mode",
+    "matchMode":"Match Mode",
+    "writtenMode":"Written Mode",
+    "testMode":"Test Mode"
 }
