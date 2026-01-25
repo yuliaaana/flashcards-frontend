@@ -250,38 +250,38 @@ export default function TestLearningMode() {
       <div className="test-modes-wrapper">
         <div className="learning-block"></div>
         <div className="learning-block test-modes-container">
-          <h2 className="ch-ttl">Test Learning Mode</h2>
-          {step === 0 && (!cardsLoaded ? <div>Loading...</div> : setStep(1))}
+          <h2 className="ch-ttl">{t('testLearningMode', 'Тестовий режим навчання')}</h2>
+          {step === 0 && (!cardsLoaded ? <div>{t('loading', 'Завантаження...')}</div> : setStep(1))}
           {step === 1 && cardsLoaded && (
             <div>
-              <h3>{t('chooseTaskTypes', 'Choose which types of tasks you want:')}</h3>
+              <h3>{t('chooseTaskTypes')}</h3>
               <div style={{marginBottom: 24}}>
                 <label style={{marginRight: 16}}>
                   <input type="checkbox" checked={selectedTasks.mcq} onChange={e => setSelectedTasks(s => ({...s, mcq: e.target.checked}))} />
-                  {t('multipleChoice', 'Multiple Choice')}
+                  {t('multipleChoice')}
                 </label>
                 <label style={{marginRight: 16}}>
                   <input type="checkbox" checked={selectedTasks.match} onChange={e => setSelectedTasks(s => ({...s, match: e.target.checked}))} />
-                  {t('match', 'Match')}
+                  {t('match')}
                 </label>
                 <label style={{marginRight: 16}}>
                   <input type="checkbox" checked={selectedTasks.writtenDef} onChange={e => setSelectedTasks(s => ({...s, writtenDef: e.target.checked}))} />
-                  {t('writeDefinition', 'Write Definition')}
+                  {t('writeDefinition')}
                 </label>
                 <label>
                   <input type="checkbox" checked={selectedTasks.writtenTerm} onChange={e => setSelectedTasks(s => ({...s, writtenTerm: e.target.checked}))} />
-                  {t('writeTerm', 'Write Term')}
+                  {t('writeTerm')}
                 </label>
               </div>
               <button className="mode-btn btn-conf" onClick={handleStartTest} disabled={!(selectedTasks.mcq || selectedTasks.match || selectedTasks.writtenDef || selectedTasks.writtenTerm)}>
-                {t('startTest', 'Start Test')}
+                {t('startTest')}
               </button>
             </div>
           )}
           {/* MCQ */}
           {step === 2 && flashcards.length > 0 && mcqTerms.length > 0 && (
             <div>
-              <h3>Multiple Choice: {mcqIndex + 1} / {mcqTerms.length}</h3>
+              <h3>{t('multipleChoice')}: {mcqIndex + 1} / {mcqTerms.length}</h3>
               <div className="flashcard-learning flc-cover" style={{margin: '0 auto 16px auto'}}>
                 <div className="learn-front">
                   <h5>{flashcards[mcqTerms[mcqIndex]].front_title}</h5>
@@ -302,9 +302,9 @@ export default function TestLearningMode() {
                 {mcqShowResult && (
                   <div style={{marginTop: 16}}>
                     {mcqSelected === flashcards[mcqTerms[mcqIndex]].back_title ? (
-                      <span style={{color: 'green'}}>Correct!</span>
+                      <span style={{color: 'green'}}>{t('correct')}</span>
                     ) : (
-                      <span style={{color: 'red'}}>Incorrect! Correct answer: {flashcards[mcqTerms[mcqIndex]].back_title}</span>
+                      <span style={{color: 'red'}}>{t('incorrectAnswerWas', { answer: flashcards[mcqTerms[mcqIndex]].back_title })}</span>
                     )}
                   </div>
                 )}
@@ -322,7 +322,7 @@ export default function TestLearningMode() {
                       else setStep(5);
                     }
                   }}>
-                    {mcqIndex + 1 === mcqTerms.length ? (selectedTasks.match ? t('nextMode', 'Next Mode') : selectedTasks.written ? t('nextMode', 'Next Mode') : t('finish', 'Finish')) : t('next', 'Next')}
+                    {mcqIndex + 1 === mcqTerms.length ? (selectedTasks.match ? t('nextMode') : selectedTasks.written ? t('nextMode') : t('finish')) : t('next')}
                   </button>
                 )}
               </div>
@@ -331,10 +331,10 @@ export default function TestLearningMode() {
           {/* Match */}
           {step === 3 && flashcards.length > 0 && matchTerms.length > 0 && (
             <div>
-              <h3>{t('matchModeTitle', 'Match Mode')}</h3>
+              <h3>{t('matchModeTitle')}</h3>
               <div className="match-columns">
                 <div className="match-col">
-                  <h4>{t('terms', 'Terms')}</h4>
+                  <h4>{t('terms')}</h4>
                   {shuffledTerms.map(({ id, text }) => (
                     <button
                       key={id}
@@ -347,7 +347,7 @@ export default function TestLearningMode() {
                   ))}
                 </div>
                 <div className="match-col">
-                  <h4>{t('definitions', 'Definitions')}</h4>
+                  <h4>{t('definitions')}</h4>
                   {shuffledDefs.map(({ id, text }) => (
                     <button
                       key={id}
@@ -361,14 +361,14 @@ export default function TestLearningMode() {
                 </div>
               </div>
               {matched.length === matchTerms.length && (
-                <div className="match-complete">{t('allPairsMatched', 'All pairs matched!')}</div>
+                <div className="match-complete">{t('allPairsMatched')}</div>
               )}
               {matched.length === matchTerms.length && (
                 <button className="mode-btn btn-conf" style={{marginTop: 16}} onClick={() => {
                   // Go to next enabled mode
                   if (selectedTasks.written) setStep(4);
                   else setStep(5);
-                }}>{selectedTasks.written ? t('nextMode', 'Next Mode') : t('finish', 'Finish')}</button>
+                }}>{selectedTasks.written ? t('nextMode') : t('finish')}</button>
               )}
             </div>
           )}
@@ -419,10 +419,10 @@ export default function TestLearningMode() {
           {/* Result */}
           {step === 5 && finalScore && (
             <div>
-              <h3>Session Complete!</h3>
-              <div>Total Points: {finalScore.total} / {finalScore.max}</div>
-              <div>Result: {finalScore.percent}%</div>
-              <button className="mode-btn btn-conf" onClick={() => navigate(`/learn/${deckId}/modes`)}>Back to Learning Modes</button>
+              <h3>{t('sessionComplete')}</h3>
+              <div>{t('totalPoints')} {finalScore.total} / {finalScore.max}</div>
+              <div>{t('result')} {finalScore.percent}%</div>
+              <button className="mode-btn btn-conf" onClick={() => navigate(`/learn/${deckId}/modes`)}>{t('backToLearningModes')}</button>
             </div>
           )}
         </div>
