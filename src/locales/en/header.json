@@ -3,5 +3,12 @@
     "profile":"Profile",
     "folder":"Folder",
     "deck":"Deck",
-    "create":"Create"
+    "create":"Create",
+    "createStudyGroup": "Create Study Group",
+    "groupName": "Group Name",
+    "groupDescription": "Description",
+    "yourGroups": "Groups You Manage",
+    "availableGroups": "Available Groups",
+    "join": "Join",
+    "leave": "Leave"
 }

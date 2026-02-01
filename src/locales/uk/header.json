@@ -3,5 +3,12 @@
     "profile":"Профіль",
     "folder":"Папка",
     "deck":"Набір карток",
-    "create":"Створити"
+    "create":"Створити",
+    "createStudyGroup": "Створити навчальну групу",
+    "groupName": "Назва групи",
+    "groupDescription": "Опис",
+    "yourGroups": "Ваші групи",
+    "availableGroups": "Доступні групи",
+    "join": "Приєднатися",
+    "leave": "Вийти"
 }

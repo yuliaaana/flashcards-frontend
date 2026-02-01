@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useTranslation } from "react-i18next";
+// If you have a UserContext, import it. Otherwise, adjust as needed.
+// import { UserContext } from '../../UserContext';
 import '../../styles/languages.css';
 import "../../i18n"; 
 
 
-function Header() {
+
+function Header({ user }) {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation("header");
+  // If using context:
+  // const { user } = useContext(UserContext);
 
   const changeLanguage = () => {
     const newLang = i18n.language === "en" ? "uk" : "en";
@@ -28,6 +33,11 @@ function Header() {
             <NavDropdown title={t("create")} id="navbarScrollingDropdown">
               <NavDropdown.Item onClick={() => navigate('/create-folder')}>{t("folder")}</NavDropdown.Item>
               <NavDropdown.Item onClick={() => navigate('/create-deck')}>{t("deck")}</NavDropdown.Item>
+              {user && user.role === 'teacher' && (
+                <NavDropdown.Item onClick={() => navigate('/study-groups')}>
+                  {t("Create Study Group")}
+                </NavDropdown.Item>
+              )}
             </NavDropdown>
           </Nav>
           <Form className="d-flex">
