@@ -9,6 +9,7 @@ const StudyGroupsPage = ({ user }) => {
   const { t } = useTranslation('header');
   const [groups, setGroups] = useState([]);
   const [myGroups, setMyGroups] = useState([]);
+  const [studentGroups, setStudentGroups] = useState([]);
   const [groupName, setGroupName] = useState('');
   const [groupDesc, setGroupDesc] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,6 +18,7 @@ const StudyGroupsPage = ({ user }) => {
   useEffect(() => {
     fetchGroups();
     if (user && user.role === 'teacher') fetchMyGroups();
+    if (user && user.role === 'student') fetchStudentGroups();
   }, [user]);
 
   const API_URL = 'http://127.0.0.1:5000/api';
@@ -44,6 +46,19 @@ const StudyGroupsPage = ({ user }) => {
       }
       const data = await response.json();
       setMyGroups(Array.isArray(data) ? data : []);
+    } catch (e) {
+      setError('Failed to load your groups');
+    }
+  };
+
+  const fetchStudentGroups = async () => {
+    try {
+      const response = await fetch(`${API_URL}/groups/user/${user?.id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setStudentGroups(Array.isArray(data) ? data : []);
     } catch (e) {
       setError('Failed to load your groups');
     }
@@ -89,6 +104,7 @@ const StudyGroupsPage = ({ user }) => {
         return;
       }
       fetchGroups();
+      if (user?.role === 'student') fetchStudentGroups();
     } catch (e) {
       setError('Failed to join group');
     }
@@ -107,6 +123,7 @@ const StudyGroupsPage = ({ user }) => {
         return;
       }
       fetchGroups();
+      if (user?.role === 'student') fetchStudentGroups();
     } catch (e) {
       setError('Failed to leave group');
     }
@@ -164,21 +181,19 @@ const StudyGroupsPage = ({ user }) => {
         </div>
       )}
       {user.role === 'student' && (
-        <div className="available-groups">
-          <h3>{t('availableGroups') || 'Available Groups'}</h3>
-          <ul>
-            {(Array.isArray(groups) ? groups : []).map(g => (
-              <li key={g.id}>
-                <Link className="group-link" to={`/group/${g.id}`}>{g.name}</Link>
-                <span>- {g.description}</span>
-                {g.is_member ? (
-                  <button onClick={() => handleLeave(g.id)}>{t('leave') || 'Leave'}</button>
-                ) : (
-                  <button onClick={() => handleJoin(g.id)}>{t('join') || 'Join'}</button>
-                )}
-              </li>
+        <div className="my-groups">
+          <h3 className="ur-gr">{t('yourGroups') || 'Your Groups'}</h3>
+          <div className="group-boxes">
+            {(Array.isArray(studentGroups) ? studentGroups : []).map(g => (
+              <div key={g.id} className="group-box">
+                <div className="group-box-header">
+                  <Link className="group-link" to={`/group/${g.id}`}>{g.name}</Link>
+                </div>
+                {g.description && <p className="group-box-desc">{g.description}</p>}
+                <span className="group-members-count">{g.members ? g.members.length : 0} {t('studentsCount')}</span>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       )}
       {loading && <div>Loading...</div>}
