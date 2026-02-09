@@ -29,5 +29,12 @@
     "failedRemoveStudent": "Failed to remove student",
     "enterUsername": "Please enter at least one username.",
     "studentsCount": "students",
-    "edit": "Edit"
+    "edit": "Edit",
+    "decks": "Decks",
+    "folders": "Folders",
+    "selectDeck": "-- Select Deck --",
+    "selectFolder": "-- Select Folder --",
+    "add": "Add",
+    "noDecks": "No decks yet.",
+    "noFolders": "No folders yet."
 }

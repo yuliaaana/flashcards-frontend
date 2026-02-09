@@ -328,3 +328,157 @@ input{
 .eg-back-btn:hover {
   background: #357ab8;
 }
+
+/* ===== GroupPage styles ===== */
+.gp-main {
+  font-family: "Montserrat", sans-serif;
+  margin: 15px auto;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 24px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10.7px);
+  -webkit-backdrop-filter: blur(16.7px);
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+}
+
+.gp-title {
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.gp-desc {
+  text-align: center;
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.gp-content {
+  display: grid;
+  grid-template-columns: 1fr 2px 1fr;
+  gap: 24px;
+  margin-top: 12px;
+}
+
+.gp-vertical-divider {
+  background: rgba(0, 0, 0, 0.25);
+  width: 1px;
+  align-self: stretch;
+}
+
+.gp-left,
+.gp-right {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.gp-section h3 {
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+}
+
+.gp-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.gp-select {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  background: #fff;
+  min-width: 0;
+  width: 100%;
+}
+
+.gp-add-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #0e81c8a8;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 50px;
+  transition: background 0.2s;
+}
+.gp-add-btn:hover:not(:disabled) {
+  background: #357ab8;
+}
+.gp-add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gp-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gp-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s;
+}
+.gp-item:hover {
+  box-shadow: 0 0 10px rgba(3, 70, 205, 0.3);
+}
+
+.gp-remove-btn {
+  border: none;
+  background: #e74c3c;
+  color: #fff;
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  width: 35px;
+  transition: background 0.2s;
+}
+.gp-remove-btn:hover {
+  background: #c0392b;
+}
+
+.gp-member {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.gp-empty {
+  color: #888;
+  font-style: italic;
+  font-size: 0.93rem;
+}
+
+.gp-divider {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.65);
+  margin: 4px 0;
+}
+
+@media (max-width: 700px) {
+  .gp-content {
+    grid-template-columns: 1fr;
+  }
+  .gp-vertical-divider {
+    display: none;
+  }
+}
