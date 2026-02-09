@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from './components/homepage/Header';
 import { useTranslation } from 'react-i18next';
 import './styles/groups.css';
@@ -28,6 +29,7 @@ const StudyGroupsPage = ({ user }) => {
       }
       const data = await response.json();
       setGroups(Array.isArray(data) ? data : []);
+      console.log('Fetched groups:', data);
     } catch (e) {
       setError('Failed to load groups');
     }
@@ -116,9 +118,11 @@ const StudyGroupsPage = ({ user }) => {
   return (
     <>
       <Header user={user} />
-    <div className="study-groups-page">
-      <h2>{t('createStudyGroup')}</h2>
-      {error && <div className="error">{error}</div>}
+    <div className="sg-cont">
+    <div className="sg-block"></div>
+    <div className="sg-block sg-card">
+      <h2>{t('StudyGroup')}</h2>
+        <hr style={{ margin: '8px 0' }} />
       {user.role === 'teacher' && (
         <div className="create-group-form">
           <h3>{t('createStudyGroup')}</h3>
@@ -136,18 +140,27 @@ const StudyGroupsPage = ({ user }) => {
               value={groupDesc}
               onChange={e => setGroupDesc(e.target.value)}
             />
-            <button type="submit">{t('createStudyGroup')}</button>
+            <button className="cr-st-btn" type="submit">{t('createStudyGroup')}</button>
           </form>
         </div>
       )}
       {user.role === 'teacher' && (
         <div className="my-groups">
-          <h3>{t('yourGroups') || 'Groups You Manage'}</h3>
-          <ul>
+          <h3 className="ur-gr">{t('yourGroups') || 'Groups You Manage'}</h3>
+          <div className="group-boxes">
             {(Array.isArray(myGroups) ? myGroups : []).map(g => (
-              <li key={g.id}>{g.name} - {g.description}</li>
+              <div key={g.id} className="group-box">
+                <div className="group-box-header">
+                  <Link className="group-link" to={`/group/${g.id}`}>{g.name}</Link>
+                  <Link className="group-edit-btn" to={`/editgroup/${g.id}`}>
+                    ✎ {t('edit') || 'Edit'}
+                  </Link>
+                </div>
+                {g.description && <p className="group-box-desc">{g.description}</p>}
+                <span className="group-members-count">{g.members ? g.members.length : 0} {t('studentsCount')}</span>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       )}
       {user.role === 'student' && (
@@ -156,7 +169,8 @@ const StudyGroupsPage = ({ user }) => {
           <ul>
             {(Array.isArray(groups) ? groups : []).map(g => (
               <li key={g.id}>
-                {g.name} - {g.description}
+                <Link className="group-link" to={`/group/${g.id}`}>{g.name}</Link>
+                <span>- {g.description}</span>
                 {g.is_member ? (
                   <button onClick={() => handleLeave(g.id)}>{t('leave') || 'Leave'}</button>
                 ) : (
@@ -168,6 +182,8 @@ const StudyGroupsPage = ({ user }) => {
         </div>
       )}
       {loading && <div>Loading...</div>}
+    </div>
+    <div className="sg-block"></div>
     </div>
     </>
   );

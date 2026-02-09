@@ -20,6 +20,7 @@ import EditDeckPage from './EditDeckPage';
 
 import TestLearningMode from './TestLearningMode';
 import StudyGroupsPage from './StudyGroupsPage';
+import EditGroupPage from './EditGroupPage';
 
 
 export default function MainApp() {
@@ -63,6 +64,8 @@ export default function MainApp() {
       <Route path="/folder/:folderId" element={<Folder />} />
       <Route path="/edit-deck/:deckId" element={<EditDeckPage />} />
       <Route path="/study-groups" element={<StudyGroupsPage user={user} />} />
+      <Route path="/group/:groupId" element={<EditGroupPage user={user} />} />
+      <Route path="/editgroup/:groupId" element={<EditGroupPage user={user} />} />
     </Routes>
   );
 }
