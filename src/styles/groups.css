@@ -1,0 +1,329 @@
+
+.my-groups ul,
+.available-groups ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  padding-left: 20px;
+  text-align: left;
+}
+
+.my-groups li,
+.available-groups li {
+  margin-bottom: 8px;
+}
+
+.group-link {
+  color: #357ab8;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+.group-link:hover {
+  color: #23507a;
+}
+/* Style for create group form inputs and button */
+.create-group-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+
+.create-group-form input[type="text"] {
+  padding: 10px 12px;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 13px;
+  text-align: center;
+  font-size: 1rem;
+  width: 250px;
+  box-sizing: border-box;
+}
+
+.create-group-form .cr-st-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 13px;
+  background: #0e81c8a8;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 8px;
+  text-align: center;
+  transition: background 0.2s;
+}
+.create-group-form .cr-st-btn:hover {
+  background: #357ab8;
+}
+.sg-cont{
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.sg-card{
+   font-family: "Montserrat", sans-serif;
+  margin: 15px auto;
+  padding: 12px;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 24px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10.7px);
+  -webkit-backdrop-filter: blur(16.7px);
+  padding: 20px;
+  width: 100%;
+  max-width: 700px; 
+  box-sizing: border-box;
+}
+
+.sg-card h2,
+.sg-card h3 {
+  text-align: center;
+}
+
+
+.cr-st-btn{
+    max-width: 620px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 13px;
+    background: #0e81c8a8;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.cr-st-btn:hover {
+    background: #357ab8;
+}
+
+input{
+  min-width: 620px;
+}
+
+.my-groups{
+  font-family: "Montserrat", sans-serif;
+  margin: 10px auto;
+  padding: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 18px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10.7px);
+  -webkit-backdrop-filter: blur(16.7px);
+  padding: 5px;
+  width: 100%;
+  max-width: 720px; 
+  box-sizing: border-box;
+}
+
+.ur-gr{
+    margin-top: 10px;
+}
+
+/* Group box cards */
+.group-boxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+.group-box {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  transition: box-shadow 0.2s;
+}
+.group-box:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+}
+
+.group-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-box-header .group-link {
+  font-size: 1.1rem;
+}
+
+.group-box-desc {
+  color: #555;
+  margin: 4px 0 6px;
+  font-size: 0.93rem;
+  text-align: left;
+}
+
+.group-members-count {
+  color: #777;
+  font-size: 0.88rem;
+}
+
+.group-edit-btn {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 10px;
+  background: #0e81c8a8;
+  color: #fff;
+  font-size: 0.85rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.group-edit-btn:hover {
+  background: #357ab8;
+}
+
+/* EditGroupPage styles */
+.eg-desc-text {
+  color: #555;
+  margin: 4px 0 8px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.eg-description {
+  color: #555;
+  margin: 4px 0 8px;
+  font-size: 1rem;
+  text-align: left !important;
+}
+
+.eg-members {
+  text-align: left;
+  margin: 12px 0;
+}
+
+.eg-no-members {
+  color: #888;
+  font-style: italic;
+}
+
+.eg-members-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+
+.eg-member-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.eg-member-name {
+  font-weight: 600;
+  min-width: 120px;
+}
+
+.eg-member-email {
+  color: #666;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.eg-remove-btn {
+  padding: 4px 14px;
+  margin-left: auto;
+  border: none;
+  border-radius: 10px;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: 100px;
+  transition: background 0.2s;
+}
+.eg-remove-btn:hover {
+  background: #c0392b;
+}
+
+.eg-add-students {
+  text-align: center;
+  margin: 8px 0;
+      background: rgba(255, 255, 255, 0.35);
+    border-radius: 24px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(16.7px);
+    padding: 20px;
+    width: 100%;
+    max-width: 900px; 
+    box-sizing: border-box;
+
+
+}
+
+.eg-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.eg-add-form input[type="text"] {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 13px;
+  text-align: center;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+}
+
+.eg-add-result {
+  margin-top: 10px;
+  font-size: 0.95em;
+  text-align: left;
+}
+
+.eg-result-added {
+  color: green;
+}
+
+.eg-result-notfound {
+  color: orange;
+}
+
+.eg-result-already {
+  color: gray;
+}
+
+.eg-error {
+  color: #e74c3c;
+  margin: 10px 0;
+  font-weight: 600;
+}
+
+.eg-back-btn {
+  margin-top: 16px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 13px;
+  background: #0e81c8a8;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.eg-back-btn:hover {
+  background: #357ab8;
+}

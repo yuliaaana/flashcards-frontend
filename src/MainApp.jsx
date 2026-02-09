@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import Login from './Login'; 
 import Register from './Register'; 
 import HomePage from './HomePage'; 
@@ -16,10 +17,32 @@ import LearningModes from './LearningModes';
 import MatchMode from './MatchMode';
 import WrittenMode from './WrittenMode';
 import EditDeckPage from './EditDeckPage';
+
 import TestLearningMode from './TestLearningMode';
+import StudyGroupsPage from './StudyGroupsPage';
+import EditGroupPage from './EditGroupPage';
 
 
 export default function MainApp() {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const userId = localStorage.getItem('user_id');
+    if (userId) {
+      fetch(`http://127.0.0.1:5000/api/user-data/${userId}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.user) {
+            setUser(data.user);
+          }
+        })
+        .catch((error) => console.error('Error fetching user:', error));
+    }
+  }, []);
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
@@ -40,7 +63,9 @@ export default function MainApp() {
       <Route path="/folders" element={<Folders />} />
       <Route path="/folder/:folderId" element={<Folder />} />
       <Route path="/edit-deck/:deckId" element={<EditDeckPage />} />
-
+      <Route path="/study-groups" element={<StudyGroupsPage user={user} />} />
+      <Route path="/group/:groupId" element={<EditGroupPage user={user} />} />
+      <Route path="/editgroup/:groupId" element={<EditGroupPage user={user} />} />
     </Routes>
   );
 }
