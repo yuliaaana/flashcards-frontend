@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import Header from './components/homepage/Header';
 import AnimatedBackground from './components/AnimatedBackground';
 import CompletedSession from './components/CompletedSession';
@@ -12,6 +12,8 @@ import "./i18n";
 
 export default function LearningMode() {
   const { deckId } = useParams();
+  const [searchParams] = useSearchParams();
+  const assignmentId = searchParams.get('assignmentId');
   const [flashcards, setFlashcards] = useState([]);
   const [currentCard, setCurrentCard] = useState(null);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -19,6 +21,7 @@ export default function LearningMode() {
   const [currentRoundCards, setCurrentRoundCards] = useState([]);
   const [reviewedCards, setReviewedCards] = useState(new Set());
   const [showCompletion, setShowCompletion] = useState(false);
+  const [assignmentSubmitted, setAssignmentSubmitted] = useState(false);
   const { t, i18n } = useTranslation("learn");
 
   useEffect(() => {
@@ -37,6 +40,26 @@ export default function LearningMode() {
       })
       .catch((error) => console.error('Error fetching flashcards:', error));
   }, [deckId]);
+
+  useEffect(() => {
+    if (showCompletion && assignmentId && !assignmentSubmitted && flashcards.length > 0) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) return;
+      const goodOrAbove = flashcards.filter(c => c.confidence_level >= 3).length;
+      fetch(`http://127.0.0.1:5000/api/assignments/${assignmentId}/results`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: user.id,
+          deck_id: parseInt(deckId),
+          mode: 'flashcards',
+          score: goodOrAbove,
+          total: flashcards.length
+        })
+      }).then(() => setAssignmentSubmitted(true))
+        .catch(err => console.error('Failed to submit assignment result:', err));
+    }
+  }, [showCompletion]);
 
   const initializeRound = (cards, roundNumber) => {
     console.log(`Initializing round ${roundNumber}`);

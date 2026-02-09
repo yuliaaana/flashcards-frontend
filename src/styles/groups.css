@@ -482,3 +482,219 @@ input{
     display: none;
   }
 }
+
+/* ===== Assignment styles ===== */
+.gp-assignments-section {
+  margin-top: 4px;
+}
+
+.gp-assignments-section h3 {
+  margin-bottom: 10px;
+}
+
+.asn-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 14px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+}
+
+.asn-input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: unset !important;
+}
+
+.asn-label {
+  font-weight: 600;
+  font-size: 0.93rem;
+  margin-top: 4px;
+}
+
+.asn-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.asn-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.93rem;
+  cursor: pointer;
+}
+
+.asn-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.asn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.asn-card {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.asn-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.asn-due {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.asn-card-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0;
+}
+
+.asn-mode-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  background: #0e81c830;
+  color: #1a6fa0;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.asn-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* Assignment Page */
+.asn-tabs {
+  display: flex;
+  gap: 0;
+  margin-top: 12px;
+}
+
+.asn-tab {
+  padding: 8px 20px;
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.asn-tab:first-child {
+  border-radius: 10px 0 0 0;
+}
+.asn-tab:last-child {
+  border-radius: 0 10px 0 0;
+}
+
+.asn-tab:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.asn-tab-active {
+  border-bottom: 2px solid #0e81c8;
+  color: #0e81c8;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.asn-overview,
+.asn-results,
+.asn-leaderboard {
+  margin-top: 12px;
+}
+
+.asn-deck-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.asn-deck-modes {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.asn-mode-start-btn {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #0e81c8a8;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.asn-mode-start-btn:hover {
+  background: #357ab8;
+  color: #fff;
+}
+
+.asn-results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+.asn-results-table th,
+.asn-results-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 0.93rem;
+}
+
+.asn-results-table th {
+  font-weight: 700;
+  color: #333;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.asn-results-table tr:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+
+.btn-cr-ass{
+  width: 200px;
+}
+
+.si{
+  width: 120px;
+}
+

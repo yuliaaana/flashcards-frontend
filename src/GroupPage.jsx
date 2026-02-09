@@ -22,12 +22,22 @@ const GroupPage = ({ user }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
+  // Assignments state
+  const [assignments, setAssignments] = useState([]);
+  const [asnTitle, setAsnTitle] = useState('');
+  const [asnDesc, setAsnDesc] = useState('');
+  const [asnDueDate, setAsnDueDate] = useState('');
+  const [asnDeckIds, setAsnDeckIds] = useState([]);
+  const [asnModes, setAsnModes] = useState([]);
+  const [showCreateAssignment, setShowCreateAssignment] = useState(false);
+
   const isTeacher = user && group && user.id === group.teacher_id;
 
   useEffect(() => {
     fetchGroup();
     fetchGroupDecks();
     fetchGroupFolders();
+    fetchAssignments();
   }, [groupId]);
 
   useEffect(() => {
@@ -200,6 +210,93 @@ const GroupPage = ({ user }) => {
     f => !groupFolders.some(gf => gf.id === f.id)
   );
 
+  // --- Assignments ---
+  const fetchAssignments = async () => {
+    try {
+      const res = await fetch(`${API_URL}/groups/${groupId}/assignments`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setAssignments(Array.isArray(data) ? data : []);
+    } catch {
+      setAssignments([]);
+    }
+  };
+
+  const handleCreateAssignment = async (e) => {
+    e.preventDefault();
+    if (!asnTitle || asnDeckIds.length === 0 || asnModes.length === 0) {
+      setError('Title, at least one deck and one mode are required');
+      return;
+    }
+    setError('');
+    try {
+      const res = await fetch(`${API_URL}/groups/${groupId}/assignments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          teacher_id: user.id,
+          title: asnTitle,
+          description: asnDesc,
+          due_date: asnDueDate || null,
+          deck_ids: asnDeckIds,
+          modes: asnModes
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Failed to create assignment');
+        return;
+      }
+      setAsnTitle('');
+      setAsnDesc('');
+      setAsnDueDate('');
+      setAsnDeckIds([]);
+      setAsnModes([]);
+      setShowCreateAssignment(false);
+      fetchAssignments();
+    } catch {
+      setError('Failed to create assignment');
+    }
+  };
+
+  const handleDeleteAssignment = async (assignmentId) => {
+    setError('');
+    try {
+      const res = await fetch(`${API_URL}/assignments/${assignmentId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ teacher_id: user.id })
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || 'Failed to delete assignment');
+        return;
+      }
+      fetchAssignments();
+    } catch {
+      setError('Failed to delete assignment');
+    }
+  };
+
+  const toggleAsnDeck = (deckId) => {
+    setAsnDeckIds(prev =>
+      prev.includes(deckId) ? prev.filter(id => id !== deckId) : [...prev, deckId]
+    );
+  };
+
+  const toggleAsnMode = (mode) => {
+    setAsnModes(prev =>
+      prev.includes(mode) ? prev.filter(m => m !== mode) : [...prev, mode]
+    );
+  };
+
+  const allModes = [
+    { key: 'flashcards', label: t('flashcardMode') },
+    { key: 'match', label: t('matchMode') },
+    { key: 'written', label: t('writtenMode') },
+    { key: 'test', label: t('testMode') },
+  ];
+
   if (loading) return <div>{t('loading')}</div>;
   if (!group) return <div>{t('groupNotFound')}</div>;
 
@@ -227,7 +324,7 @@ const GroupPage = ({ user }) => {
                       onChange={e => setSelectedDeck(e.target.value)}
                       className="gp-select"
                     >
-                      <option value="">{t('selectDeck') || '-- Select Deck --'}</option>
+                      <option value="">{t('selectDeck') || ' Select Deck '}</option>
                       {availableDecks.map(d => (
                         <option key={d.id} value={d.id}>{d.name}</option>
                       ))}
@@ -262,7 +359,7 @@ const GroupPage = ({ user }) => {
                       onChange={e => setSelectedFolder(e.target.value)}
                       className="gp-select"
                     >
-                      <option value="">{t('selectFolder') || '-- Select Folder --'}</option>
+                      <option value="">{t('selectFolder') || ' Select Folder '}</option>
                       {availableFolders.map(f => (
                         <option key={f.id} value={f.id}>{f.name}</option>
                       ))}
@@ -304,6 +401,111 @@ const GroupPage = ({ user }) => {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+
+          <hr className="gp-divider" style={{ margin: '16px 0' }} />
+
+          {/* Assignments Section */}
+          <div className="gp-assignments-section">
+            <h3>{t('assignments')}</h3>
+
+            {isTeacher && !showCreateAssignment && (
+              <button className="gp-add-btn btn-cr-ass" style={{ marginBottom: 12 }} onClick={() => setShowCreateAssignment(true)}>
+                {t('createAssignment')}
+              </button>
+            )}
+
+            {isTeacher && showCreateAssignment && (
+              <form className="asn-create-form" onSubmit={handleCreateAssignment}>
+                <input
+                  type="text"
+                  placeholder={t('assignmentTitle')}
+                  value={asnTitle}
+                  onChange={e => setAsnTitle(e.target.value)}
+                  required
+                  className="asn-input"
+                />
+                <input
+                  type="text"
+                  placeholder={t('assignmentDescription')}
+                  value={asnDesc}
+                  onChange={e => setAsnDesc(e.target.value)}
+                  className="asn-input"
+                />
+                <label className="asn-label">{t('dueDate')}</label>
+                <input
+                  type="datetime-local"
+                  value={asnDueDate}
+                  onChange={e => setAsnDueDate(e.target.value)}
+                  className="asn-input"
+                />
+
+                <label className="asn-label">{t('selectDecksForAssignment')}</label>
+                <div className="asn-checkboxes">
+                  {groupDecks.map(d => (
+                    <label key={d.id} className="asn-checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={asnDeckIds.includes(d.id)}
+                        onChange={() => toggleAsnDeck(d.id)}
+                      />
+                      {d.name}
+                    </label>
+                  ))}
+                </div>
+
+                <label className="asn-label">{t('selectModes')}</label>
+                <div className="asn-checkboxes">
+                  {allModes.map(m => (
+                    <label key={m.key} className="asn-checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={asnModes.includes(m.key)}
+                        onChange={() => toggleAsnMode(m.key)}
+                      />
+                      {m.label}
+                    </label>
+                  ))}
+                </div>
+
+                <div className="asn-form-actions">
+                  <button type="submit" className="gp-add-btn btn-cr-ass">{t('createAssignment')}</button>
+                  <button type="button" className="gp-remove-btn" onClick={() => setShowCreateAssignment(false)}>✕</button>
+                </div>
+              </form>
+            )}
+
+            <div className="asn-list">
+              {assignments.length === 0 && <p className="gp-empty">{t('noAssignments')}</p>}
+              {assignments.map(a => (
+                <div key={a.id} className="asn-card">
+                  <div className="asn-card-header">
+                    <Link className="group-link" to={`/assignment/${a.id}`}>{a.title}</Link>
+                    <span className="asn-due">
+                      {a.due_date
+                        ? `${t('due')}: ${new Date(a.due_date).toLocaleDateString()}`
+                        : t('noDueDate')}
+                    </span>
+                  </div>
+                  {a.description && <p className="gp-empty" style={{ fontStyle: 'normal' }}>{a.description}</p>}
+                  <div className="asn-card-modes">
+                    {(a.modes || []).map(m => (
+                      <span key={m} className="asn-mode-tag">{m}</span>
+                    ))}
+                  </div>
+                  <div className="asn-card-actions">
+                    <Link className="gp-add-btn si" to={`/assignment/${a.id}`} style={{ textDecoration: 'none', fontSize: '0.85rem', padding: '4px 12px' }}>
+                      {t('viewAssignment')}
+                    </Link>
+                    {isTeacher && (
+                      <button className="gp-remove-btn si" onClick={() => handleDeleteAssignment(a.id)}>
+                        {t('deleteAssignment')}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
