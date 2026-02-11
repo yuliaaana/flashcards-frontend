@@ -6,13 +6,6 @@ import './styles/groups.css';
 
 const API_URL = 'http://127.0.0.1:5000/api';
 
-const MODE_ROUTES = {
-  flashcards: (deckId) => `/learn/${deckId}`,
-  match: (deckId) => `/learn/${deckId}/match`,
-  written: (deckId) => `/learn/${deckId}/written`,
-  test: (deckId) => `/learn/${deckId}/test`,
-};
-
 const AssignmentPage = ({ user }) => {
   const { t } = useTranslation('header');
   const { assignmentId } = useParams();
@@ -177,28 +170,14 @@ const AssignmentPage = ({ user }) => {
                   <div key={d.id} className="asn-deck-row">
                     <span className="group-link" style={{ fontWeight: 700 }}>{d.name}</span>
                     <div className="asn-deck-modes">
-                      {(assignment.modes || []).map(mode => {
-                        const routeFn = MODE_ROUTES[mode];
-                        if (!routeFn) return null;
-                        return (
-                          <Link
-                            key={mode}
-                            className="asn-mode-start-btn"
-                            to={`${routeFn(d.id)}?assignmentId=${assignmentId}`}
-                          >
-                            {mode} →
-                          </Link>
-                        );
-                      })}
+                      <Link
+                        className="asn-mode-start-btn"
+                        to={`/assignment/${assignmentId}/deck/${d.id}/test`}
+                      >
+                        {t('startTest')} →
+                      </Link>
                     </div>
                   </div>
-                ))}
-              </div>
-
-              <h3 style={{ marginTop: 16 }}>{t('availableModes')}</h3>
-              <div className="asn-card-modes">
-                {(assignment.modes || []).map(m => (
-                  <span key={m} className="asn-mode-tag">{m}</span>
                 ))}
               </div>
             </div>

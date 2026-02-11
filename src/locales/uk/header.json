@@ -67,5 +67,10 @@
     "allResults": "Всі результати",
     "leaderboard": "Рейтинг",
     "avgScore": "Сер. бал",
-    "rank": "Місце"
+    "rank": "Місце",
+    "selectTestModes": "Оберіть режими тесту",
+    "multipleChoice": "Тест з вибором відповіді",
+    "writeDefinition": "Написати визначення",
+    "writeTerm": "Написати термін",
+    "startTest": "Почати тест"
 }

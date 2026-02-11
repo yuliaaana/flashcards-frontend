@@ -19,6 +19,7 @@ import WrittenMode from './WrittenMode';
 import EditDeckPage from './EditDeckPage';
 
 import TestLearningMode from './TestLearningMode';
+import AssignmentTestMode from './AssignmentTestMode';
 import StudyGroupsPage from './StudyGroupsPage';
 import GroupPage from './GroupPage';
 import AssignmentPage from './AssignmentPage';
@@ -62,6 +63,7 @@ export default function MainApp() {
       <Route path="/learn/:deckId/match" element={<MatchMode />} />
       <Route path="/learn/:deckId/written" element={<WrittenMode />} />
       <Route path="/learn/:deckId/test" element={<TestLearningMode />} />
+      <Route path="/assignment/:assignmentId/deck/:deckId/test" element={<AssignmentTestMode />} />
       <Route path="/folders" element={<Folders />} />
       <Route path="/folder/:folderId" element={<Folder />} />
       <Route path="/edit-deck/:deckId" element={<EditDeckPage />} />
