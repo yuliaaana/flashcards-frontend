@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import Header from './components/homepage/Header';
 import './styles/learning.css';
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,8 @@ function shuffle(array) {
 export default function TestLearningMode() {
   const { deckId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const assignmentId = searchParams.get('assignmentId');
   const [flashcards, setFlashcards] = useState([]);
   // 0: loading, 1: select tasks, 2: multiple choice, 3: match, 4: written, 5: result
   const [step, setStep] = useState(0);
@@ -246,7 +248,7 @@ export default function TestLearningMode() {
   // --- Save Result to Backend ---
   useEffect(() => {
     if (step === 5 && finalScore && results.length > 0) {
-      // Adjust the URL and payload as needed for your backend
+      // Save to deck test-result
       fetch(`http://127.0.0.1:5000/api/deck/${deckId}/test-result`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -258,16 +260,27 @@ export default function TestLearningMode() {
         })
       })
       .then(res => res.ok ? res.json() : Promise.reject(res))
-      .then(data => {
-        // Optionally handle response
-        // console.log('Result saved:', data);
-      })
-      .catch(err => {
-        // Optionally handle error
-        // console.error('Failed to save result', err);
-      });
+      .catch(() => {});
+
+      // Submit to assignment if assignmentId is present
+      if (assignmentId) {
+        const userId = localStorage.getItem('user_id');
+        if (userId) {
+          fetch(`http://127.0.0.1:5000/api/assignments/${assignmentId}/results`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              user_id: parseInt(userId),
+              deck_id: parseInt(deckId),
+              mode: 'test',
+              score: parseFloat(finalScore.total),
+              total: finalScore.max
+            })
+          }).catch(() => {});
+        }
+      }
     }
-  }, [step, finalScore, results, deckId]);
+  }, [step, finalScore, results, deckId, assignmentId]);
 
   // --- Render UI for each step ---
   return (

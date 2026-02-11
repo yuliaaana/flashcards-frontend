@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import Header from './components/homepage/Header';
 import './styles/learning.css';
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,8 @@ function shuffle(array) {
 
 export default function MatchMode() {
   const { deckId } = useParams();
+  const [searchParams] = useSearchParams();
+  const assignmentId = searchParams.get('assignmentId');
   const [pairs, setPairs] = useState([]);
   const [selected, setSelected] = useState([]); // [{type: 'term'|'definition', id}]
   const [matched, setMatched] = useState([]); // [{termId, defId}]
@@ -100,10 +102,39 @@ export default function MatchMode() {
           ))}
         </div>
       </div>
-      {matched.length === pairs.length && (
+      {matched.length === pairs.length && pairs.length > 0 && (
         <div className="match-complete">{t("allPairsMatched", "Congratulations! All pairs matched!")}</div>
+      )}
+      {/* Submit assignment result when match is complete */}
+      {matched.length === pairs.length && pairs.length > 0 && assignmentId && (
+        <MatchResultSubmitter assignmentId={assignmentId} deckId={deckId} total={pairs.length} />
       )}
     </div>
     </>
   );
+}
+
+// Helper component to submit match result once
+function MatchResultSubmitter({ assignmentId, deckId, total }) {
+  const [submitted, setSubmitted] = useState(false);
+  useEffect(() => {
+    if (!submitted) {
+      const userId = localStorage.getItem('user_id');
+      if (userId) {
+        fetch(`http://127.0.0.1:5000/api/assignments/${assignmentId}/results`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: parseInt(userId),
+            deck_id: parseInt(deckId),
+            mode: 'match',
+            score: total,
+            total: total
+          })
+        }).catch(() => {});
+        setSubmitted(true);
+      }
+    }
+  }, [submitted, assignmentId, deckId, total]);
+  return null;
 }

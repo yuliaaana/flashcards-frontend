@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import './styles/learning.css';
 import Header from './components/homepage/Header';
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,8 @@ function shuffle(array) {
 export default function WrittenMode() {
   const { deckId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const assignmentId = searchParams.get('assignmentId');
   const [flashcards, setFlashcards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [input, setInput] = useState("");
@@ -23,6 +25,7 @@ export default function WrittenMode() {
   const [isCorrect, setIsCorrect] = useState(null);
   const [attempts, setAttempts] = useState(0);
   const [completed, setCompleted] = useState(false);
+  const [correctCount, setCorrectCount] = useState(0);
   const { t, i18n } = useTranslation("learn");
 
   useEffect(() => {
@@ -47,6 +50,24 @@ export default function WrittenMode() {
       });
   }, [deckId]);
 
+  useEffect(() => {
+    if (completed && assignmentId && flashcards.length > 0) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) return;
+      fetch(`http://127.0.0.1:5000/api/assignments/${assignmentId}/results`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: user.id,
+          deck_id: parseInt(deckId),
+          mode: 'written',
+          score: correctCount,
+          total: flashcards.length
+        })
+      }).catch(err => console.error('Failed to submit assignment result:', err));
+    }
+  }, [completed]);
+
   if (completed || !flashcards.length) {
     return (
     <>
@@ -70,6 +91,7 @@ export default function WrittenMode() {
     if (input.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
       setIsCorrect(true);
       setShowResult(true);
+      setCorrectCount(prev => prev + 1);
     } else {
       setIsCorrect(false);
       if (attempts + 1 >= 3) {

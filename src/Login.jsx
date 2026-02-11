@@ -62,7 +62,7 @@ export default function Login() {
       <form className='div3' onSubmit={handleSubmit}>
         <div><h1> {t("login")}</h1></div>
         <input
-          className="input-field"
+          className="input-field lg-inp"
           type="text"
           required
           value={userInput.username}
@@ -70,14 +70,14 @@ export default function Login() {
           placeholder={t("enterUsername")}
         />
         <input
-          className="input-field"
+          className="input-field lg-inp"
           type="password"
           required
           value={userInput.password}
           onChange={(event) => handleChange('password', event.target.value)}
           placeholder={t("enterPassword")}
         />
-        <button type="submit"> {t("login")}</button>
+        <button className="bt" type="submit"> {t("login")}</button>
 
         <button
           type="button"
