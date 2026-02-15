@@ -33,9 +33,7 @@ const AssignmentPage = ({ user }) => {
       } else if (user) {
         fetchMyResults();
       }
-      if (assignment.group_id) {
-        fetchLeaderboard();
-      }
+      fetchLeaderboard();
     }
   }, [assignment, user]);
 
@@ -88,7 +86,7 @@ const AssignmentPage = ({ user }) => {
 
   const fetchLeaderboard = async () => {
     try {
-      const res = await fetch(`${API_URL}/groups/${assignment.group_id}/leaderboard`);
+      const res = await fetch(`${API_URL}/assignments/${assignmentId}/leaderboard`);
       if (!res.ok) throw new Error();
       const data = await res.json();
       setLeaderboard(Array.isArray(data) ? data : []);
