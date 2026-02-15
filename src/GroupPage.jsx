@@ -507,7 +507,7 @@ const GroupPage = ({ user }) => {
                         : t('noDueDate')}
                     </span>
                   </div>
-                  {a.description && <p className="gp-empty" style={{ fontStyle: 'normal' }}>{a.description}</p>}
+                  {a.description && <p className="gp-empty" style={{ fontStyle: 'normal', textAlign: 'left' }}>{a.description}</p>}
                   <div className="asn-card-modes">
                     {(a.modes || []).includes('mcq') && <span className="asn-mode-tag">{t('multipleChoice') || 'Multiple Choice'}</span>}
                     {(a.modes || []).includes('match') && <span className="asn-mode-tag">{t('matchMode') || 'Match'}</span>}

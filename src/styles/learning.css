@@ -96,11 +96,34 @@
   gap: 40px;
   margin-top: 32px;
 }
+.match-columns::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -20px;
+  bottom: 0;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.3);
+  transform: translateX(-50%);
+}
+.match-columns {
+  position: relative;
+}
 .match-col {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+.match-mode-container > h2 {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  padding-bottom: 16px;
+  margin-bottom: 0;
+}
+.match-col h4 {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  padding-bottom: 12px;
+  margin-bottom: 0;
 }
 .match-btn {
   padding: 14px 0;
