@@ -460,7 +460,11 @@ const GroupPage = ({ user }) => {
                   className="asn-input"
                 />
 
+
+                <hr style={{ margin: '1px 0' }} />
                 <label className="asn-label">{t('selectDecksForAssignment')}</label>
+                <hr style={{ margin: '1px 0' }} />
+                
                 <div className="asn-checkboxes">
                   {groupDecks.map(d => (
                     <label key={d.id} className="asn-checkbox-label">
@@ -473,8 +477,12 @@ const GroupPage = ({ user }) => {
                     </label>
                   ))}
                 </div>
+               
 
+                <hr style={{ margin: '1px 0' }} />
                 <label className="asn-label">{t('selectTestModes') || 'Select Test Modes'}</label>
+                <hr style={{ margin: '1px 0' }} />
+                
                 <div className="asn-checkboxes">
                   {testModeOptions.map(m => (
                     <label key={m.key} className="asn-checkbox-label">
@@ -487,6 +495,7 @@ const GroupPage = ({ user }) => {
                     </label>
                   ))}
                 </div>
+               
 
                 <div className="asn-form-actions">
                   <button type="submit" className="gp-add-btn btn-cr-ass">{t('createAssignment')}</button>
