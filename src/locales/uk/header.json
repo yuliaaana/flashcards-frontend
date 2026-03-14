@@ -72,5 +72,7 @@
     "multipleChoice": "Тест з вибором відповіді",
     "writeDefinition": "Написання визначення",
     "writeTerm": "Написання терміну",
-    "startTest": "Почати тест"
+    "startTest": "Почати тест",
+    "assignmentExpired": "Ви не можете пройти цей тест, оскільки термін здачі минув.",
+    "testUnavailable": "Тест недоступний"
 }

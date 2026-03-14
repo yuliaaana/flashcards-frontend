@@ -31,6 +31,7 @@ export default function AssignmentTestMode() {
   const [matchTerms, setMatchTerms] = useState([]);
   const [writtenQuestions, setWrittenQuestions] = useState([]);
   const [cardsLoaded, setCardsLoaded] = useState(false);
+  const [assignmentExpired, setAssignmentExpired] = useState(false);
 
   // Fetch assignment settings
   useEffect(() => {
@@ -41,6 +42,14 @@ export default function AssignmentTestMode() {
           console.log("Assignment data:", data);
           console.log("Modes from backend:", data.modes);
           setAssignmentSettings(data);
+          // Check if assignment has expired
+          if (data.due_date) {
+            const dueDate = new Date(data.due_date);
+            const now = new Date();
+            if (now > dueDate) {
+              setAssignmentExpired(true);
+            }
+          }
           // Parse modes from assignment - modes is an array of strings
           const modes = data.modes || [];
           const tasks = {
@@ -76,7 +85,7 @@ export default function AssignmentTestMode() {
 
   // Auto-distribute cards when both loaded
   useEffect(() => {
-    if (cardsLoaded && assignmentSettings !== null && flashcards.length > 0) {
+    if (cardsLoaded && assignmentSettings !== null && flashcards.length > 0 && !assignmentExpired) {
       distributeCards();
       // Start first enabled mode
       if (selectedTasks.mcq) setStep(2);
@@ -84,7 +93,7 @@ export default function AssignmentTestMode() {
       else if (selectedTasks.writtenDef || selectedTasks.writtenTerm) setStep(4);
       else setStep(5); // No tasks enabled
     }
-  }, [cardsLoaded, assignmentSettings, flashcards]);
+  }, [cardsLoaded, assignmentSettings, flashcards, assignmentExpired]);
 
   const distributeCards = () => {
     const enabledModes = [];
@@ -291,10 +300,20 @@ export default function AssignmentTestMode() {
         <div className="learning-block test-modes-container">
           <h2 className="ch-ttl">{t('assignmentTest', 'Assignment Test')}</h2>
           
-          {step === 0 && <div>{t('loading', 'Loading...')}</div>}
-          
-          {/* MCQ */}
-          {step === 2 && flashcards.length > 0 && mcqTerms.length > 0 && (
+          {assignmentExpired ? (
+            <div>
+              <h3>{t('assignmentExpired', 'Assignment Deadline Has Passed')}</h3>
+              <p>{t('cannotTakeTest', 'You cannot take this test because the deadline has passed.')}</p>
+              <button className="mode-btn btn-conf" onClick={() => navigate(`/assignment/${assignmentId}`)}>
+                {t('backToAssignment', 'Back to Assignment')}
+              </button>
+            </div>
+          ) : (
+            <>
+              {step === 0 && <div>{t('loading', 'Loading...')}</div>}
+              
+              {/* MCQ */}
+              {step === 2 && flashcards.length > 0 && mcqTerms.length > 0 && (
             <div>
               <h3>{t('multipleChoice')}: {mcqIndex + 1} / {mcqTerms.length}</h3>
               <div className="flashcard-learning flc-cover" style={{margin: '0 auto 16px auto'}}>
@@ -433,6 +452,8 @@ export default function AssignmentTestMode() {
                 {t('backToAssignment')}
               </button>
             </div>
+          )}
+          </>
           )}
         </div>
         <div className="learning-block"></div>

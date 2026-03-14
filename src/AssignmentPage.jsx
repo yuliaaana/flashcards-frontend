@@ -19,6 +19,7 @@ const AssignmentPage = ({ user }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview'); // overview | results | leaderboard
+  const [assignmentExpired, setAssignmentExpired] = useState(false);
 
   const isTeacher = user && assignment && user.id === assignment.created_by;
 
@@ -56,6 +57,14 @@ const AssignmentPage = ({ user }) => {
       if (!res.ok) throw new Error();
       const data = await res.json();
       setAssignment(data);
+      // Check if assignment has expired
+      if (data.due_date) {
+        const dueDate = new Date(data.due_date);
+        const now = new Date();
+        if (now > dueDate) {
+          setAssignmentExpired(true);
+        }
+      }
     } catch {
       setError('Failed to load assignment');
     }
@@ -133,6 +142,11 @@ const AssignmentPage = ({ user }) => {
               ? `${t('due')}: ${new Date(assignment.due_date).toLocaleString()}`
               : t('noDueDate')}
           </p>
+          {assignmentExpired && (
+            <div className="eg-error" style={{ backgroundColor: '#f8d7da', color: '#721c24', border: '1px solid #f5c6cb', padding: '10px', borderRadius: '13px', marginBottom: '10px' }}>
+              {t('assignmentExpired', 'This assignment has expired. You can no longer take the test.')}
+            </div>
+          )}
           {error && <div className="eg-error">{error}</div>}
 
           {/* Tabs */}
@@ -168,12 +182,18 @@ const AssignmentPage = ({ user }) => {
                   <div key={d.id} className="asn-deck-row">
                     <span className="group-link" style={{ fontWeight: 700 }}>{d.name}</span>
                     <div className="asn-deck-modes">
-                      <Link
-                        className="asn-mode-start-btn"
-                        to={`/assignment/${assignmentId}/deck/${d.id}/test`}
-                      >
-                        {t('startTest')} →
-                      </Link>
+                      {assignmentExpired ? (
+                        <span className="asn-mode-start-btn" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', opacity: 0.6 }}>
+                          {t('testUnavailable', 'Test Unavailable')}
+                        </span>
+                      ) : (
+                        <Link
+                          className="asn-mode-start-btn"
+                          to={`/assignment/${assignmentId}/deck/${d.id}/test`}
+                        >
+                          {t('startTest')} →
+                        </Link>
+                      )}
                     </div>
                   </div>
                 ))}
