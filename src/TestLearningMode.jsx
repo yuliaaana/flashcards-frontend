@@ -295,19 +295,19 @@ export default function TestLearningMode() {
             <div>
               <h3>{t('chooseTaskTypes')}</h3>
               <div style={{marginBottom: 24}}>
-                <label style={{marginRight: 16}}>
+                <label className="asn-checkbox-label">
                   <input type="checkbox" checked={selectedTasks.mcq} onChange={e => setSelectedTasks(s => ({...s, mcq: e.target.checked}))} />
                   {t('multipleChoice')}
                 </label>
-                <label style={{marginRight: 16}}>
+                <label className="asn-checkbox-label">
                   <input type="checkbox" checked={selectedTasks.match} onChange={e => setSelectedTasks(s => ({...s, match: e.target.checked}))} />
                   {t('match')}
                 </label>
-                <label style={{marginRight: 16}}>
+                <label className="asn-checkbox-label">
                   <input type="checkbox" checked={selectedTasks.writtenDef} onChange={e => setSelectedTasks(s => ({...s, writtenDef: e.target.checked}))} />
                   {t('writeDefinition')}
                 </label>
-                <label>
+                <label className="asn-checkbox-label">
                   <input type="checkbox" checked={selectedTasks.writtenTerm} onChange={e => setSelectedTasks(s => ({...s, writtenTerm: e.target.checked}))} />
                   {t('writeTerm')}
                 </label>

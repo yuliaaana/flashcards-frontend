@@ -316,6 +316,11 @@ h5,p{
     font-weight: bold;
 }
 
+.asn-checkbox-label input[type="checkbox"] {
+  width: auto;
+  min-width: unset;
+  flex-shrink: 0;
+}
 .modes-list {
     display: flex;
     flex-direction: column;
