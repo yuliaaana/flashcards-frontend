@@ -31,6 +31,7 @@ const GroupPage = ({ user }) => {
   const [asnModes, setAsnModes] = useState([]);
   const [testSettings, setTestSettings] = useState({ mcq: true, match: true, writtenDef: true, writtenTerm: false });
   const [showCreateAssignment, setShowCreateAssignment] = useState(false);
+  const [oneTimeOnly, setOneTimeOnly] = useState(false);
 
   const isTeacher = user && group && user.id === group.teacher_id;
 
@@ -253,7 +254,8 @@ const GroupPage = ({ user }) => {
           description: asnDesc,
           due_date: asnDueDate || null,
           deck_ids: asnDeckIds,
-          modes: modesArray
+          modes: modesArray,
+          one_time_only: oneTimeOnly
         })
       });
       const data = await res.json();
@@ -267,6 +269,7 @@ const GroupPage = ({ user }) => {
       setAsnDeckIds([]);
       setAsnModes([]);
       setTestSettings({ mcq: true, match: true, writtenDef: true, writtenTerm: false });
+      setOneTimeOnly(false);
       setShowCreateAssignment(false);
       fetchAssignments();
     } catch {
@@ -496,6 +499,16 @@ const GroupPage = ({ user }) => {
                   ))}
                 </div>
                
+
+                <hr style={{ margin: '1px 0' }} />
+                <label className="asn-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={oneTimeOnly}
+                    onChange={() => setOneTimeOnly(!oneTimeOnly)}
+                  />
+                  {t('oneTimeOnly') || 'Allow only one attempt per student'}
+                </label>
 
                 <div className="asn-form-actions">
                   <button type="submit" className="gp-add-btn btn-cr-ass">{t('createAssignment')}</button>

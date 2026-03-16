@@ -182,9 +182,9 @@ const AssignmentPage = ({ user }) => {
                   <div key={d.id} className="asn-deck-row">
                     <span className="group-link" style={{ fontWeight: 700 }}>{d.name}</span>
                     <div className="asn-deck-modes">
-                      {assignmentExpired ? (
+                      {assignmentExpired || (assignment.one_time_only && myResults.some(r => r.deck_id === d.id)) ? (
                         <span className="asn-mode-start-btn" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', opacity: 0.6 }}>
-                          {t('testUnavailable', 'Test Unavailable')}
+                          {assignmentExpired ? t('testUnavailable', 'Test Unavailable') : t('alreadyCompleted', 'Already Completed')}
                         </span>
                       ) : (
                         <Link
