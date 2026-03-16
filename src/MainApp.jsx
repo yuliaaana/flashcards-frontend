@@ -63,6 +63,7 @@ export default function MainApp() {
       <Route path="/learn/:deckId/match" element={<MatchMode />} />
       <Route path="/learn/:deckId/written" element={<WrittenMode />} />
       <Route path="/learn/:deckId/test" element={<TestLearningMode />} />
+      <Route path="/assignment/:assignmentId/test" element={<AssignmentTestMode />} />
       <Route path="/assignment/:assignmentId/deck/:deckId/test" element={<AssignmentTestMode />} />
       <Route path="/folders" element={<Folders />} />
       <Route path="/folder/:folderId" element={<Folder />} />

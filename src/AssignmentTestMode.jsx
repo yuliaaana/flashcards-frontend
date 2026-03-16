@@ -13,7 +13,7 @@ function shuffle(array) {
 }
 
 export default function AssignmentTestMode() {
-  const { deckId, assignmentId } = useParams();
+  const { assignmentId, deckId } = useParams();
   const navigate = useNavigate();
   
   const [flashcards, setFlashcards] = useState([]);
@@ -74,14 +74,24 @@ export default function AssignmentTestMode() {
 
   // Fetch flashcards
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/api/deck/${deckId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const cards = data.flashcards || [];
-        setFlashcards(cards);
+    if (assignmentSettings && assignmentSettings.decks) {
+      const fetchAllFlashcards = async () => {
+        const allCards = [];
+        for (const deck of assignmentSettings.decks) {
+          try {
+            const res = await fetch(`http://127.0.0.1:5000/api/deck/${deck.id}`);
+            const data = await res.json();
+            allCards.push(...(data.flashcards || []));
+          } catch (error) {
+            console.error(`Error fetching deck ${deck.id}:`, error);
+          }
+        }
+        setFlashcards(allCards);
         setCardsLoaded(true);
-      });
-  }, [deckId]);
+      };
+      fetchAllFlashcards();
+    }
+  }, [assignmentSettings]);
 
   // Auto-distribute cards when both loaded
   useEffect(() => {
@@ -276,16 +286,19 @@ export default function AssignmentTestMode() {
     if (step === 5 && finalScore && results.length > 0 && assignmentId) {
       const userId = localStorage.getItem('user_id');
       if (userId) {
+        const payload = {
+          user_id: parseInt(userId),
+          mode: 'test',
+          score: parseFloat(finalScore.total),
+          total: finalScore.max
+        };
+        if (deckId) {
+          payload.deck_id = parseInt(deckId);
+        }
         fetch(`http://127.0.0.1:5000/api/assignments/${assignmentId}/results`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user_id: parseInt(userId),
-            deck_id: parseInt(deckId),
-            mode: 'test',
-            score: parseFloat(finalScore.total),
-            total: finalScore.max
-          })
+          body: JSON.stringify(payload)
         }).catch(() => {});
       }
     }
@@ -448,7 +461,7 @@ export default function AssignmentTestMode() {
               <h3>{t('sessionComplete')}</h3>
               <div>{t('totalPoints')} {finalScore.total} / {finalScore.max}</div>
               <div>{t('result')} {finalScore.percent}%</div>
-              <button className="mode-btn btn-conf" onClick={() => navigate(`/assignment/${assignmentId}`)}>
+              <button className="mode-btn btn-conf" onClick={() => navigate(`/assignment/${assignmentId}?submitScore=1&mode=assignment&score=${finalScore.total}&total=${finalScore.max}`)}>
                 {t('backToAssignment')}
               </button>
             </div>

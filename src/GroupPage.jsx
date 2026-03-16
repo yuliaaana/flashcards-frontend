@@ -507,7 +507,7 @@ const GroupPage = ({ user }) => {
                     checked={oneTimeOnly}
                     onChange={() => setOneTimeOnly(!oneTimeOnly)}
                   />
-                  {t('oneTimeOnly') || 'Allow only one attempt per student'}
+                  {t('oneTimeOnly', { ns: 'create' })}
                 </label>
 
                 <div className="asn-form-actions">
@@ -531,10 +531,10 @@ const GroupPage = ({ user }) => {
                   </div>
                   {a.description && <p className="gp-empty" style={{ fontStyle: 'normal', textAlign: 'left' }}>{a.description}</p>}
                   <div className="asn-card-modes">
-                    {(a.modes || []).includes('mcq') && <span className="asn-mode-tag">{t('multipleChoice') || 'Multiple Choice'}</span>}
-                    {(a.modes || []).includes('match') && <span className="asn-mode-tag">{t('matchMode') || 'Match'}</span>}
-                    {(a.modes || []).includes('writtenDef') && <span className="asn-mode-tag">{t('writeDefinition') || 'Write Definition'}</span>}
-                    {(a.modes || []).includes('writtenTerm') && <span className="asn-mode-tag">{t('writeTerm') || 'Write Term'}</span>}
+                    {(a.modes || []).includes('mcq') && <span className="asn-mode-tag">{t('multipleChoice', 'Multiple Choice')}</span>}
+                    {(a.modes || []).includes('match') && <span className="asn-mode-tag">{t('matchMode', 'Match')}</span>}
+                    {(a.modes || []).includes('writtenDef') && <span className="asn-mode-tag">{t('writeDefinition', 'Write Definition')}</span>}
+                    {(a.modes || []).includes('writtenTerm') && <span className="asn-mode-tag">{t('writeTerm', 'Write Term')}</span>}
                   </div>
                   <div className="asn-card-actions">
                     <Link className="gp-add-btn si" to={`/assignment/${a.id}`} style={{ textDecoration: 'none', fontSize: '0.85rem', padding: '4px 12px' }}>

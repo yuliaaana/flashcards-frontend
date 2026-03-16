@@ -6,6 +6,21 @@ import './styles/groups.css';
 
 const API_URL = 'http://127.0.0.1:5000/api';
 
+// Транслітерація кирилиці в латиницю
+function transliterate(text) {
+  if (!text) return '';
+  const map = {
+    А: 'A', а: 'a', Б: 'B', б: 'b', В: 'V', в: 'v', Г: 'H', г: 'h', Д: 'D', д: 'd',
+    Е: 'E', е: 'e', Є: 'Ye', є: 'ye', Ж: 'Zh', ж: 'zh', З: 'Z', з: 'z', И: 'Y', и: 'y',
+    І: 'I', і: 'i', Ї: 'Yi', ї: 'yi', Й: 'Y', й: 'y', К: 'K', к: 'k', Л: 'L', л: 'l',
+    М: 'M', м: 'm', Н: 'N', н: 'n', О: 'O', о: 'o', П: 'P', п: 'p', Р: 'R', р: 'r',
+    С: 'S', с: 's', Т: 'T', т: 't', У: 'U', у: 'u', Ф: 'F', ф: 'f', Х: 'Kh', х: 'kh',
+    Ц: 'Ts', ц: 'ts', Ч: 'Ch', ч: 'ch', Ш: 'Sh', ш: 'sh', Щ: 'Shch', щ: 'shch',
+    Ю: 'Yu', ю: 'yu', Я: 'Ya', я: 'ya', Ь: '', ь: '', Ъ: '', ъ: '', Ґ: 'G', ґ: 'g'
+  };
+  return text.split('').map(char => map[char] || char).join('');
+}
+
 const AssignmentPage = ({ user }) => {
   const { t } = useTranslation('header');
   const { assignmentId } = useParams();
@@ -41,12 +56,11 @@ const AssignmentPage = ({ user }) => {
   // Check if returning from a learning mode with score to submit
   useEffect(() => {
     const submitScore = searchParams.get('submitScore');
-    const deckId = searchParams.get('deckId');
     const mode = searchParams.get('mode');
     const score = searchParams.get('score');
     const total = searchParams.get('total');
-    if (submitScore && deckId && mode && score !== null && total !== null && user) {
-      submitResult(parseInt(deckId), mode, parseInt(score), parseInt(total));
+    if (submitScore && mode && score !== null && total !== null && user) {
+      submitResult(mode, parseInt(score), parseInt(total));
     }
   }, [searchParams, user]);
 
@@ -104,14 +118,13 @@ const AssignmentPage = ({ user }) => {
     }
   };
 
-  const submitResult = async (deckId, mode, score, total) => {
+  const submitResult = async (mode, score, total) => {
     try {
       await fetch(`${API_URL}/assignments/${assignmentId}/results`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           user_id: user.id,
-          deck_id: deckId,
           mode,
           score,
           total
@@ -135,8 +148,8 @@ const AssignmentPage = ({ user }) => {
       <div className="sg-cont">
         <div className="sg-block"></div>
         <div className="sg-block gp-main">
-          <h2 className="gp-title">{assignment.title}</h2>
-          {assignment.description && <p className="gp-desc">{assignment.description}</p>}
+          <h2 className="gp-title">{transliterate(assignment.title)}</h2>
+          {assignment.description && <p className="gp-desc">{transliterate(assignment.description)}</p>}
           <p className="gp-desc">
             {assignment.due_date
               ? `${t('due')}: ${new Date(assignment.due_date).toLocaleString()}`
@@ -181,22 +194,22 @@ const AssignmentPage = ({ user }) => {
                 {(assignment.decks || []).map(d => (
                   <div key={d.id} className="asn-deck-row">
                     <span className="group-link" style={{ fontWeight: 700 }}>{d.name}</span>
-                    <div className="asn-deck-modes">
-                      {assignmentExpired || (assignment.one_time_only && myResults.some(r => r.deck_id === d.id)) ? (
-                        <span className="asn-mode-start-btn" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', opacity: 0.6 }}>
-                          {assignmentExpired ? t('testUnavailable', 'Test Unavailable') : t('alreadyCompleted', 'Already Completed')}
-                        </span>
-                      ) : (
-                        <Link
-                          className="asn-mode-start-btn"
-                          to={`/assignment/${assignmentId}/deck/${d.id}/test`}
-                        >
-                          {t('startTest')} →
-                        </Link>
-                      )}
-                    </div>
                   </div>
                 ))}
+              </div>
+              <div className="asn-deck-modes" style={{ marginTop: '20px' }}>
+                {assignmentExpired || (assignment.one_time_only && myResults.length > 0) ? (
+                  <span className="asn-mode-start-btn" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', opacity: 0.6 }}>
+                    {assignmentExpired ? t('testUnavailable', 'Test Unavailable') : t('alreadyCompleted', 'Already Completed')}
+                  </span>
+                ) : (
+                  <Link
+                    className="asn-mode-start-btn"
+                    to={`/assignment/${assignmentId}/test`}
+                  >
+                    {t('startTest')} →
+                  </Link>
+                )}
               </div>
             </div>
           )}
@@ -221,8 +234,8 @@ const AssignmentPage = ({ user }) => {
                   <tbody>
                     {displayResults.map(r => (
                       <tr key={r.id}>
-                        {isTeacher && <td>{r.username || r.user_id}</td>}
-                        <td>{r.deck_name || r.deck_id}</td>
+                        {isTeacher && <td>{transliterate(r.username || r.user_id)}</td>}
+                        <td>{r.deck_name || (r.deck_id ? r.deck_id : 'All Decks')}</td>
                         <td>{r.mode}</td>
                         <td>{r.score}/{r.total}</td>
                         <td>{r.completed_at ? new Date(r.completed_at).toLocaleString() : '-'}</td>
@@ -255,7 +268,7 @@ const AssignmentPage = ({ user }) => {
                         <td>{idx + 1}</td>
                         <td>
                           <Link className="group-link" to={`/profile/${entry.user_id}`}>
-                            {entry.username || entry.user_id}
+                            {transliterate(entry.username || entry.user_id)}
                           </Link>
                         </td>
                         <td>{entry.avg_score}%</td>

@@ -16,7 +16,8 @@
     "publicdeck": "Public deck",
     "privatedeck": "Private deck",
     "editdeck": "Edit deck",
-    "updatedeck": "Update deck"
+    "updatedeck": "Update deck",
+    "oneTimeOnly": "Allow only one attempt for students"
 
 
 
