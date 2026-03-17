@@ -33,16 +33,11 @@ const AssignmentPage = ({ user }) => {
   const [results, setResults] = useState([]);
   const [myResults, setMyResults] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
-  const [groupStatus, setGroupStatus] = useState({
-    not_taken: [],
-    not_passed: [],
-    passed: [],
-    group_members: []
-  });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [assignmentExpired, setAssignmentExpired] = useState(false);
+  const [groupMembers, setGroupMembers] = useState([]);
 
   const isTeacher = user && assignment && user.id === assignment.created_by;
 
@@ -51,10 +46,32 @@ const AssignmentPage = ({ user }) => {
   }, [assignmentId]);
 
   useEffect(() => {
+    if (assignment && assignment.group_id) {
+      fetchGroupMembers(assignment.group_id);
+    }
+  }, [assignment]);
+  // Fetch group info to get full student details
+  // Fetch group members as user IDs only, do not fetch user info
+  const fetchGroupMembers = async (groupId) => {
+    try {
+      const res = await fetch(`${API_URL}/groups/${groupId}`);
+      if (!res.ok) throw new Error('Failed to load group info');
+      const data = await res.json();
+      if (data.members && Array.isArray(data.members)) {
+        // Just use IDs, backend does not provide user info
+        setGroupMembers(data.members.map(id => ({ id })));
+      } else {
+        setGroupMembers([]);
+      }
+    } catch {
+      setGroupMembers([]);
+    }
+  };
+
+  useEffect(() => {
     if (assignment) {
       if (isTeacher) {
         fetchAllResults();
-        fetchGroupStatus();
       } else if (user) {
         fetchMyResults();
       }
@@ -125,28 +142,12 @@ const AssignmentPage = ({ user }) => {
     }
   };
 
-  const fetchGroupStatus = async () => {
-    try {
-      const res = await fetch(`${API_URL}/assignments/${assignmentId}/group-status`);
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      setGroupStatus(data);
-    } catch {
-      setGroupStatus({ not_taken: [], not_passed: [], passed: [], group_members: [] });
-    }
-  };
-
   const submitResult = async (mode, score, total) => {
     try {
-      // Try to get deckId from searchParams or default to first deck
-      let deckId = searchParams.get('deckId');
-      if (!deckId && assignment && assignment.decks && assignment.decks.length > 0) {
-        deckId = assignment.decks[0].id;
-      }
       await fetch(`${API_URL}/assignments/${assignmentId}/results`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: user.id, deck_id: deckId, mode, score, total })
+        body: JSON.stringify({ user_id: user.id, mode, score, total })
       });
       if (isTeacher) fetchAllResults();
       else fetchMyResults();
@@ -204,6 +205,7 @@ const AssignmentPage = ({ user }) => {
       return <p className="gp-empty">{t('noResults')}</p>;
     }
 
+    // Score distribution chart
     const scores = dataToAnalyze.map(r => Math.round((r.score / r.total) * 100));
     const bins = [0, 20, 40, 60, 80, 100];
     const binLabels = bins.map((b, i) => i === bins.length - 1 ? `${b}+` : `${b}-${bins[i + 1] - 1}`);
@@ -260,8 +262,11 @@ const AssignmentPage = ({ user }) => {
       },
     };
 
-    const notTaken = groupStatus.not_taken || [];
-    const notPassed = groupStatus.not_passed || [];
+    // Always use groupMembers as the student list
+    const allStudents = groupMembers && groupMembers.length > 0 ? groupMembers : [];
+    const takenIds = new Set(dataToAnalyze.map(r => r.user_id));
+    const notTaken = allStudents.filter(s => !takenIds.has(s.id));
+    const notPassed = dataToAnalyze.filter(r => (r.score / r.total) * 100 < 50);
 
     return (
       <div className="dashboard-content">
@@ -270,51 +275,55 @@ const AssignmentPage = ({ user }) => {
         </div>
 
         {/* Students who didn't take the test */}
-        {notTaken.length > 0 ? (
+        {allStudents.length === 0 ? (
           <div className="dashboard-section">
-            <h4 style={{ color: '#e74c3c' }}>
-              Students who didn't take the test ({notTaken.length})
-            </h4>
+            <h4 style={{ color: '#e74c3c' }}>No student list available for this assignment.</h4>
+          </div>
+        ) : notTaken.length > 0 ? (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#e74c3c' }}>Students who didn't take the test</h4>
             <ul style={{ color: '#e74c3c', fontWeight: 600 }}>
               {notTaken.map(s => (
-                <li key={s.id}>
-                  {transliterate(s.username || s.name || s.email || s.id)}
-                </li>
+                <li key={s.id}>{transliterate(s.id)}</li>
               ))}
             </ul>
           </div>
         ) : (
           <div className="dashboard-section">
-            <h4 style={{ color: '#27ae60' }}>✓ All students have taken the test.</h4>
+            <h4 style={{ color: '#e74c3c' }}>All students have taken the test.</h4>
           </div>
         )}
+        <hr style={{ margin: '24px 0', border: 'none', borderTop: '2px solid #357ab8', width: '100%' }} />
 
         {/* Students who didn't pass the test */}
         {notPassed.length > 0 ? (
           <div className="dashboard-section">
-            <h4 style={{ color: '#ff9800' }}>
-              Students who didn't pass (score &lt; 50%) ({notPassed.length})
-            </h4>
+            <h4 style={{ color: '#ff9800' }}>Students who didn't pass (score &lt; 50%)</h4>
             <ul style={{ color: '#ff9800', fontWeight: 600 }}>
-              {notPassed.map(item => (
-                <li key={item.member.id}>
-                  <strong>{transliterate(item.member.username || item.member.name || item.member.email)}</strong>
-                  <ul style={{ marginLeft: '20px', marginTop: '5px', fontWeight: 'normal' }}>
-                    {item.results.map((r, idx) => (
-                      <li key={idx} style={{ fontSize: '0.9em' }}>
-                        {r.deck_name || 'All Decks'}: {r.score}/{r.total} ({Math.round((r.score / r.total) * 100)}%)
-                      </li>
-                    ))}
-                  </ul>
-                </li>
+              {notPassed.map(r => (
+                <li key={r.user_id}>{transliterate(r.username || r.user_id)} ({r.score}/{r.total})</li>
               ))}
             </ul>
           </div>
         ) : (
           <div className="dashboard-section">
-            <h4 style={{ color: '#27ae60' }}>✓ All students who took the test passed.</h4>
+            <h4 style={{ color: '#ff9800' }}>All students who took the test passed.</h4>
           </div>
         )}
+        <hr style={{ margin: '24px 0', border: 'none', borderTop: '2px solid #357ab8', width: '100%' }} />
+        {/* Overall group student list at the end */}
+        <div className="dashboard-section">
+          <h4 style={{ color: '#357ab8' }}>Overall Group Student List</h4>
+          {allStudents.length === 0 ? (
+            <p style={{ color: '#888' }}>No group student list available.</p>
+          ) : (
+            <ul style={{ color: '#357ab8', fontWeight: 600 }}>
+              {allStudents.map(s => (
+                <li key={s.id}>{transliterate(s.id)}</li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         <div className="dashboard-metrics">
           <div className="metric-card">
