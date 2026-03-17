@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from './components/homepage/Header';
 import './styles/learning.css';
 import { useTranslation } from "react-i18next";
@@ -12,54 +12,109 @@ function shuffle(array) {
     .map(({ value }) => value);
 }
 
-export default function TestLearningMode() {
-  const { deckId } = useParams();
+export default function AssignmentTestMode() {
+  const { assignmentId, deckId } = useParams();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const assignmentId = searchParams.get('assignmentId');
+  
   const [flashcards, setFlashcards] = useState([]);
-  // 0: loading, 1: select tasks, 2: multiple choice, 3: match, 4: written, 5: result
+  const [assignmentSettings, setAssignmentSettings] = useState(null);
+  // 0: loading, 2: multiple choice, 3: match, 4: written, 5: result
   const [step, setStep] = useState(0);
-  const [results, setResults] = useState([]); // [{id, correct, mode, attempt, points}]
+  const [results, setResults] = useState([]);
   const [finalScore, setFinalScore] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFlipped, setIsFlipped] = useState(false);
   const [input, setInput] = useState("");
-  const [showResult, setShowResult] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(null);
-  const [attempts, setAttempts] = useState(0);
-  // Removed mode state, now handled per-question in writtenQuestions
   const { t } = useTranslation("learn");
 
-  // User task selection state
-  const [selectedTasks, setSelectedTasks] = useState({ mcq: true, match: true, writtenDef: true, writtenTerm: false });
-  // Distribute terms across modes so each appears exactly twice in total, but only for selected modes
+  // Teacher-configured settings (loaded from assignment)
+  const [selectedTasks, setSelectedTasks] = useState({ mcq: false, match: false, writtenDef: false, writtenTerm: false });
   const [mcqTerms, setMcqTerms] = useState([]);
   const [matchTerms, setMatchTerms] = useState([]);
-  // For written, store array of {idx, type: 'definition'|'term'}
   const [writtenQuestions, setWrittenQuestions] = useState([]);
   const [cardsLoaded, setCardsLoaded] = useState(false);
-  useEffect(() => {
-    fetch(`http://127.0.0.1:5000/api/deck/${deckId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const cards = data.flashcards || [];
-        setFlashcards(cards);
-        setCardsLoaded(true);
-      });
-  }, [deckId]);
+  const [assignmentExpired, setAssignmentExpired] = useState(false);
 
-  // When user confirms task selection, distribute cards
-  const distributeCards = React.useCallback(() => {
-    // Only use selected modes
+  // Fetch assignment settings
+  useEffect(() => {
+    if (assignmentId) {
+      fetch(`http://127.0.0.1:5000/api/assignments/${assignmentId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Assignment data:", data);
+          console.log("Modes from backend:", data.modes);
+          setAssignmentSettings(data);
+          // Check if assignment has expired
+          if (data.due_date) {
+            const dueDate = new Date(data.due_date);
+            const now = new Date();
+            if (now > dueDate) {
+              setAssignmentExpired(true);
+            }
+          }
+          // Parse modes from assignment - modes is an array of strings
+          const modes = data.modes || [];
+          const tasks = {
+            mcq: modes.includes('mcq'),
+            match: modes.includes('match'),
+            writtenDef: modes.includes('writtenDef'),
+            writtenTerm: modes.includes('writtenTerm')
+          };
+          console.log("Parsed tasks:", tasks);
+          setSelectedTasks(tasks);
+        })
+        .catch(error => {
+          console.error("Error fetching assignment:", error);
+          // Default to all tasks enabled if fetch fails
+          setSelectedTasks({ mcq: true, match: true, writtenDef: true, writtenTerm: false });
+        });
+    } else {
+      // If no assignment, default to all tasks
+      setSelectedTasks({ mcq: true, match: true, writtenDef: true, writtenTerm: false });
+    }
+  }, [assignmentId]);
+
+  // Fetch flashcards
+  useEffect(() => {
+    if (assignmentSettings && assignmentSettings.decks) {
+      const fetchAllFlashcards = async () => {
+        const allCards = [];
+        for (const deck of assignmentSettings.decks) {
+          try {
+            const res = await fetch(`http://127.0.0.1:5000/api/deck/${deck.id}`);
+            const data = await res.json();
+            allCards.push(...(data.flashcards || []));
+          } catch (error) {
+            console.error(`Error fetching deck ${deck.id}:`, error);
+          }
+        }
+        setFlashcards(allCards);
+        setCardsLoaded(true);
+      };
+      fetchAllFlashcards();
+    }
+  }, [assignmentSettings]);
+
+  // Auto-distribute cards when both loaded
+  useEffect(() => {
+    if (cardsLoaded && assignmentSettings !== null && flashcards.length > 0 && !assignmentExpired) {
+      distributeCards();
+      // Start first enabled mode
+      if (selectedTasks.mcq) setStep(2);
+      else if (selectedTasks.match) setStep(3);
+      else if (selectedTasks.writtenDef || selectedTasks.writtenTerm) setStep(4);
+      else setStep(5); // No tasks enabled
+    }
+  }, [cardsLoaded, assignmentSettings, flashcards, assignmentExpired]);
+
+  const distributeCards = () => {
     const enabledModes = [];
     if (selectedTasks.mcq) enabledModes.push('mcq');
     if (selectedTasks.match) enabledModes.push('match');
-    // For written, we handle separately
+    
     let allIndexes = Array(flashcards.length).fill(0).map((_, i) => i);
     let pool = [];
     enabledModes.forEach(() => { pool = pool.concat(allIndexes); });
     pool = shuffle(pool);
+    
     const mcq = new Set(), match = new Set();
     while (pool.length) {
       const idx = pool.pop();
@@ -71,51 +126,44 @@ export default function TestLearningMode() {
       if (mode === 'mcq') mcq.add(idx);
       else if (mode === 'match') match.add(idx);
     }
+    
     setMcqTerms(Array.from(mcq));
     setMatchTerms(Array.from(match));
-    // Written: for each card, add one or two written questions depending on which written types are selected
+    
+    // Written questions
     let writtenQ = [];
     allIndexes.forEach(idx => {
       if (selectedTasks.writtenDef) writtenQ.push({ idx, type: 'definition' });
       if (selectedTasks.writtenTerm) writtenQ.push({ idx, type: 'term' });
     });
     setWrittenQuestions(shuffle(writtenQ));
-  }, [flashcards, selectedTasks]);
-
-  // When user clicks Start after selecting tasks
-  const handleStartTest = () => {
-    distributeCards();
-    // Go to first enabled mode
-    if (selectedTasks.mcq) setStep(2);
-    else if (selectedTasks.match) setStep(3);
-    else if (selectedTasks.writtenDef || selectedTasks.writtenTerm) setStep(4);
   };
 
-  // --- Flashcard Mode (first pass) ---
-  // --- Multiple Choice for Flashcard Step ---
+  // --- Multiple Choice ---
   const [mcqIndex, setMcqIndex] = useState(0);
   const [mcqSelected, setMcqSelected] = useState(null);
   const [mcqOptions, setMcqOptions] = useState([]);
   const [mcqShowResult, setMcqShowResult] = useState(false);
+
   useEffect(() => {
-      if (step === 2 && mcqTerms.length > 0 && flashcards.length > 0) {
-        const cardIdx = mcqTerms[mcqIndex];
-        const correct = flashcards[cardIdx]?.back_title;
-        let incorrect = flashcards.filter((c, i) => i !== cardIdx).map(c => c.back_title);
-        incorrect = shuffle(incorrect).slice(0, 3);
-        const options = shuffle([correct, ...incorrect]);
-        setMcqOptions(options);
-        setMcqSelected(null);
-        setMcqShowResult(false);
-      }
-    }, [step, mcqIndex, mcqTerms, flashcards]);
+    if (step === 2 && mcqTerms.length > 0 && flashcards.length > 0) {
+      const cardIdx = mcqTerms[mcqIndex];
+      const correct = flashcards[cardIdx]?.back_title;
+      let incorrect = flashcards.filter((c, i) => i !== cardIdx).map(c => c.back_title);
+      incorrect = shuffle(incorrect).slice(0, 3);
+      const options = shuffle([correct, ...incorrect]);
+      setMcqOptions(options);
+      setMcqSelected(null);
+      setMcqShowResult(false);
+    }
+  }, [step, mcqIndex, mcqTerms, flashcards]);
 
   const handleMcqSelect = (option) => {
     setMcqSelected(option);
     setMcqShowResult(true);
     const cardIdx = mcqTerms[mcqIndex];
     const isCorrect = option === flashcards[cardIdx].back_title;
-    setResults(prev => ([...prev, { id: flashcards[cardIdx].id, correct: isCorrect, mode: 'flashcard', attempt: 1, points: isCorrect ? 0.5 : 0 }]));
+    setResults(prev => ([...prev, { id: flashcards[cardIdx].id, correct: isCorrect, mode: 'flashcard', attempt: 1, points: isCorrect ? 1 : 0 }]));
   };
 
   const handleMcqNext = () => {
@@ -125,24 +173,27 @@ export default function TestLearningMode() {
       setMcqIndex(mcqIndex + 1);
     } else {
       setMcqIndex(0);
-      setStep(2);
+      if (selectedTasks.match) setStep(3);
+      else if (selectedTasks.writtenDef || selectedTasks.writtenTerm) setStep(4);
+      else setStep(5);
     }
   };
 
-  // --- Match Mode (second pass) ---
-  const [matched, setMatched] = useState([]); // [{termId, defId}]
+  // --- Match Mode ---
+  const [matched, setMatched] = useState([]);
   const [selected, setSelected] = useState([]);
   const [shuffledTerms, setShuffledTerms] = useState([]);
   const [shuffledDefs, setShuffledDefs] = useState([]);
+
   useEffect(() => {
-      if (step === 3 && matchTerms.length > 0 && flashcards.length > 0) {
-        const pairs = matchTerms.map(idx => ({ id: flashcards[idx].id, term: flashcards[idx].front_title, definition: flashcards[idx].back_title }));
-        setShuffledTerms(shuffle(pairs.map(p => ({ id: p.id, text: p.term }))));
-        setShuffledDefs(shuffle(pairs.map(p => ({ id: p.id, text: p.definition }))));
-        setMatched([]);
-        setSelected([]);
-      }
-    }, [step, matchTerms, flashcards]);
+    if (step === 3 && matchTerms.length > 0 && flashcards.length > 0) {
+      const pairs = matchTerms.map(idx => ({ id: flashcards[idx].id, term: flashcards[idx].front_title, definition: flashcards[idx].back_title }));
+      setShuffledTerms(shuffle(pairs.map(p => ({ id: p.id, text: p.term }))));
+      setShuffledDefs(shuffle(pairs.map(p => ({ id: p.id, text: p.definition }))));
+      setMatched([]);
+      setSelected([]);
+    }
+  }, [step, matchTerms, flashcards]);
 
   const handleMatchSelect = (type, id) => {
     if (selected.length === 0) {
@@ -151,7 +202,7 @@ export default function TestLearningMode() {
       const first = selected[0];
       if (first.id === id) {
         setMatched([...matched, { termId: type === 'term' ? id : first.id, defId: type === 'definition' ? id : first.id }]);
-        setResults(prev => ([...prev, { id, correct: true, mode: 'match', attempt: 2, points: 0.5 }]));
+        setResults(prev => ([...prev, { id, correct: true, mode: 'match', attempt: 2, points: 1 }]));
       } else {
         setResults(prev => ([...prev, { id, correct: false, mode: 'match', attempt: 2, points: 0 }]));
       }
@@ -160,26 +211,20 @@ export default function TestLearningMode() {
   };
 
   useEffect(() => {
-      if (step === 3 && matched.length === matchTerms.length && matchTerms.length > 0) {
-        // If written is enabled, go to written, else go to result
-        if (selectedTasks.writtenDef || selectedTasks.writtenTerm) setStep(4);
-        else setStep(5);
-        setCurrentIndex(0);
-        setInput("");
-        setShowResult(false);
-        setIsCorrect(null);
-        setAttempts(0);
-      }
-    }, [matched, step, matchTerms, selectedTasks]);
+    if (step === 3 && matched.length === matchTerms.length && matchTerms.length > 0) {
+      if (selectedTasks.writtenDef || selectedTasks.writtenTerm) setStep(4);
+      else setStep(5);
+    }
+  }, [matched, step, matchTerms, selectedTasks]);
 
-  // --- Written Mode (third pass) ---
-  // --- Written Mode (third pass, now uses writtenQuestions for both types) ---
+  // --- Written Mode ---
   const [writtenIndex, setWrittenIndex] = useState(0);
   const [writtenAttempts, setWrittenAttempts] = useState(0);
   const [writtenShowResult, setWrittenShowResult] = useState(false);
   const [writtenIsCorrect, setWrittenIsCorrect] = useState(null);
+
   useEffect(() => {
-    if (step === 3) {
+    if (step === 4) {
       setWrittenAttempts(0);
       setWrittenShowResult(false);
       setWrittenIsCorrect(null);
@@ -191,10 +236,12 @@ export default function TestLearningMode() {
     const { idx, type } = writtenQuestions[writtenIndex];
     const currentCard = flashcards[idx];
     const correctAnswer = type === "definition" ? currentCard.back_title : currentCard.front_title;
+    
     if (input.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
       setWrittenIsCorrect(true);
       setWrittenShowResult(true);
-      setResults(prev => ([...prev, { id: currentCard.id, correct: true, mode: 'written', attempt: writtenAttempts + 1, points: 1, type }]));
+      const points = writtenAttempts === 0 ? 1 : writtenAttempts === 1 ? 0.5 : 0.25;
+      setResults(prev => ([...prev, { id: currentCard.id, correct: true, mode: 'written', attempt: writtenAttempts + 1, points, type }]));
     } else {
       setWrittenIsCorrect(false);
       if (writtenAttempts + 1 >= 3) {
@@ -222,103 +269,64 @@ export default function TestLearningMode() {
     }
   };
 
-  // (No random mode)
-
   // --- Calculate Final Score ---
   useEffect(() => {
     if (step === 5 && results.length > 0) {
       let totalPoints = 0;
-      let maxPoints = results.length; // Each question is worth 1 point
+      let maxPoints = results.length;
       results.forEach(r => {
-        if (r.mode === 'written') {
-          // Written: 1 for first try, 0.5 for second, 0.25 for third, 0 if never correct
-          if (r.correct && r.attempt === 1) totalPoints += 1;
-          else if (r.correct && r.attempt === 2) totalPoints += 0.5;
-          else if (r.correct && r.attempt === 3) totalPoints += 0.25;
-          // If incorrect after 3 attempts, 0 points
-        } else {
-          // MCQ and Match: 1 point for correct, 0 for incorrect
-          if (r.correct) totalPoints += 1;
-        }
+        totalPoints += r.points || 0;
       });
       setFinalScore({ total: totalPoints, max: maxPoints, percent: ((totalPoints / maxPoints) * 100).toFixed(2) });
     }
-  }, [step, results, flashcards]);
+  }, [step, results]);
 
   // --- Save Result to Backend ---
   useEffect(() => {
-    if (step === 5 && finalScore && results.length > 0) {
-      // Save to deck test-result
-      fetch(`http://127.0.0.1:5000/api/deck/${deckId}/test-result`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          deckId,
-          results,
-          test_result:finalScore.percent,
-          timestamp: new Date().toISOString(),
-        })
-      })
-      .then(res => res.ok ? res.json() : Promise.reject(res))
-      .catch(() => {});
-
-      // Submit to assignment if assignmentId is present
-      if (assignmentId) {
-        const userId = localStorage.getItem('user_id');
-        if (userId) {
-          fetch(`http://127.0.0.1:5000/api/assignments/${assignmentId}/results`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              user_id: parseInt(userId),
-              deck_id: parseInt(deckId),
-              mode: 'test',
-              score: parseFloat(finalScore.total),
-              total: finalScore.max
-            })
-          }).catch(() => {});
+    if (step === 5 && finalScore && results.length > 0 && assignmentId) {
+      const userId = localStorage.getItem('user_id');
+      if (userId) {
+        const payload = {
+          user_id: parseInt(userId),
+          mode: 'test',
+          score: parseFloat(finalScore.total),
+          total: finalScore.max
+        };
+        if (deckId) {
+          payload.deck_id = parseInt(deckId);
         }
+        fetch(`http://127.0.0.1:5000/api/assignments/${assignmentId}/results`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(() => {});
       }
     }
   }, [step, finalScore, results, deckId, assignmentId]);
 
-  // --- Render UI for each step ---
+  // --- Render UI ---
   return (
     <>
       <Header />
       <div className="test-modes-wrapper">
         <div className="learning-block"></div>
         <div className="learning-block test-modes-container">
-          <h2 className="ch-ttl">{t('testLearningMode', 'Тестовий режим навчання')}</h2>
-          {step === 0 && (!cardsLoaded ? <div>{t('loading', 'Завантаження...')}</div> : setStep(1))}
-          {step === 1 && cardsLoaded && (
+          <h2 className="ch-ttl">{t('assignmentTest', 'Assignment Test')}</h2>
+          
+          {assignmentExpired ? (
             <div>
-              <h3>{t('chooseTaskTypes')}</h3>
-              <div style={{marginBottom: 24}}>
-                <label className="asn-checkbox-label">
-                  <input type="checkbox" checked={selectedTasks.mcq} onChange={e => setSelectedTasks(s => ({...s, mcq: e.target.checked}))} />
-                  {t('multipleChoice')}
-                </label>
-                <label className="asn-checkbox-label">
-                  <input type="checkbox" checked={selectedTasks.match} onChange={e => setSelectedTasks(s => ({...s, match: e.target.checked}))} />
-                  {t('match')}
-                </label>
-                <label className="asn-checkbox-label">
-                  <input type="checkbox" checked={selectedTasks.writtenDef} onChange={e => setSelectedTasks(s => ({...s, writtenDef: e.target.checked}))} />
-                  {t('writeDefinition')}
-                </label>
-                <label className="asn-checkbox-label">
-                  <input type="checkbox" checked={selectedTasks.writtenTerm} onChange={e => setSelectedTasks(s => ({...s, writtenTerm: e.target.checked}))} />
-                  {t('writeTerm')}
-                </label>
-              </div>
-              <button className="mode-btn btn-conf" onClick={handleStartTest} disabled={!(selectedTasks.mcq || selectedTasks.match || selectedTasks.writtenDef || selectedTasks.writtenTerm)}>
-                {t('startTest')}
+              <h3>{t('assignmentExpired', 'Assignment Deadline Has Passed')}</h3>
+              <p>{t('cannotTakeTest', 'You cannot take this test because the deadline has passed.')}</p>
+              <button className="mode-btn btn-conf" onClick={() => navigate(`/assignment/${assignmentId}`)}>
+                {t('backToAssignment', 'Back to Assignment')}
               </button>
             </div>
-          )}
-          {/* MCQ */}
-          {step === 2 && flashcards.length > 0 && mcqTerms.length > 0 && (
+          ) : (
+            <>
+              {step === 0 && <div>{t('loading', 'Loading...')}</div>}
+              
+              {/* MCQ */}
+              {step === 2 && flashcards.length > 0 && mcqTerms.length > 0 && (
             <div>
               <h3>{t('multipleChoice')}: {mcqIndex + 1} / {mcqTerms.length}</h3>
               <div className="flashcard-learning flc-cover" style={{margin: '0 auto 16px auto'}}>
@@ -326,7 +334,7 @@ export default function TestLearningMode() {
                   <h5>{flashcards[mcqTerms[mcqIndex]].front_title}</h5>
                 </div>
                 <div className="confidence-buttons" style={{marginTop: 24}}>
-                  {mcqOptions.map((option, idx) => (
+                  {mcqOptions.map((option) => (
                     <button
                       key={option}
                       className={`tst-btn btn-conf${mcqSelected === option ? (option === flashcards[mcqTerms[mcqIndex]].back_title ? ' correct' : ' incorrect') : ''}`}
@@ -348,25 +356,14 @@ export default function TestLearningMode() {
                   </div>
                 )}
                 {mcqShowResult && (
-                  <button className="mode-btn btn-conf" style={{marginTop: 16}} onClick={() => {
-                    setMcqShowResult(false);
-                    setMcqSelected(null);
-                    if (mcqIndex + 1 < mcqTerms.length) {
-                      setMcqIndex(mcqIndex + 1);
-                    } else {
-                      setMcqIndex(0);
-                      // Go to next enabled mode
-                      if (selectedTasks.match) setStep(3);
-                      else if (selectedTasks.written) setStep(4);
-                      else setStep(5);
-                    }
-                  }}>
-                    {mcqIndex + 1 === mcqTerms.length ? (selectedTasks.match ? t('nextMode') : selectedTasks.written ? t('nextMode') : t('finish')) : t('next')}
+                  <button className="mode-btn btn-conf" style={{marginTop: 16}} onClick={handleMcqNext}>
+                    {mcqIndex + 1 === mcqTerms.length ? t('nextMode') : t('next')}
                   </button>
                 )}
               </div>
             </div>
           )}
+
           {/* Match */}
           {step === 3 && flashcards.length > 0 && matchTerms.length > 0 && (
             <div>
@@ -402,17 +399,11 @@ export default function TestLearningMode() {
               {matched.length === matchTerms.length && (
                 <div className="match-complete">{t('allPairsMatched')}</div>
               )}
-              {matched.length === matchTerms.length && (
-                <button className="mode-btn btn-conf" style={{marginTop: 16}} onClick={() => {
-                  // Go to next enabled mode
-                  if (selectedTasks.written) setStep(4);
-                  else setStep(5);
-                }}>{selectedTasks.written ? t('nextMode') : t('finish')}</button>
-              )}
             </div>
           )}
+
           {/* Written */}
-          {step === 4 && flashcards.length > 0 && writtenQuestions.length > 0 && (selectedTasks.writtenDef || selectedTasks.writtenTerm) && (
+          {step === 4 && flashcards.length > 0 && writtenQuestions.length > 0 && (
             <div>
               <h3>{t("writtenMode", "Written Mode")}</h3>
               <div className="write-block">
@@ -438,10 +429,18 @@ export default function TestLearningMode() {
                     <div className="written-correct">{t("correct", "Correct!")}</div>
                   )}
                   {(!writtenShowResult && writtenAttempts > 0 && writtenAttempts < 3) && (
-                    <div className="written-incorrect">{t("incorrectTryAgain", { defaultValue: "Incorrect. Try again. {{count}} attempts left", count: 3 - writtenAttempts })}</div>
+                    <div className="written-incorrect">
+                      {t("incorrectTryAgain", { count: 3 - writtenAttempts })}
+                    </div>
                   )}
                   {writtenShowResult && !writtenIsCorrect && writtenAttempts >= 3 && (
-                    <div className="written-incorrect">{t("incorrectAnswerWas", { defaultValue: "Incorrect. The correct answer was: <b>{{answer}}</b>", answer: writtenQuestions[writtenIndex].type === "definition" ? flashcards[writtenQuestions[writtenIndex].idx].back_title : flashcards[writtenQuestions[writtenIndex].idx].front_title })}</div>
+                    <div className="written-incorrect">
+                      {t("incorrectAnswerWas", { 
+                        answer: writtenQuestions[writtenIndex].type === "definition" 
+                          ? flashcards[writtenQuestions[writtenIndex].idx].back_title 
+                          : flashcards[writtenQuestions[writtenIndex].idx].front_title 
+                      })}
+                    </div>
                   )}
                   {writtenShowResult && ((writtenIsCorrect) || (!writtenIsCorrect && writtenAttempts >= 3)) && (
                     <button className="mode-btn" onClick={handleWrittenNext}>
@@ -449,20 +448,25 @@ export default function TestLearningMode() {
                     </button>
                   )}
                   <div style={{ marginTop: 24 }}>
-                    {t("cardOf", { defaultValue: "Card {{current}} of {{total}}", current: writtenIndex + 1, total: writtenQuestions.length })}
+                    {t("cardOf", { current: writtenIndex + 1, total: writtenQuestions.length })}
                   </div>
                 </div>
               </div>
             </div>
           )}
+
           {/* Result */}
           {step === 5 && finalScore && (
             <div>
               <h3>{t('sessionComplete')}</h3>
               <div>{t('totalPoints')} {finalScore.total} / {finalScore.max}</div>
               <div>{t('result')} {finalScore.percent}%</div>
-              <button className="mode-btn btn-conf" onClick={() => navigate(`/learn/${deckId}/modes`)}>{t('backToLearningModes')}</button>
+              <button className="mode-btn btn-conf" onClick={() => navigate(`/assignment/${assignmentId}?submitScore=1&mode=assignment&score=${finalScore.total}&total=${finalScore.max}`)}>
+                {t('backToAssignment')}
+              </button>
             </div>
+          )}
+          </>
           )}
         </div>
         <div className="learning-block"></div>

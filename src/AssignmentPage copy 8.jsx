@@ -6,7 +6,6 @@ import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom'
 import Header from './components/homepage/Header';
 import { useTranslation } from 'react-i18next';
 import './styles/groups.css';
-import './styles/dashboard.css';
 
 const API_URL = 'http://127.0.0.1:5000/api';
 
@@ -212,7 +211,7 @@ const AssignmentPage = ({ user }) => {
     const chartData = {
       labels: binLabels,
       datasets: [{
-        label: t('scoreDistribution', 'Score Distribution'),
+        label: 'Score Distribution',
         data: binCounts,
         backgroundColor: [
           '#0e81c8a8', '#357ab8', '#4fc3f7', '#81d4fa', '#b3e5fc', '#e1f5fe'
@@ -232,24 +231,24 @@ const AssignmentPage = ({ user }) => {
           enabled: true,
           callbacks: {
             label: function(context) {
-              return t('attempts', 'Attempts') + `: ${context.parsed.y}`;
+              return `Attempts: ${context.parsed.y}`;
             }
           }
         },
         title: {
           display: true,
-          text: t('scoreDistribution', 'Score Distribution'),
+          text: 'Score Distribution',
           font: { size: 18 },
           color: '#357ab8',
         },
       },
       scales: {
         x: {
-          title: { display: true, text: t('scorePercent', 'Score (%)'), color: '#357ab8', font: { size: 16 } },
+          title: { display: true, text: 'Score (%)', color: '#357ab8', font: { size: 16 } },
           grid: { color: '#e1f5fe' },
         },
         y: {
-          title: { display: true, text: t('attempts', 'Attempts'), color: '#357ab8', font: { size: 16 } },
+          title: { display: true, text: 'Attempts', color: '#357ab8', font: { size: 16 } },
           beginAtZero: true,
           grid: { color: '#e1f5fe' },
         },
@@ -261,61 +260,81 @@ const AssignmentPage = ({ user }) => {
 
     return (
       <div className="dashboard-content">
-        <div className="dashboard-flex-row">
+        <div style={{ display: 'flex', gap: '30px', marginBottom: '30px' }}>
           {/* LEFT SIDE - CHART */}
-          <div className="dashboard-flex-col">
-            <div className="dashboard-chart-container">
-              <Bar data={chartData} options={chartOptions} height={600} width={850} />
+          <div style={{ flex: 1, minWidth: '0' }}>
+            <div style={{ backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+              <Bar data={chartData} options={chartOptions} />
+            </div>
+
+            {/* Metrics below chart */}
+            <div className="dashboard-metrics" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+              <div className="metric-card" style={{ padding: '12px', textAlign: 'center' }}>
+                <div className="metric-label" style={{ fontSize: '0.85em' }}>{t('totalAttempts', 'Total Attempts')}</div>
+                <div className="metric-value" style={{ fontSize: '1.5em' }}>{stats.totalAttempts}</div>
+              </div>
+              <div className="metric-card" style={{ padding: '12px', textAlign: 'center' }}>
+                <div className="metric-label" style={{ fontSize: '0.85em' }}>{t('avgScore', 'Avg Score')}</div>
+                <div className="metric-value" style={{ fontSize: '1.5em' }}>{stats.avgScore}%</div>
+              </div>
+              <div className="metric-card" style={{ padding: '12px', textAlign: 'center' }}>
+                <div className="metric-label" style={{ fontSize: '0.85em' }}>{t('highestScore', 'Highest')}</div>
+                <div className="metric-value" style={{ fontSize: '1.5em' }}>{stats.highestScore}%</div>
+              </div>
+              <div className="metric-card" style={{ padding: '12px', textAlign: 'center' }}>
+                <div className="metric-label" style={{ fontSize: '0.85em' }}>{t('passRate', 'Pass Rate')}</div>
+                <div className="metric-value" style={{ fontSize: '1.5em' }}>{stats.passRate}%</div>
+              </div>
             </div>
           </div>
 
           {/* VERTICAL DIVIDER */}
-          <div className="dashboard-divider"></div>
+          <div style={{ width: '1px', backgroundColor: '#ddd', margin: '0 10px' }}></div>
 
           {/* RIGHT SIDE - STUDENT LISTS */}
-          <div className="dashboard-flex-col dashboard-student-lists">
+          <div style={{ flex: 1, minWidth: '0', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {/* Students who didn't take the test */}
-            <div className="dashboard-section dashboard-not-taken">
-              <h4 className="dashboard-section-title dashboard-not-taken-title">
-                <span className="dashboard-section-count dashboard-not-taken-count">
+            <div className="dashboard-section" style={{ backgroundColor: '#fff3cd', border: '1px solid #ffeeba', borderRadius: '8px', padding: '15px', maxHeight: '350px', overflowY: 'auto' }}>
+              <h4 style={{ color: '#e74c3c', marginTop: 0, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ backgroundColor: '#e74c3c', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9em', fontWeight: 'bold' }}>
                   {notTaken.length}
                 </span>
-                {t('studentsNotTaken', "Didn't Take Test")}
+                Didn't Take Test
               </h4>
               {notTaken.length > 0 ? (
-                <ul className="dashboard-not-taken-list">
+                <ul style={{ color: '#e74c3c', fontWeight: 600, margin: '0', paddingLeft: '20px', listStyle: 'none' }}>
                   {notTaken.map(s => (
-                    <li key={s.id} className="dashboard-not-taken-list-item">
-                      <span className="dashboard-dot dashboard-dot-red">●</span>
+                    <li key={s.id} style={{ padding: '6px 0', borderBottom: '1px solid #ffecb5', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ color: '#e74c3c', fontSize: '1.2em' }}>●</span>
                       {transliterate(s.username || s.name || s.email || s.id)}
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="dashboard-all-taken">✓ {t('allStudentsTaken', 'All took test')}</p>
+                <p style={{ color: '#27ae60', fontWeight: 600, margin: '0', textAlign: 'center' }}>✓ All took test</p>
               )}
             </div>
 
             {/* Students who didn't pass the test */}
-            <div className="dashboard-section dashboard-not-passed">
-              <h4 className="dashboard-section-title dashboard-not-passed-title">
-                <span className="dashboard-section-count dashboard-not-passed-count">
+            <div className="dashboard-section" style={{ backgroundColor: '#ffe5cc', border: '1px solid #ffd6b3', borderRadius: '8px', padding: '15px', maxHeight: '350px', overflowY: 'auto' }}>
+              <h4 style={{ color: '#ff9800', marginTop: 0, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ backgroundColor: '#ff9800', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9em', fontWeight: 'bold' }}>
                   {notPassed.length}
                 </span>
-                {t('studentsNotPassed', "Didn't Pass (<50%)")}
+                Didn't Pass (&lt;50%)
               </h4>
               {notPassed.length > 0 ? (
-                <ul className="dashboard-not-passed-list">
+                <ul style={{ color: '#ff9800', fontWeight: 600, margin: '0', paddingLeft: '0', listStyle: 'none' }}>
                   {notPassed.map(item => (
-                    <li key={item.member.id} className="dashboard-not-passed-list-item">
-                      <div className="dashboard-not-passed-list-item-header">
-                        <span className="dashboard-dot dashboard-dot-orange">●</span>
-                        <strong className="dashboard-not-passed-list-item-name">{transliterate(item.member.username || item.member.name || item.member.email)}</strong>
+                    <li key={item.member.id} style={{ padding: '8px 0', borderBottom: '1px solid #ffd6b3', marginBottom: '5px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ color: '#ff9800', fontSize: '1.2em' }}>●</span>
+                        <strong style={{ flex: 1 }}>{transliterate(item.member.username || item.member.name || item.member.email)}</strong>
                       </div>
-                      <ul className="dashboard-not-passed-list-results">
+                      <ul style={{ margin: '6px 0 0 28px', paddingLeft: '0', listStyle: 'none', fontSize: '0.85em' }}>
                         {item.results.map((r, idx) => (
-                          <li key={idx} className="dashboard-not-passed-list-result">
-                            {r.deck_name || t('allDecks', 'All Decks')}: <strong>{r.score}/{r.total}</strong> ({Math.round((r.score / r.total) * 100)}%)
+                          <li key={idx} style={{ color: '#c97300', padding: '3px 0' }}>
+                            {r.deck_name || 'All Decks'}: <strong>{r.score}/{r.total}</strong> ({Math.round((r.score / r.total) * 100)}%)
                           </li>
                         ))}
                       </ul>
@@ -323,68 +342,39 @@ const AssignmentPage = ({ user }) => {
                   ))}
                 </ul>
               ) : (
-                <p className="dashboard-all-passed">✓ {t('allStudentsPassed', 'All passed')}</p>
+                <p style={{ color: '#27ae60', fontWeight: 600, margin: '0', textAlign: 'center' }}>✓ All passed</p>
               )}
             </div>
           </div>
         </div>
 
-        {/* Metrics */}
-        <hr className="dashboard-delimiter" />
-        <div className="dashboard-metrics">
-          <div className="metric-card">
-            <div className="metric-label">{t('totalAttempts', 'Total Attempts')}</div>
-            <div className="metric-value">{stats.totalAttempts}</div>
-          </div>
-          <div className="metric-card">
-            <div className="metric-label">{t('avgScore', 'Avg Score')}</div>
-            <div className="metric-value">{stats.avgScore}%</div>
-          </div>
-          <div className="metric-card">
-            <div className="metric-label">{t('highestScore', 'Highest Score')}</div>
-            <div className="metric-value">{stats.highestScore}%</div>
-          </div>
-          <div className="metric-card">
-            <div className="metric-label">{t('lowestScore', 'Lowest Score')}</div>
-            <div className="metric-value">{stats.lowestScore}%</div>
-          </div>
-          <div className="metric-card">
-            <div className="metric-label">{t('passRate', 'Pass Rate (50+)')}</div>
-            <div className="metric-value">{stats.passRate}%</div>
-          </div>
-        </div>
-        <hr className="dashboard-delimiter" />
-
-        {/* Results by Mode */}
+        {/* Results by Mode and Deck */}
         {Object.keys(stats.byMode).length > 0 && (
-          <>
-            <div className="dashboard-section dashboard-by-mode">
-              <h4>{t('byMode', 'Results by Mode')}</h4>
-              <table className="asn-results-table">
-                <thead>
-                  <tr>
-                    <th>{t('mode')}</th>
-                    <th>{t('attempts', 'Attempts')}</th>
-                    <th>{t('avgScore', 'Avg Score')}</th>
+          <div className="dashboard-section" style={{ marginTop: '30px' }}>
+            <h4>{t('byMode', 'Results by Mode')}</h4>
+            <table className="asn-results-table">
+              <thead>
+                <tr>
+                  <th>{t('mode')}</th>
+                  <th>{t('attempts', 'Attempts')}</th>
+                  <th>{t('avgScore', 'Avg Score')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(stats.byMode).map(([mode, data]) => (
+                  <tr key={mode}>
+                    <td>{transliterate(mode)}</td>
+                    <td>{data.count}</td>
+                    <td>{data.avgScore}%</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {Object.entries(stats.byMode).map(([mode, data]) => (
-                    <tr key={mode}>
-                      <td>{transliterate(mode)}</td>
-                      <td>{data.count}</td>
-                      <td>{data.avgScore}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
 
-        {/* Results by Deck */}
         {Object.keys(stats.byDeck).length > 0 && (
-          <div className="dashboard-section dashboard-by-deck">
+          <div className="dashboard-section" style={{ marginTop: '20px' }}>
             <h4>{t('byDeck', 'Results by Deck')}</h4>
             <table className="asn-results-table">
               <thead>

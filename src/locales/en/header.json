@@ -67,5 +67,10 @@
     "allResults": "All Results",
     "leaderboard": "Leaderboard",
     "avgScore": "Avg Score",
-    "rank": "Rank"
+    "rank": "Rank",
+    "selectTestModes": "Select Test Modes",
+    "multipleChoice": "Multiple Choice",
+    "writeDefinition": "Write Definition",
+    "writeTerm": "Write Term",
+    "startTest": "Start Test"
 }

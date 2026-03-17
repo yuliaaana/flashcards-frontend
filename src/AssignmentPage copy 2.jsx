@@ -6,7 +6,6 @@ import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom'
 import Header from './components/homepage/Header';
 import { useTranslation } from 'react-i18next';
 import './styles/groups.css';
-import './styles/dashboard.css';
 
 const API_URL = 'http://127.0.0.1:5000/api';
 
@@ -34,16 +33,11 @@ const AssignmentPage = ({ user }) => {
   const [results, setResults] = useState([]);
   const [myResults, setMyResults] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
-  const [groupStatus, setGroupStatus] = useState({
-    not_taken: [],
-    not_passed: [],
-    passed: [],
-    group_members: []
-  });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [assignmentExpired, setAssignmentExpired] = useState(false);
+  const [groupMembers, setGroupMembers] = useState([]);
 
   const isTeacher = user && assignment && user.id === assignment.created_by;
 
@@ -52,10 +46,32 @@ const AssignmentPage = ({ user }) => {
   }, [assignmentId]);
 
   useEffect(() => {
+    if (assignment && assignment.group_id) {
+      fetchGroupMembers(assignment.group_id);
+    }
+  }, [assignment]);
+  // Fetch group info to get full student details
+  // Fetch group members as user IDs only, do not fetch user info
+  const fetchGroupMembers = async (groupId) => {
+    try {
+      const res = await fetch(`${API_URL}/groups/${groupId}`);
+      if (!res.ok) throw new Error('Failed to load group info');
+      const data = await res.json();
+      if (data.members && Array.isArray(data.members)) {
+        // Just use IDs, backend does not provide user info
+        setGroupMembers(data.members.map(id => ({ id })));
+      } else {
+        setGroupMembers([]);
+      }
+    } catch {
+      setGroupMembers([]);
+    }
+  };
+
+  useEffect(() => {
     if (assignment) {
       if (isTeacher) {
         fetchAllResults();
-        fetchGroupStatus();
       } else if (user) {
         fetchMyResults();
       }
@@ -123,17 +139,6 @@ const AssignmentPage = ({ user }) => {
       setLeaderboard(Array.isArray(data) ? data : []);
     } catch {
       setLeaderboard([]);
-    }
-  };
-
-  const fetchGroupStatus = async () => {
-    try {
-      const res = await fetch(`${API_URL}/assignments/${assignmentId}/group-status`);
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      setGroupStatus(data);
-    } catch {
-      setGroupStatus({ not_taken: [], not_passed: [], passed: [], group_members: [] });
     }
   };
 
@@ -212,7 +217,7 @@ const AssignmentPage = ({ user }) => {
     const chartData = {
       labels: binLabels,
       datasets: [{
-        label: t('scoreDistribution', 'Score Distribution'),
+        label: 'Score Distribution',
         data: binCounts,
         backgroundColor: [
           '#0e81c8a8', '#357ab8', '#4fc3f7', '#81d4fa', '#b3e5fc', '#e1f5fe'
@@ -232,105 +237,103 @@ const AssignmentPage = ({ user }) => {
           enabled: true,
           callbacks: {
             label: function(context) {
-              return t('attempts', 'Attempts') + `: ${context.parsed.y}`;
+              return `Attempts: ${context.parsed.y}`;
             }
           }
         },
         title: {
           display: true,
-          text: t('scoreDistribution', 'Score Distribution'),
+          text: 'Score Distribution',
           font: { size: 18 },
           color: '#357ab8',
         },
       },
       scales: {
         x: {
-          title: { display: true, text: t('scorePercent', 'Score (%)'), color: '#357ab8', font: { size: 16 } },
+          title: { display: true, text: 'Score (%)', color: '#357ab8', font: { size: 16 } },
           grid: { color: '#e1f5fe' },
         },
         y: {
-          title: { display: true, text: t('attempts', 'Attempts'), color: '#357ab8', font: { size: 16 } },
+          title: { display: true, text: 'Attempts', color: '#357ab8', font: { size: 16 } },
           beginAtZero: true,
           grid: { color: '#e1f5fe' },
         },
       },
     };
-
-    const notTaken = groupStatus.not_taken || [];
-    const notPassed = groupStatus.not_passed || [];
+    // Find students who didn't take or didn't pass
+    // Always use groupMembers as the student list
+    let allStudents = [];
+    if (groupMembers && groupMembers.length > 0) {
+      allStudents = groupMembers;
+    }
+    const takenIds = new Set(dataToAnalyze.map(r => r.user_id));
+    const notTaken = allStudents.filter(s => !takenIds.has(s.id));
+    const notPassed = dataToAnalyze.filter(r => (r.score / r.total) * 100 < 50);
+    // ...existing code...
+// Optionally, update assignment.group_members for compatibility
+useEffect(() => {
+  if (assignment && groupMembers && groupMembers.length > 0) {
+    setAssignment(prev => prev ? { ...prev, group_members: groupMembers } : prev);
+  }
+}, [groupMembers]);
 
     return (
       <div className="dashboard-content">
-        <div className="dashboard-flex-row">
-          {/* LEFT SIDE - CHART */}
-          <div className="dashboard-flex-col">
-            <div className="dashboard-chart-container">
-              <Bar data={chartData} options={chartOptions} height={600} width={850} />
-            </div>
-          </div>
-
-          {/* VERTICAL DIVIDER */}
-          <div className="dashboard-divider"></div>
-
-          {/* RIGHT SIDE - STUDENT LISTS */}
-          <div className="dashboard-flex-col dashboard-student-lists">
-            {/* Students who didn't take the test */}
-            <div className="dashboard-section dashboard-not-taken">
-              <h4 className="dashboard-section-title dashboard-not-taken-title">
-                <span className="dashboard-section-count dashboard-not-taken-count">
-                  {notTaken.length}
-                </span>
-                {t('studentsNotTaken', "Didn't Take Test")}
-              </h4>
-              {notTaken.length > 0 ? (
-                <ul className="dashboard-not-taken-list">
-                  {notTaken.map(s => (
-                    <li key={s.id} className="dashboard-not-taken-list-item">
-                      <span className="dashboard-dot dashboard-dot-red">●</span>
-                      {transliterate(s.username || s.name || s.email || s.id)}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="dashboard-all-taken">✓ {t('allStudentsTaken', 'All took test')}</p>
-              )}
-            </div>
-
-            {/* Students who didn't pass the test */}
-            <div className="dashboard-section dashboard-not-passed">
-              <h4 className="dashboard-section-title dashboard-not-passed-title">
-                <span className="dashboard-section-count dashboard-not-passed-count">
-                  {notPassed.length}
-                </span>
-                {t('studentsNotPassed', "Didn't Pass (<50%)")}
-              </h4>
-              {notPassed.length > 0 ? (
-                <ul className="dashboard-not-passed-list">
-                  {notPassed.map(item => (
-                    <li key={item.member.id} className="dashboard-not-passed-list-item">
-                      <div className="dashboard-not-passed-list-item-header">
-                        <span className="dashboard-dot dashboard-dot-orange">●</span>
-                        <strong className="dashboard-not-passed-list-item-name">{transliterate(item.member.username || item.member.name || item.member.email)}</strong>
-                      </div>
-                      <ul className="dashboard-not-passed-list-results">
-                        {item.results.map((r, idx) => (
-                          <li key={idx} className="dashboard-not-passed-list-result">
-                            {r.deck_name || t('allDecks', 'All Decks')}: <strong>{r.score}/{r.total}</strong> ({Math.round((r.score / r.total) * 100)}%)
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="dashboard-all-passed">✓ {t('allStudentsPassed', 'All passed')}</p>
-              )}
-            </div>
-          </div>
+        <div style={{ maxWidth: 600, margin: '0 auto 24px' }}>
+          <Bar data={chartData} options={chartOptions} />
         </div>
 
-        {/* Metrics */}
-        <hr className="dashboard-delimiter" />
+        {/* Students who didn't take the test */}
+        {allStudents.length === 0 ? (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#e74c3c' }}>No student list available for this assignment.</h4>
+          </div>
+        ) : notTaken.length > 0 ? (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#e74c3c' }}>Students who didn't take the test</h4>
+            <ul style={{ color: '#e74c3c', fontWeight: 600 }}>
+              {notTaken.map(s => (
+                <li key={s.id}>{transliterate(s.id)}</li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#e74c3c' }}>All students have taken the test.</h4>
+          </div>
+        )}
+        <hr style={{ margin: '24px 0', border: 'none', borderTop: '2px solid #357ab8', width: '100%' }} />
+
+        {/* Students who didn't pass the test */}
+        {notPassed.length > 0 ? (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#ff9800' }}>Students who didn't pass (score &lt; 50%)</h4>
+            <ul style={{ color: '#ff9800', fontWeight: 600 }}>
+              {notPassed.map(r => (
+                <li key={r.user_id}>{transliterate(r.username || r.user_id)} ({r.score}/{r.total})</li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#ff9800' }}>All students who took the test passed.</h4>
+          </div>
+        )}
+        <hr style={{ margin: '24px 0', border: 'none', borderTop: '2px solid #357ab8', width: '100%' }} />
+        {/* Overall group student list at the end */}
+        <div className="dashboard-section">
+          <h4 style={{ color: '#357ab8' }}>Overall Group Student List</h4>
+          {allStudents.length === 0 ? (
+            <p style={{ color: '#888' }}>No group student list available.</p>
+          ) : (
+            <ul style={{ color: '#357ab8', fontWeight: 600 }}>
+              {allStudents.map(s => (
+                <li key={s.id}>{transliterate(s.id)}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <div className="dashboard-metrics">
           <div className="metric-card">
             <div className="metric-label">{t('totalAttempts', 'Total Attempts')}</div>
@@ -353,38 +356,33 @@ const AssignmentPage = ({ user }) => {
             <div className="metric-value">{stats.passRate}%</div>
           </div>
         </div>
-        <hr className="dashboard-delimiter" />
 
-        {/* Results by Mode */}
         {Object.keys(stats.byMode).length > 0 && (
-          <>
-            <div className="dashboard-section dashboard-by-mode">
-              <h4>{t('byMode', 'Results by Mode')}</h4>
-              <table className="asn-results-table">
-                <thead>
-                  <tr>
-                    <th>{t('mode')}</th>
-                    <th>{t('attempts', 'Attempts')}</th>
-                    <th>{t('avgScore', 'Avg Score')}</th>
+          <div className="dashboard-section">
+            <h4>{t('byMode', 'Results by Mode')}</h4>
+            <table className="asn-results-table">
+              <thead>
+                <tr>
+                  <th>{t('mode')}</th>
+                  <th>{t('attempts', 'Attempts')}</th>
+                  <th>{t('avgScore', 'Avg Score')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(stats.byMode).map(([mode, data]) => (
+                  <tr key={mode}>
+                    <td>{transliterate(mode)}</td>
+                    <td>{data.count}</td>
+                    <td>{data.avgScore}%</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {Object.entries(stats.byMode).map(([mode, data]) => (
-                    <tr key={mode}>
-                      <td>{transliterate(mode)}</td>
-                      <td>{data.count}</td>
-                      <td>{data.avgScore}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
 
-        {/* Results by Deck */}
         {Object.keys(stats.byDeck).length > 0 && (
-          <div className="dashboard-section dashboard-by-deck">
+          <div className="dashboard-section">
             <h4>{t('byDeck', 'Results by Deck')}</h4>
             <table className="asn-results-table">
               <thead>

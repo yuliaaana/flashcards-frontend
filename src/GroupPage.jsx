@@ -29,7 +29,9 @@ const GroupPage = ({ user }) => {
   const [asnDueDate, setAsnDueDate] = useState('');
   const [asnDeckIds, setAsnDeckIds] = useState([]);
   const [asnModes, setAsnModes] = useState([]);
+  const [testSettings, setTestSettings] = useState({ mcq: true, match: true, writtenDef: true, writtenTerm: false });
   const [showCreateAssignment, setShowCreateAssignment] = useState(false);
+  const [oneTimeOnly, setOneTimeOnly] = useState(false);
 
   const isTeacher = user && group && user.id === group.teacher_id;
 
@@ -224,11 +226,24 @@ const GroupPage = ({ user }) => {
 
   const handleCreateAssignment = async (e) => {
     e.preventDefault();
-    if (!asnTitle || asnDeckIds.length === 0 || asnModes.length === 0) {
-      setError('Title, at least one deck and one mode are required');
+    if (!asnTitle || asnDeckIds.length === 0) {
+      setError('Title and at least one deck are required');
+      return;
+    }
+    // Check that at least one test mode is selected
+    if (!testSettings.mcq && !testSettings.match && !testSettings.writtenDef && !testSettings.writtenTerm) {
+      setError('Please select at least one test mode');
       return;
     }
     setError('');
+    
+    // Convert testSettings object to modes array for backend
+    const modesArray = [];
+    if (testSettings.mcq) modesArray.push('mcq');
+    if (testSettings.match) modesArray.push('match');
+    if (testSettings.writtenDef) modesArray.push('writtenDef');
+    if (testSettings.writtenTerm) modesArray.push('writtenTerm');
+    
     try {
       const res = await fetch(`${API_URL}/groups/${groupId}/assignments`, {
         method: 'POST',
@@ -239,7 +254,8 @@ const GroupPage = ({ user }) => {
           description: asnDesc,
           due_date: asnDueDate || null,
           deck_ids: asnDeckIds,
-          modes: asnModes
+          modes: modesArray,
+          one_time_only: oneTimeOnly
         })
       });
       const data = await res.json();
@@ -252,6 +268,8 @@ const GroupPage = ({ user }) => {
       setAsnDueDate('');
       setAsnDeckIds([]);
       setAsnModes([]);
+      setTestSettings({ mcq: true, match: true, writtenDef: true, writtenTerm: false });
+      setOneTimeOnly(false);
       setShowCreateAssignment(false);
       fetchAssignments();
     } catch {
@@ -290,11 +308,15 @@ const GroupPage = ({ user }) => {
     );
   };
 
-  const allModes = [
-    { key: 'flashcards', label: t('flashcardMode') },
-    { key: 'match', label: t('matchMode') },
-    { key: 'written', label: t('writtenMode') },
-    { key: 'test', label: t('testMode') },
+  const toggleTestSetting = (key) => {
+    setTestSettings(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const testModeOptions = [
+    { key: 'mcq', label: t('multipleChoice') || 'Multiple Choice' },
+    { key: 'match', label: t('matchMode') || 'Match' },
+    { key: 'writtenDef', label: t('writeDefinition') || 'Write Definition' },
+    { key: 'writtenTerm', label: t('writeTerm') || 'Write Term' },
   ];
 
   if (loading) return <div>{t('loading')}</div>;
@@ -441,7 +463,11 @@ const GroupPage = ({ user }) => {
                   className="asn-input"
                 />
 
+
+                <hr style={{ margin: '1px 0' }} />
                 <label className="asn-label">{t('selectDecksForAssignment')}</label>
+                <hr style={{ margin: '1px 0' }} />
+                
                 <div className="asn-checkboxes">
                   {groupDecks.map(d => (
                     <label key={d.id} className="asn-checkbox-label">
@@ -454,20 +480,35 @@ const GroupPage = ({ user }) => {
                     </label>
                   ))}
                 </div>
+               
 
-                <label className="asn-label">{t('selectModes')}</label>
+                <hr style={{ margin: '1px 0' }} />
+                <label className="asn-label">{t('selectTestModes') || 'Select Test Modes'}</label>
+                <hr style={{ margin: '1px 0' }} />
+                
                 <div className="asn-checkboxes">
-                  {allModes.map(m => (
+                  {testModeOptions.map(m => (
                     <label key={m.key} className="asn-checkbox-label">
                       <input
                         type="checkbox"
-                        checked={asnModes.includes(m.key)}
-                        onChange={() => toggleAsnMode(m.key)}
+                        checked={testSettings[m.key]}
+                        onChange={() => toggleTestSetting(m.key)}
                       />
                       {m.label}
                     </label>
                   ))}
                 </div>
+               
+
+                <hr style={{ margin: '1px 0' }} />
+                <label className="asn-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={oneTimeOnly}
+                    onChange={() => setOneTimeOnly(!oneTimeOnly)}
+                  />
+                  {t('oneTimeOnly', { ns: 'create' })}
+                </label>
 
                 <div className="asn-form-actions">
                   <button type="submit" className="gp-add-btn btn-cr-ass">{t('createAssignment')}</button>
@@ -488,11 +529,12 @@ const GroupPage = ({ user }) => {
                         : t('noDueDate')}
                     </span>
                   </div>
-                  {a.description && <p className="gp-empty" style={{ fontStyle: 'normal' }}>{a.description}</p>}
+                  {a.description && <p className="gp-empty" style={{ fontStyle: 'normal', textAlign: 'left' }}>{a.description}</p>}
                   <div className="asn-card-modes">
-                    {(a.modes || []).map(m => (
-                      <span key={m} className="asn-mode-tag">{m}</span>
-                    ))}
+                    {(a.modes || []).includes('mcq') && <span className="asn-mode-tag">{t('multipleChoice', 'Multiple Choice')}</span>}
+                    {(a.modes || []).includes('match') && <span className="asn-mode-tag">{t('matchMode', 'Match')}</span>}
+                    {(a.modes || []).includes('writtenDef') && <span className="asn-mode-tag">{t('writeDefinition', 'Write Definition')}</span>}
+                    {(a.modes || []).includes('writtenTerm') && <span className="asn-mode-tag">{t('writeTerm', 'Write Term')}</span>}
                   </div>
                   <div className="asn-card-actions">
                     <Link className="gp-add-btn si" to={`/assignment/${a.id}`} style={{ textDecoration: 'none', fontSize: '0.85rem', padding: '4px 12px' }}>

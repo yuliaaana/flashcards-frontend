@@ -1,6 +1,4 @@
 {
-
-
     "fail": "Не знаю",
     "hard": "Тяжко",
     "good": "Добре",
@@ -14,16 +12,18 @@
     "matchMode": "Режим відповідностей",
     "writtenMode": "Письмовий режим",
     "testMode": "Режим тестування",
+    "assignmentTest": "Тест завдання",
     "sessionComplete": "Сесію завершено!",
     "finishedAllCards": "Ви завершили всі картки у цьому режимі.",
     "backToLearningModes": "Повернутися до режимів навчання",
+    "backToAssignment": "Повернутися до завдання",
     "selectWritingMode": "Оберіть режим написання:",
     "writeDefinition": "Написання визначення",
     "writeTerm": "Написання терміну",
     "check": "Перевірити",
     "correct": "Вірно!",
     "incorrectTryAgain": "Невірно. Спробуйте ще раз. Залишилось {{count}} спроби",
-    "incorrectAnswerWas": "Невірно. Правильна відповідь: <b>{{answer}}</b>",
+    "incorrectAnswerWas": "Невірно. Правильна відповідь: {{answer}}",
     "next": "Далі",
     "cardOf": "Картка {{current}} з {{total}}",
     "matchModeTitle": "Режим відповідностей",
@@ -40,6 +40,6 @@
     "testLearningMode": "Тестовий режим навчання",
     "totalPoints": "Загальна кількість балів:",
     "result": "Результат:",
-    "backToModes": "Повернутися до режимів навчання"
-
+    "assignmentExpired": "Термін здачі завдання минув",
+    "cannotTakeTest": "Ви не можете пройти цей тест, оскільки термін здачі минув."
 }
