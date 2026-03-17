@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import Header from './components/homepage/Header';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +9,6 @@ import './styles/groups.css';
 
 const API_URL = 'http://127.0.0.1:5000/api';
 
-// Транслітерація кирилиці в латиницю
 function transliterate(text) {
   if (!text) return '';
   const map = {
@@ -33,7 +35,7 @@ const AssignmentPage = ({ user }) => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview'); // overview | results | leaderboard
+  const [activeTab, setActiveTab] = useState('overview');
   const [assignmentExpired, setAssignmentExpired] = useState(false);
 
   const isTeacher = user && assignment && user.id === assignment.created_by;
@@ -53,7 +55,6 @@ const AssignmentPage = ({ user }) => {
     }
   }, [assignment, user]);
 
-  // Check if returning from a learning mode with score to submit
   useEffect(() => {
     const submitScore = searchParams.get('submitScore');
     const mode = searchParams.get('mode');
@@ -71,7 +72,6 @@ const AssignmentPage = ({ user }) => {
       if (!res.ok) throw new Error();
       const data = await res.json();
       setAssignment(data);
-      // Check if assignment has expired
       if (data.due_date) {
         const dueDate = new Date(data.due_date);
         const now = new Date();
@@ -123,18 +123,244 @@ const AssignmentPage = ({ user }) => {
       await fetch(`${API_URL}/assignments/${assignmentId}/results`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: user.id,
-          mode,
-          score,
-          total
-        })
+        body: JSON.stringify({ user_id: user.id, mode, score, total })
       });
       if (isTeacher) fetchAllResults();
       else fetchMyResults();
     } catch {
       // silent
     }
+  };
+
+  const calculateDashboardStats = () => {
+    const dataToAnalyze = isTeacher ? results : myResults;
+    if (dataToAnalyze.length === 0) {
+      return { totalAttempts: 0, avgScore: 0, highestScore: 0, lowestScore: 0, passRate: 0, byMode: {}, byDeck: {} };
+    }
+
+    const scores = dataToAnalyze.map(r => (r.score / r.total) * 100);
+    const totalAttempts = dataToAnalyze.length;
+    const avgScore = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
+    const highestScore = Math.max(...scores).toFixed(1);
+    const lowestScore = Math.min(...scores).toFixed(1);
+
+    const byMode = {};
+    dataToAnalyze.forEach(r => {
+      if (!byMode[r.mode]) byMode[r.mode] = { count: 0, totalScore: 0, totalMax: 0 };
+      byMode[r.mode].count += 1;
+      byMode[r.mode].totalScore += r.score;
+      byMode[r.mode].totalMax += r.total;
+    });
+
+    const byDeck = {};
+    dataToAnalyze.forEach(r => {
+      const deckName = r.deck_name || (r.deck_id ? r.deck_id : 'All Decks');
+      if (!byDeck[deckName]) byDeck[deckName] = { count: 0, totalScore: 0, totalMax: 0 };
+      byDeck[deckName].count += 1;
+      byDeck[deckName].totalScore += r.score;
+      byDeck[deckName].totalMax += r.total;
+    });
+
+    Object.keys(byMode).forEach(mode => {
+      byMode[mode].avgScore = ((byMode[mode].totalScore / byMode[mode].totalMax) * 100).toFixed(1);
+    });
+    Object.keys(byDeck).forEach(deck => {
+      byDeck[deck].avgScore = ((byDeck[deck].totalScore / byDeck[deck].totalMax) * 100).toFixed(1);
+    });
+
+    const passRate = ((scores.filter(s => s >= 50).length / scores.length) * 100).toFixed(1);
+
+    return { totalAttempts, avgScore, highestScore, lowestScore, passRate, byMode, byDeck };
+  };
+
+  const renderDashboard = () => {
+    const stats = calculateDashboardStats();
+    const dataToAnalyze = results;
+
+    if (dataToAnalyze.length === 0) {
+      return <p className="gp-empty">{t('noResults')}</p>;
+    }
+
+    const scores = dataToAnalyze.map(r => Math.round((r.score / r.total) * 100));
+    const bins = [0, 20, 40, 60, 80, 100];
+    const binLabels = bins.map((b, i) => i === bins.length - 1 ? `${b}+` : `${b}-${bins[i + 1] - 1}`);
+    const binCounts = bins.map((b, i) =>
+      i === bins.length - 1
+        ? scores.filter(s => s >= b).length
+        : scores.filter(s => s >= b && s < bins[i + 1]).length
+    );
+
+    const chartData = {
+      labels: binLabels,
+      datasets: [{
+        label: 'Score Distribution',
+        data: binCounts,
+        backgroundColor: [
+          '#0e81c8a8', '#357ab8', '#4fc3f7', '#81d4fa', '#b3e5fc', '#e1f5fe'
+        ],
+        borderRadius: 8,
+        borderWidth: 2,
+        borderColor: '#fff',
+        hoverBackgroundColor: '#23507a',
+      }],
+    };
+
+    const chartOptions = {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          enabled: true,
+          callbacks: {
+            label: function(context) {
+              return `Attempts: ${context.parsed.y}`;
+            }
+          }
+        },
+        title: {
+          display: true,
+          text: 'Score Distribution',
+          font: { size: 18 },
+          color: '#357ab8',
+        },
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'Score (%)', color: '#357ab8', font: { size: 16 } },
+          grid: { color: '#e1f5fe' },
+        },
+        y: {
+          title: { display: true, text: 'Attempts', color: '#357ab8', font: { size: 16 } },
+          beginAtZero: true,
+          grid: { color: '#e1f5fe' },
+        },
+      },
+    };
+  // Find students who didn't take or didn't pass
+    let allStudents = [];
+    if (assignment && Array.isArray(assignment.students) && assignment.students.length > 0) {
+      allStudents = assignment.students;
+    } else if (assignment && assignment.group_members) {
+      allStudents = assignment.group_members;
+    }
+    const takenIds = new Set(dataToAnalyze.map(r => r.user_id));
+    const notTaken = allStudents.filter(s => !takenIds.has(s.id));
+    const notPassed = dataToAnalyze.filter(r => (r.score / r.total) * 100 < 50);
+
+    return (
+      <div className="dashboard-content">
+        <div style={{ maxWidth: 600, margin: '0 auto 24px' }}>
+          <Bar data={chartData} options={chartOptions} />
+        </div>
+
+        {/* Students who didn't take the test */}
+        {allStudents.length === 0 ? (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#e74c3c' }}>No student list available for this assignment.</h4>
+          </div>
+        ) : notTaken.length > 0 ? (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#e74c3c' }}>Students who didn't take the test</h4>
+            <ul style={{ color: '#e74c3c', fontWeight: 600 }}>
+              {notTaken.map(s => (
+                <li key={s.id}>{transliterate(s.username || s.name || s.email || s.id)}</li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#e74c3c' }}>All students have taken the test.</h4>
+          </div>
+        )}
+
+        {/* Students who didn't pass the test */}
+        {notPassed.length > 0 ? (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#ff9800' }}>Students who didn't pass (score &lt; 50%)</h4>
+            <ul style={{ color: '#ff9800', fontWeight: 600 }}>
+              {notPassed.map(r => (
+                <li key={r.user_id}>{transliterate(r.username || r.user_id)} ({r.score}/{r.total})</li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#ff9800' }}>All students who took the test passed.</h4>
+          </div>
+        )}
+
+        <div className="dashboard-metrics">
+          <div className="metric-card">
+            <div className="metric-label">{t('totalAttempts', 'Total Attempts')}</div>
+            <div className="metric-value">{stats.totalAttempts}</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">{t('avgScore', 'Avg Score')}</div>
+            <div className="metric-value">{stats.avgScore}%</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">{t('highestScore', 'Highest Score')}</div>
+            <div className="metric-value">{stats.highestScore}%</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">{t('lowestScore', 'Lowest Score')}</div>
+            <div className="metric-value">{stats.lowestScore}%</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">{t('passRate', 'Pass Rate (50+)')}</div>
+            <div className="metric-value">{stats.passRate}%</div>
+          </div>
+        </div>
+
+        {Object.keys(stats.byMode).length > 0 && (
+          <div className="dashboard-section">
+            <h4>{t('byMode', 'Results by Mode')}</h4>
+            <table className="asn-results-table">
+              <thead>
+                <tr>
+                  <th>{t('mode')}</th>
+                  <th>{t('attempts', 'Attempts')}</th>
+                  <th>{t('avgScore', 'Avg Score')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(stats.byMode).map(([mode, data]) => (
+                  <tr key={mode}>
+                    <td>{transliterate(mode)}</td>
+                    <td>{data.count}</td>
+                    <td>{data.avgScore}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {Object.keys(stats.byDeck).length > 0 && (
+          <div className="dashboard-section">
+            <h4>{t('byDeck', 'Results by Deck')}</h4>
+            <table className="asn-results-table">
+              <thead>
+                <tr>
+                  <th>{t('deck')}</th>
+                  <th>{t('attempts', 'Attempts')}</th>
+                  <th>{t('avgScore', 'Avg Score')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(stats.byDeck).map(([deck, data]) => (
+                  <tr key={deck}>
+                    <td>{transliterate(deck)}</td>
+                    <td>{data.count}</td>
+                    <td>{data.avgScore}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    );
   };
 
   if (loading) return <div>{t('loading')}</div>;
@@ -149,12 +375,15 @@ const AssignmentPage = ({ user }) => {
         <div className="sg-block"></div>
         <div className="sg-block gp-main">
           <h2 className="gp-title">{transliterate(assignment.title)}</h2>
-          {assignment.description && <p className="gp-desc">{transliterate(assignment.description)}</p>}
+          {assignment.description && (
+            <p className="gp-desc">{transliterate(assignment.description)}</p>
+          )}
           <p className="gp-desc">
             {assignment.due_date
               ? `${t('due')}: ${new Date(assignment.due_date).toLocaleString()}`
               : t('noDueDate')}
           </p>
+
           {assignmentExpired && (
             <div className="eg-error" style={{ backgroundColor: '#f8d7da', color: '#721c24', border: '1px solid #f5c6cb', padding: '10px', borderRadius: '13px', marginBottom: '10px' }}>
               {t('assignmentExpired', 'This assignment has expired. You can no longer take the test.')}
@@ -182,6 +411,14 @@ const AssignmentPage = ({ user }) => {
             >
               {t('leaderboard')}
             </button>
+            {isTeacher && (
+              <button
+                className={`asn-tab ${activeTab === 'dashboard' ? 'asn-tab-active' : ''}`}
+                onClick={() => setActiveTab('dashboard')}
+              >
+                {t('statistics', 'Statistics')}
+              </button>
+            )}
           </div>
 
           <hr className="gp-divider" />
@@ -200,13 +437,12 @@ const AssignmentPage = ({ user }) => {
               <div className="asn-deck-modes" style={{ marginTop: '20px' }}>
                 {assignmentExpired || (assignment.one_time_only && myResults.length > 0) ? (
                   <span className="asn-mode-start-btn" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', opacity: 0.6 }}>
-                    {assignmentExpired ? t('testUnavailable', 'Test Unavailable') : t('alreadyCompleted', 'Already Completed')}
+                    {assignmentExpired
+                      ? t('testUnavailable', 'Test Unavailable')
+                      : t('alreadyCompleted', 'Already Completed')}
                   </span>
                 ) : (
-                  <Link
-                    className="asn-mode-start-btn"
-                    to={`/assignment/${assignmentId}/test`}
-                  >
+                  <Link className="asn-mode-start-btn" to={`/assignment/${assignmentId}/test`}>
                     {t('startTest')} →
                   </Link>
                 )}
@@ -280,11 +516,14 @@ const AssignmentPage = ({ user }) => {
             </div>
           )}
 
-          <button className="eg-back-btn" onClick={() => navigate(`/group/${assignment.group_id}`)}>
-            ← {t('backToGroup')}
-          </button>
+          {/* Dashboard Tab */}
+          {activeTab === 'dashboard' && isTeacher && (
+            <div className="asn-dashboard">
+              <h3>{t('statistics', 'Statistics')}</h3>
+              {renderDashboard()}
+            </div>
+          )}
         </div>
-        <div className="sg-block"></div>
       </div>
     </>
   );

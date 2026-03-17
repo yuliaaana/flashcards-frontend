@@ -707,3 +707,60 @@ label.asn-label {
   width: 120px;
 }
 
+/* Dashboard Styles */
+.asn-dashboard {
+  margin-top: 12px;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.metric-card {
+  padding: 20px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(14, 129, 200, 0.2);
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.metric-value {
+  font-size: 2rem;
+  color: #0e81c8;
+  font-weight: 700;
+}
+
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dashboard-section h4 {
+  margin: 8px 0 12px;
+  font-size: 1.05rem;
+  color: #333;
+}
+
