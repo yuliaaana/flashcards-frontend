@@ -6,7 +6,6 @@ import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom'
 import Header from './components/homepage/Header';
 import { useTranslation } from 'react-i18next';
 import './styles/groups.css';
-import './styles/dashboard.css';
 
 const API_URL = 'http://127.0.0.1:5000/api';
 
@@ -193,6 +192,22 @@ const AssignmentPage = ({ user }) => {
   };
 
   const renderDashboard = () => {
+    /*const stats = calculateDashboardStats();
+    const dataToAnalyze = results;
+
+    if (dataToAnalyze.length === 0) {
+          return <p className="gp-empty">{t('noResults')}</p>;
+    }
+
+    const scores = dataToAnalyze.map(r => Math.round((r.score / r.total) * 100));
+    const bins = [0, 20, 40, 60, 80, 100];
+    const binLabels = bins.map((b, i) => i === bins.length - 1 ? `${b}+` : `${b}-${bins[i + 1] - 1}`);
+    const binCounts = bins.map((b, i) =>
+      i === bins.length - 1
+        ? scores.filter(s => s >= b).length
+        : scores.filter(s => s >= b && s < bins[i + 1]).length
+    );/*/
+
     const stats = calculateDashboardStats();
     const dataToAnalyze = results;
 
@@ -261,76 +276,62 @@ const AssignmentPage = ({ user }) => {
 
     return (
       <div className="dashboard-content">
-        <div className="dashboard-flex-row">
+        <div style={{ display: 'flex', gap: '30px', marginBottom: '30px' }}>
           {/* LEFT SIDE - CHART */}
-          <div className="dashboard-flex-col">
-            <div className="dashboard-chart-container">
-              <Bar data={chartData} options={chartOptions} height={600} width={850} />
-            </div>
-          </div>
-
-          {/* VERTICAL DIVIDER */}
-          <div className="dashboard-divider"></div>
-
-          {/* RIGHT SIDE - STUDENT LISTS */}
-          <div className="dashboard-flex-col dashboard-student-lists">
-            {/* Students who didn't take the test */}
-            <div className="dashboard-section dashboard-not-taken">
-              <h4 className="dashboard-section-title dashboard-not-taken-title">
-                <span className="dashboard-section-count dashboard-not-taken-count">
-                  {notTaken.length}
-                </span>
-                {t('studentsNotTaken', "Didn't Take Test")}
-              </h4>
-              {notTaken.length > 0 ? (
-                <ul className="dashboard-not-taken-list">
-                  {notTaken.map(s => (
-                    <li key={s.id} className="dashboard-not-taken-list-item">
-                      <span className="dashboard-dot dashboard-dot-red">●</span>
-                      {transliterate(s.username || s.name || s.email || s.id)}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="dashboard-all-taken">✓ {t('allStudentsTaken', 'All took test')}</p>
-              )}
-            </div>
-
-            {/* Students who didn't pass the test */}
-            <div className="dashboard-section dashboard-not-passed">
-              <h4 className="dashboard-section-title dashboard-not-passed-title">
-                <span className="dashboard-section-count dashboard-not-passed-count">
-                  {notPassed.length}
-                </span>
-                {t('studentsNotPassed', "Didn't Pass (<50%)")}
-              </h4>
-              {notPassed.length > 0 ? (
-                <ul className="dashboard-not-passed-list">
-                  {notPassed.map(item => (
-                    <li key={item.member.id} className="dashboard-not-passed-list-item">
-                      <div className="dashboard-not-passed-list-item-header">
-                        <span className="dashboard-dot dashboard-dot-orange">●</span>
-                        <strong className="dashboard-not-passed-list-item-name">{transliterate(item.member.username || item.member.name || item.member.email)}</strong>
-                      </div>
-                      <ul className="dashboard-not-passed-list-results">
-                        {item.results.map((r, idx) => (
-                          <li key={idx} className="dashboard-not-passed-list-result">
-                            {r.deck_name || t('allDecks', 'All Decks')}: <strong>{r.score}/{r.total}</strong> ({Math.round((r.score / r.total) * 100)}%)
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="dashboard-all-passed">✓ {t('allStudentsPassed', 'All passed')}</p>
-              )}
+          <div style={{ flex: 1, minWidth: '0' }}>
+            <div style={{ backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                  <Bar data={chartData} options={chartOptions} height={400} width={850} />
             </div>
           </div>
         </div>
 
-        {/* Metrics */}
-        <hr className="dashboard-delimiter" />
+        {/* Students who didn't take the test */}
+        {notTaken.length > 0 ? (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#e74c3c' }}>
+              {t('studentsNotTaken', "Students who didn't take the test")} ({notTaken.length})
+            </h4>
+            <ul style={{ color: '#e74c3c', fontWeight: 600 }}>
+              {notTaken.map(s => (
+                <li key={s.id}>
+                  {transliterate(s.username || s.name || s.email || s.id)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#27ae60' }}>✓ {t('allStudentsTaken', 'All students have taken the test.')}</h4>
+          </div>
+        )}
+
+        {/* Students who didn't pass the test */}
+        {notPassed.length > 0 ? (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#ff9800' }}>
+              {t('studentsNotPassed', "Students who didn't pass (score < 50%)")} ({notPassed.length})
+            </h4>
+            <ul style={{ color: '#ff9800', fontWeight: 600 }}>
+              {notPassed.map(item => (
+                <li key={item.member.id}>
+                  <strong>{transliterate(item.member.username || item.member.name || item.member.email)}</strong>
+                  <ul style={{ marginLeft: '20px', marginTop: '5px', fontWeight: 'normal' }}>
+                    {item.results.map((r, idx) => (
+                      <li key={idx} style={{ fontSize: '0.9em' }}>
+                        {r.deck_name || t('allDecks', 'All Decks')}: {r.score}/{r.total} ({Math.round((r.score / r.total) * 100)}%)
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="dashboard-section">
+            <h4 style={{ color: '#27ae60' }}>✓ {t('allStudentsPassed', 'All students who took the test passed.')}</h4>
+          </div>
+        )}
+
         <div className="dashboard-metrics">
           <div className="metric-card">
             <div className="metric-label">{t('totalAttempts', 'Total Attempts')}</div>
@@ -353,38 +354,33 @@ const AssignmentPage = ({ user }) => {
             <div className="metric-value">{stats.passRate}%</div>
           </div>
         </div>
-        <hr className="dashboard-delimiter" />
 
-        {/* Results by Mode */}
         {Object.keys(stats.byMode).length > 0 && (
-          <>
-            <div className="dashboard-section dashboard-by-mode">
-              <h4>{t('byMode', 'Results by Mode')}</h4>
-              <table className="asn-results-table">
-                <thead>
-                  <tr>
-                    <th>{t('mode')}</th>
-                    <th>{t('attempts', 'Attempts')}</th>
-                    <th>{t('avgScore', 'Avg Score')}</th>
+          <div className="dashboard-section">
+            <h4>{t('byMode', 'Results by Mode')}</h4>
+            <table className="asn-results-table">
+              <thead>
+                <tr>
+                  <th>{t('mode')}</th>
+                  <th>{t('attempts', 'Attempts')}</th>
+                  <th>{t('avgScore', 'Avg Score')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(stats.byMode).map(([mode, data]) => (
+                  <tr key={mode}>
+                    <td>{transliterate(mode)}</td>
+                    <td>{data.count}</td>
+                    <td>{data.avgScore}%</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {Object.entries(stats.byMode).map(([mode, data]) => (
-                    <tr key={mode}>
-                      <td>{transliterate(mode)}</td>
-                      <td>{data.count}</td>
-                      <td>{data.avgScore}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
 
-        {/* Results by Deck */}
         {Object.keys(stats.byDeck).length > 0 && (
-          <div className="dashboard-section dashboard-by-deck">
+          <div className="dashboard-section">
             <h4>{t('byDeck', 'Results by Deck')}</h4>
             <table className="asn-results-table">
               <thead>
@@ -408,12 +404,6 @@ const AssignmentPage = ({ user }) => {
         )}
       </div>
     );
-  };
-
-  if (loading) return <div>{t('loading')}</div>;
-  if (!assignment) return <div>Assignment not found</div>;
-
-  const displayResults = isTeacher ? results : myResults;
 
   return (
     <>
