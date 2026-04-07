@@ -561,7 +561,7 @@ const GroupPage = ({ user }) => {
                   className="gp-add-btn btn-dashboard"
                   onClick={handleOpenDashboard}
                 >
-                  📊 {t('groupDashboard') || 'Group dashboard'}
+                  {t('groupDashboard') || 'Group dashboard'}
                 </button>
               </div>
             )}
@@ -645,7 +645,7 @@ const GroupPage = ({ user }) => {
             {isTeacher && showDashboard && (
               <div className="gp-dashboard">
                 <div className="gp-dashboard-header">
-                  <h3>📊 {t('groupDashboard') || 'Group dashboard'}</h3>
+                  <h3>{t('groupDashboard') || 'Group dashboard'}</h3>
                   <button
                     className="gp-remove-btn"
                     onClick={() => setShowDashboard(false)}

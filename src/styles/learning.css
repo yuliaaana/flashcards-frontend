@@ -37,7 +37,7 @@
   border: 1px solid #b6b6f7;
   margin-bottom: 12px;
   width: 100%;
-  max-width: 560px;
+  min-width: 460px;
 }
 .written-correct {
   color: #2e7d32;
@@ -396,4 +396,20 @@ h5,p{
 
 .written-input-test {
   max-width: 760px;
+}
+
+.radio-block input[type="radio"] {
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+
+  appearance: auto !important;
+  -webkit-appearance: radio !important;
+
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+
+  margin: 0;
+  flex-shrink: 0;
 }
