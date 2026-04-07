@@ -1,0 +1,24 @@
+.gp-teacher-actions { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.btn-dashboard { background: #f0f4ff; border-color: #b0c4f0; }
+
+.gp-dashboard { border: 1px solid #e0e0e0; border-radius: 10px; padding: 16px; margin-bottom: 16px; background: #fafafa; }
+.gp-dashboard-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.dashboard-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+.dash-stat { background: #fff; border-radius: 8px; padding: 10px 12px; text-align: center; border: 1px solid #eee; }
+.dash-stat-label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; }
+.dash-stat-val { display: block; font-size: 20px; font-weight: 500; }
+.dashboard-table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid #eee; }
+.dashboard-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dashboard-table thead th { background: #f5f5f5; padding: 9px 13px; text-align: left; font-weight: 500; color: #666; border-bottom: 1px solid #eee; }
+.dashboard-table tbody tr { border-bottom: 1px solid #f0f0f0; }
+.dashboard-table tbody tr:last-child { border-bottom: none; }
+.dashboard-table tbody tr:hover { background: #fafafa; }
+.dashboard-table td { padding: 9px 13px; }
+.dash-score-row { display: flex; align-items: center; gap: 8px; }
+.dash-score-bar { flex: 1; height: 6px; border-radius: 3px; background: #e1f5ee; min-width: 50px; overflow: hidden; }
+.dash-score-fill { height: 100%; border-radius: 3px; background: #1D9E75; }
+.dash-score-txt { font-size: 12px; color: #666; min-width: 32px; text-align: right; }
+.dash-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; }
+.dash-badge-done { background: #EAF3DE; color: #3B6D11; }
+.dash-badge-progress { background: #FAEEDA; color: #854F0B; }
+.dash-badge-miss { background: #FCEBEB; color: #A32D2D; }

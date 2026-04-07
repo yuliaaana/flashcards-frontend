@@ -72,5 +72,30 @@
     "multipleChoice": "Multiple Choice",
     "writeDefinition": "Write Definition",
     "writeTerm": "Write Term",
-    "startTest": "Start Test"
+    "startTest": "Start Test",
+    
+  "sum": "Total",
+  "sum100": "100 scale",
+
+  "complete": "Complete",
+  "notStarted": "Not started",
+  "inProgress": "In progress",
+
+  "allAssignments": "All assignments",
+
+  "students": "Students",
+
+  "avgCompletion": "Average Completion",
+
+  "assignment": "Assignment",
+
+  "assignmentsDone": "Completed",
+  "lastActivity": "Last Activity",
+  "status": "Status",
+
+
+
+  "noData": "No data"
+
+
 }

@@ -128,6 +128,66 @@
     "lowestScore": "Мін.бал",
     "passRate": "Відсоток здачі",
     "byMode"   : "Загальний підсумок",
-    "byDeck"   : "Підсумок за набором"
+    "byDeck"   : "Підсумок за набором",
+  "groupDashboard": "Дашборд групи",
+  "students": "Студенти",
+  "assignments": "Завдання",
+  "avgCompletion": "Середнє виконання",
+  "avgScore": "Сер. бал",
+
+  "allAssignments": "Усі завдання",
+  "assignment": "Завдання",
+
+  "student": "Студент",
+  "assignmentsDone": "Виконано",
+  "lastActivity": "Остання активність",
+  "status": "Статус",
+
+  "sum": "Сума",
+  "sum100": "У 100-бальній шкалі",
+
+  "complete": "Завершено",
+  "notStarted": "Не розпочато",
+  "inProgress": "В процесі",
+
+  "noData": "Немає даних",
+
+  "loading": "Завантаження...",
+  "groupNotFound": "Групу не знайдено",
+
+  "failedLoadGroup": "Не вдалося завантажити групу",
+
+  "decks": "Колоди",
+  "folders": "Папки",
+  "members": "Учасники",
+
+  "noDecks": "Немає колод",
+  "noFolders": "Немає папок",
+  "noMembers": "Немає учасників",
+  "noAssignments": "Немає завдань",
+
+  "selectDeck": "Оберіть колоду",
+  "selectFolder": "Оберіть папку",
+
+  "createAssignment": "Створити завдання",
+  "assignmentTitle": "Назва завдання",
+  "assignmentDescription": "Опис завдання",
+  "dueDate": "Дата здачі",
+  "due": "До",
+  "noDueDate": "Без дедлайну",
+
+  "selectDecksForAssignment": "Оберіть колоди для завдання",
+  "selectTestModes": "Оберіть режими тесту",
+
+  "multipleChoice": "Тести",
+  "matchMode": "Відповідність",
+  "writeDefinition": "Написати визначення",
+  "writeTerm": "Написати слово",
+
+  "viewAssignment": "Відкрити",
+  "deleteAssignment": "Видалити",
+
+  "backToGroups": "Назад до груп"
+
 
 }

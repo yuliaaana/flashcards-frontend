@@ -357,53 +357,32 @@ const GroupPage = ({ user }) => {
     ? Math.round(dashboardData.reduce((s, r) => s + (r.avg_score || 0), 0) / dashboardData.length)
     : 0;
 
-  const getAssignmentResult = (row, assignmentId) => {
-    return row.assignment_results?.find(
+  const getAssignmentScore = (row, assignmentId) => {
+    const result = row.assignment_results?.find(
       ar => ar.assignment_id === assignmentId
-    ) || null;
-  };
-
-  const getAssignmentDisplay = (row, assignmentId) => {
-    const result = getAssignmentResult(row, assignmentId);
+    );
 
     if (!result) return null;
 
-    const earned = typeof result.earned_score === 'number'
-      ? result.earned_score
+    return typeof result.avg_score === 'number'
+      ? Math.round(result.avg_score)
       : null;
-
-    const possible = typeof result.possible_score === 'number'
-      ? result.possible_score
-      : null;
-
-    if (earned === null || possible === null) return null;
-
-    return `${earned}/${possible}`;
   };
 
   const getStudentTotalRaw = (row) => {
     return assignments.reduce((sum, assignment) => {
-      const result = getAssignmentResult(row, assignment.id);
-      const earned = typeof result?.earned_score === 'number' ? result.earned_score : 0;
-      return sum + earned;
-    }, 0);
-  };
-
-  const getStudentTotalPossible = (row) => {
-    return assignments.reduce((sum, assignment) => {
-      const result = getAssignmentResult(row, assignment.id);
-      const possible = typeof result?.possible_score === 'number' ? result.possible_score : 0;
-      return sum + possible;
+      const score = getAssignmentScore(row, assignment.id);
+      return sum + (score ?? 0);
     }, 0);
   };
 
   const getStudentTotal100 = (row) => {
+    if (!assignments.length) return 0;
+
     const totalRaw = getStudentTotalRaw(row);
-    const totalPossible = getStudentTotalPossible(row);
+    const maxRaw = assignments.length * 100;
 
-    if (!totalPossible) return 0;
-
-    return Math.round((totalRaw / totalPossible) * 100);
+    return Math.round((totalRaw / maxRaw) * 100);
   };
 
   if (loading) return <div>{t('loading')}</div>;
@@ -696,16 +675,16 @@ const GroupPage = ({ user }) => {
                               {selectedDashboardAsn === 'all' ? (
                                 <>
                                   {assignments.map(a => {
-                                    const display = getAssignmentDisplay(r, a.id);
+                                    const score = getAssignmentScore(r, a.id);
                                     return (
                                       <td key={a.id}>
-                                        {display ?? '—'}
+                                        {score !== null ? `${score}` : '—'}
                                       </td>
                                     );
                                   })}
 
                                   <td>
-                                    <strong>{getStudentTotalRaw(r)}/{getStudentTotalPossible(r)}</strong>
+                                    <strong>{getStudentTotalRaw(r)}</strong>
                                   </td>
 
                                   <td>
