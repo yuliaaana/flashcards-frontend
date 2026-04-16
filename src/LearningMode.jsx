@@ -96,6 +96,7 @@ export default function LearningMode() {
     setCurrentRoundCards(roundCards);
     setReviewedCards(new Set());
     setCurrentCard(roundCards[0]);
+    setIsFlipped(false);
   };
 
   const handleRestart = () => {
@@ -166,7 +167,7 @@ export default function LearningMode() {
       .then(response => response.json())
       .then(data => {
         setFlashcards(prevCards => prevCards.map(card => card.id === data.id ? data : card));
-        selectNextCard(); 
+        handleNextCard();
       })
       .catch(error => {
         console.error('Error updating flashcard:', error);
@@ -196,24 +197,23 @@ export default function LearningMode() {
                 className={`flashcard-learning ${isFlipped ? 'flipped-learning' : ''}`}
                 onClick={() => setIsFlipped(!isFlipped)}
               >
-                {!isFlipped ? (
+                <div className="card-face card-front">
                   <div className="learn-front">
                     <h5>{currentCard.front_title}</h5>
                   </div>
-                ) : (
-                  <div className='back-content'>
-                    <div className="learn-back">
-                      <h5>{currentCard.back_title}</h5>
-                      <p>{currentCard.back_description}</p>
-                    </div>
-                    <div className="confidence-buttons">
-                      <button className="btn-conf" onClick={() => handleConfidence('fail')}>{t("fail")}</button>
-                      <button className="btn-conf" onClick={() => handleConfidence('hard')}>{t("hard")}</button>
-                      <button className="btn-conf" onClick={() => handleConfidence('good')}>{t("good")}</button>
-                      <button className="btn-conf" onClick={() => handleConfidence('excellent')}>{t("excellent")}</button>
-                    </div>
+                </div>
+                <div className="card-face card-back">
+                  <div className="learn-back">
+                    <h5>{currentCard.back_title}</h5>
+                    <p>{currentCard.back_description}</p>
                   </div>
-                )}
+                  <div className="confidence-buttons" onClick={(e) => e.stopPropagation()}>
+                    <button className="btn-conf btn-conf-flip" onClick={() => handleConfidence('fail')}>{t("fail")}</button>
+                    <button className="btn-conf btn-conf-flip" onClick={() => handleConfidence('hard')}>{t("hard")}</button>
+                    <button className="btn-conf btn-conf-flip" onClick={() => handleConfidence('good')}>{t("good")}</button>
+                    <button className="btn-conf btn-conf-flip" onClick={() => handleConfidence('excellent')}>{t("excellent")}</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
