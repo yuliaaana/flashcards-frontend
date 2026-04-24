@@ -24,6 +24,7 @@ import StudyGroupsPage from './StudyGroupsPage';
 import GroupPage from './GroupPage';
 import AssignmentPage from './AssignmentPage';
 import EditGroupPage from './EditGroupPage';
+import SearchResults from './SearchResults';
 
 
 export default function MainApp() {
@@ -51,6 +52,7 @@ export default function MainApp() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/homepage" element={<HomePage />} />
+      <Route path="/search" element={<SearchResults />} />
       <Route path="/edit-profile" element={<EditProfile />} />
       <Route path="/profile/:userId" element={<Profile />} />
       <Route path="/create-deck" element={<CreateDeckPage />} />

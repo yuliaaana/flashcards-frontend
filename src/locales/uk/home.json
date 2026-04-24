@@ -5,6 +5,12 @@
     "popularPublicDecks": "Популярні набори карток",
     "goToDecks": "Перейти до усіх наборів карток",
     "goToFolders": "Перейти до усіх папок",
+    "searchResultsFor": "Результати пошуку для",
+    "noResultsFound": "Не знайдено публічних наборів, які відповідають",
+    "tryDifferentKeywords": "Попробуйте пошук з іншими ключовими словами або виберіть популярні набори на головній сторінці.",
+    "noDescription": "Немає опису",
+    "terms": "термінів",
+    "by": "Від",
     "languageEnglish": "English",
     "languageUkrainian": "Ukrainian"
   }

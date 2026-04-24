@@ -94,6 +94,8 @@
     "due": "Термін",
     "noDueDate": "Без терміну",
     "startMode": "Почати",
+    "searchPlaceholder": "Пошук наборів...",
+    "search": "Пошук",
     "score": "Бал",
     "completedAt": "Завершено",
     "student": "Студент",

@@ -73,6 +73,8 @@
     "writeDefinition": "Write Definition",
     "writeTerm": "Write Term",
     "startTest": "Start Test",
+    "searchPlaceholder": "Search decks...",
+    "search": "Search",
     
   "sum": "Total",
   "sum100": "100 scale",

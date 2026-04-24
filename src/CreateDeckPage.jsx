@@ -10,7 +10,7 @@ import "./i18n";
 export default function CreateDeckPage(){
   const navigate = useNavigate();
   const [deckName, setDeckName] = useState("");
-  const [flashcards, setFlashcards] = useState([{ id: 1, front: '', back: '', description: '' }]);
+  const [flashcards, setFlashcards] = useState([{ id: 1, front: '', back: '', description: '', imageUrl: '' }]);
   const [isPublic, setIsPublic] = useState(false); // ← додано
   const { t, i18n } = useTranslation("create");
 
@@ -27,7 +27,8 @@ export default function CreateDeckPage(){
       id: prev.length + 1,
       front: '',
       back: '',
-      description: ''
+      description: '',
+      imageUrl: ''
     }]);
   };
 
@@ -58,7 +59,8 @@ export default function CreateDeckPage(){
         flashcards: validFlashcards.map(card => ({
           front: card.front,
           back: card.back,
-          description: card.description
+          description: card.description,
+          image_url: card.imageUrl || null
         }))
       }),
     })

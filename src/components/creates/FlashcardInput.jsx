@@ -41,6 +41,15 @@ export default function FlashcardInput({ id, onChange }) {
             <span className="flashcard-input-label">{t("enterdescription")}</span>
           </label>
         </div>
+
+        <div className="flashcard-input-group flashcard-items">
+          <label className="flashcard-input-underlined">
+            <input
+              onChange={(e) => handleInputChange('imageUrl', e.target.value)}
+            />
+            <span className="flashcard-input-label">{t("enterimageurl")}</span>
+          </label>
+        </div>
       </div>
     </div>
   );

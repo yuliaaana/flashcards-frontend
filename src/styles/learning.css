@@ -39,6 +39,14 @@
   width: 100%;
   min-width: 460px;
 }
+.written-card-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 12px;
+  margin: 16px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 .written-correct {
   color: #2e7d32;
   font-weight: bold;
@@ -55,10 +63,11 @@
   grid-template-columns: 1fr 3fr;
   gap: 16px;
   align-items: start;
+  padding-bottom: 10px;
 }
 .write-mode-container {
   font-family: "Montserrat", sans-serif;
-  margin: 50px auto;
+  margin: 20px auto;
   padding: 12px;
   border-radius: 16px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.08);
@@ -72,6 +81,7 @@
   width: 100%;
   max-width: 900px; 
   box-sizing: border-box;
+  margin-bottom: 100px;
 }
 /* Match Mode Styles */
 .match-mode-container {
@@ -177,7 +187,7 @@
     align-self: auto;
     order: 0;
     margin-top: 25px;
-    background: rgba(255, 255, 255, 0.00);
+    background: rgba(229, 27, 27, 0);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.0);
     backdrop-filter: blur(10.7px);
@@ -286,12 +296,27 @@
 .flashcard-learning{
     position: relative;
     width: 100%;
-    max-width: 600px;
-    min-height: 260px;
+    max-width: 740px;
+    min-height: 280px;
+    max-height: 280px;
     margin: 0 auto;
     padding: 24px;
     perspective: 1000px;
     cursor: pointer;
+}
+
+.flashcard-learning.has-image {
+    min-height: 280px;
+    max-height: 280px;
+}
+
+
+.flashcard-learning.flipped-learning.has-image {
+     min-height: 460px;
+}
+
+.flashcard-learning.has-image .card-face {
+    padding-bottom: 25px;
 }
 
 .flashcard-learning .card-face {
@@ -305,10 +330,10 @@
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 23px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-    padding: 24px;
+    padding: 30px;
     backface-visibility: hidden;
     transform-style: preserve-3d;
-    transition: transform 0.6s ease;
+    transition: transform 0.6s ease, min-height 0.3s ease;
     text-align: center;
 }
 
@@ -341,6 +366,13 @@
     align-items: center;
 }
 
+.flashcard-learning .learn-back img {
+    width: 340px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+}
 
 h5,p{
     text-align: center;

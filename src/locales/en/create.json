@@ -13,6 +13,7 @@
     "enterfront":"Enter a front title",
     "enterback":"Enter a back title",
     "enterdescription":"Enter description",
+    "enterimageurl":"Enter image URL",
     "publicdeck": "Public deck",
     "privatedeck": "Private deck",
     "editdeck": "Edit deck",

@@ -194,7 +194,7 @@ export default function LearningMode() {
           <div className='learn-items'>
             <div className="learning-mode">
               <div 
-                className={`flashcard-learning ${isFlipped ? 'flipped-learning' : ''}`}
+                className={`flashcard-learning ${isFlipped ? 'flipped-learning' : ''} ${currentCard.image_url ? 'has-image' : ''}`}
                 onClick={() => setIsFlipped(!isFlipped)}
               >
                 <div className="card-face card-front">
@@ -206,6 +206,13 @@ export default function LearningMode() {
                   <div className="learn-back">
                     <h5>{currentCard.back_title}</h5>
                     <p>{currentCard.back_description}</p>
+                    {currentCard.image_url ? (
+                      <img
+                        src={currentCard.image_url}
+                        alt="Definition"
+                        style={{ maxWidth: '100%', marginTop: '16px', borderRadius: '8px' }}
+                      />
+                    ) : null}
                   </div>
                   <div className="confidence-buttons" onClick={(e) => e.stopPropagation()}>
                     <button className="btn-conf btn-conf-flip" onClick={() => handleConfidence('fail')}>{t("fail")}</button>
