@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Header from './components/homepage/Header';
 import './styles/homepage.css';
-import './styles/SearchResults.css';
 import { useTranslation } from "react-i18next";
-import RecentDeckCard from './components/homepage/RecentDeckCard';
 import "./i18n";
 
 export default function SearchResults() {
@@ -59,16 +57,28 @@ export default function SearchResults() {
       <div className="search-page">
         <div className="search-page-container">
           <div className="search-block">
-            <h2 className=" search-title">
+            <h2 className="title search-title">
               {t("searchResultsFor", "Search Results for")} "<strong>{query.trim()}</strong>"
             </h2>
 
             {loading ? (
               <p>{t("loading", "Loading...")}</p>
             ) : results.length > 0 ? (
-              <div className="search-results-row">
+              <div className="search-results-grid">
                 {results.map((deck) => (
-                  <RecentDeckCard key={deck.id} deck={{ deck }} />
+                  <div
+                    key={deck.id}
+                    className="search-result-card"
+                    onClick={() => navigate(`/deck/${deck.id}`)}
+                  >
+                    <div className="card-content">
+                      <h4>{deck.name}</h4>
+                      <p className="card-description">{deck.description || t("noDescription", "No description")}</p>
+                      <p className="card-meta">
+                        {deck.terms} {t("terms", "terms")} • {t("by", "By")} {deck.creator}
+                      </p>
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : (
