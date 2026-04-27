@@ -121,7 +121,7 @@ export default function WrittenMode() {
   return (
     <>
         <Header />
-    <div className="write-mode-container" style={{ paddingBottom: 16 }}>
+    <div className="write-mode-container">
       <h2>{t("writtenMode", "Written Mode")}</h2>
       <div className="write-block">
       <div className="write-subblock radio-block" style={{ marginBottom: 16 }}>
@@ -145,15 +145,8 @@ export default function WrittenMode() {
       </div>
       <div className="write-subblock written-card">
         <div className="written-prompt">{prompt}</div>
-        {currentCard.image_url ? (
-          <img
-            src={currentCard.image_url}
-            alt="Card Image"
-            className="written-card-image"
-          />
-        ) : null}
         <input
-          className="written-input"
+          className="written-input written-input-test-2"
           type="text"
           value={input}
           onChange={e => setInput(e.target.value)}

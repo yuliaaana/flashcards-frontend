@@ -3,7 +3,6 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import Header from './components/homepage/Header';
 import { useTranslation } from 'react-i18next';
 import './styles/groups.css';
-import './styles/dashboard_gen.css';
 
 const API_URL = 'http://127.0.0.1:5000/api';
 
@@ -357,91 +356,6 @@ const GroupPage = ({ user }) => {
     ? Math.round(dashboardData.reduce((s, r) => s + (r.avg_score || 0), 0) / dashboardData.length)
     : 0;
 
-  const getAssignmentResult = (row, assignmentId) => {
-    return row.assignment_results?.find(
-      ar => ar.assignment_id === assignmentId
-    ) || null;
-  };
-
-  const getAssignmentDisplay = (row, assignmentId) => {
-    const result = getAssignmentResult(row, assignmentId);
-
-    if (!result) return null;
-
-    const earned = typeof result.earned_score === 'number'
-      ? result.earned_score
-      : null;
-
-    const possible = typeof result.possible_score === 'number'
-      ? result.possible_score
-      : null;
-
-    if (earned === null || possible === null) return null;
-
-    return `${earned}/${possible}`;
-  };
-
-  const getSelectedAssignmentResult = (row) => {
-    if (selectedDashboardAsn === 'all') return null;
-
-    return row.assignment_results?.find(
-      ar => ar.assignment_id === parseInt(selectedDashboardAsn)
-    ) || null;
-  };
-
-  const getSelectedAssignmentPercent = (row) => {
-    const result = getSelectedAssignmentResult(row);
-    if (!result) return 0;
-
-    if (typeof result.avg_score === 'number') {
-      return Math.round(result.avg_score);
-    }
-
-    const earned = typeof result.earned_score === 'number' ? result.earned_score : 0;
-    const possible = typeof result.possible_score === 'number' ? result.possible_score : 0;
-
-    if (!possible) return 0;
-
-    return Math.round((earned / possible) * 100);
-  };
-
-  const getSelectedAssignmentDisplay = (row) => {
-    const result = getSelectedAssignmentResult(row);
-    if (!result) return '—';
-
-    const earned = typeof result.earned_score === 'number' ? result.earned_score : null;
-    const possible = typeof result.possible_score === 'number' ? result.possible_score : null;
-
-    if (earned === null || possible === null) return '—';
-
-    return `${earned}/${possible}`;
-  };
-
-  const getStudentTotalRaw = (row) => {
-    return assignments.reduce((sum, assignment) => {
-      const result = getAssignmentResult(row, assignment.id);
-      const earned = typeof result?.earned_score === 'number' ? result.earned_score : 0;
-      return sum + earned;
-    }, 0);
-  };
-
-  const getStudentTotalPossible = (row) => {
-    return assignments.reduce((sum, assignment) => {
-      const result = getAssignmentResult(row, assignment.id);
-      const possible = typeof result?.possible_score === 'number' ? result.possible_score : 0;
-      return sum + possible;
-    }, 0);
-  };
-
-  const getStudentTotal100 = (row) => {
-    const totalRaw = getStudentTotalRaw(row);
-    const totalPossible = getStudentTotalPossible(row);
-
-    if (!totalPossible) return 0;
-
-    return Math.round((totalRaw / totalPossible) * 100);
-  };
-
   if (loading) return <div>{t('loading')}</div>;
   if (!group) return <div>{t('groupNotFound')}</div>;
 
@@ -457,7 +371,9 @@ const GroupPage = ({ user }) => {
           <hr style={{ margin: '8px 0' }} />
 
           <div className="gp-content">
+            {/* Left: Decks & Folders */}
             <div className="gp-left">
+              {/* Decks section */}
               <div className="gp-section">
                 <h3>{t('decks') || 'Decks'}</h3>
                 {isTeacher && (
@@ -492,6 +408,7 @@ const GroupPage = ({ user }) => {
 
               <hr className="gp-divider" />
 
+              {/* Folders section */}
               <div className="gp-section">
                 <h3>{t('folders') || 'Folders'}</h3>
                 {isTeacher && (
@@ -525,8 +442,10 @@ const GroupPage = ({ user }) => {
               </div>
             </div>
 
+            {/* Vertical divider */}
             <div className="gp-vertical-divider"></div>
 
+            {/* Right: Members */}
             <div className="gp-right">
               <div className="gp-section">
                 <h3>{t('members')} ({members.length})</h3>
@@ -546,9 +465,11 @@ const GroupPage = ({ user }) => {
 
           <hr className="gp-divider" style={{ margin: '16px 0' }} />
 
+          {/* Assignments Section */}
           <div className="gp-assignments-section">
             <h3>{t('assignments')}</h3>
 
+            {/* Teacher action buttons row */}
             {isTeacher && !showCreateAssignment && (
               <div className="gp-teacher-actions">
                 <button
@@ -561,7 +482,7 @@ const GroupPage = ({ user }) => {
                   className="gp-add-btn btn-dashboard"
                   onClick={handleOpenDashboard}
                 >
-                  {t('groupDashboard') || 'Group dashboard'}
+                  📊 {t('groupDashboard') || 'Group dashboard'}
                 </button>
               </div>
             )}
@@ -642,10 +563,11 @@ const GroupPage = ({ user }) => {
               </form>
             )}
 
+            {/* Group Dashboard Panel */}
             {isTeacher && showDashboard && (
               <div className="gp-dashboard">
                 <div className="gp-dashboard-header">
-                  <h3>{t('groupDashboard') || 'Group dashboard'}</h3>
+                  <h3>📊 {t('groupDashboard') || 'Group dashboard'}</h3>
                   <button
                     className="gp-remove-btn"
                     onClick={() => setShowDashboard(false)}
@@ -693,35 +615,18 @@ const GroupPage = ({ user }) => {
                   <div className="dashboard-table-wrap">
                     <table className="dashboard-table">
                       <thead>
-                        {selectedDashboardAsn === 'all' ? (
-                          <tr>
-                            <th>{t('student') || 'Student'}</th>
-                            {assignments.map((a, index) => (
-                              <th key={a.id}>
-                                {a.title || `${t('assignment') || 'Assignment'} ${index + 1}`}
-                              </th>
-                            ))}
-                            <th>{t('sum') || 'Sum'}</th>
-                            <th>{t('sum100') || 'Sum (100 scale)'}</th>
-                            <th>{t('lastActivity') || 'Last activity'}</th>
-                            <th>{t('status') || 'Status'}</th>
-                          </tr>
-                        ) : (
-                          <tr>
-                            <th>{t('student') || 'Student'}</th>
-                            <th>{t('assignmentsDoneSingle') || 'Done'}</th>
-                            <th>{t('score') || 'Score'}</th>
-                            <th>{t('lastActivity') || 'Last activity'}</th>
-                            <th>{t('status') || 'Status'}</th>
-                          </tr>
-                        )}
+                        <tr>
+                          <th>{t('student') || 'Student'}</th>
+                          <th>{t('assignmentsDone') || 'Done'}</th>
+                          <th>{t('avgScore') || 'Avg score'}</th>
+                          <th>{t('lastActivity') || 'Last activity'}</th>
+                          <th>{t('status') || 'Status'}</th>
+                        </tr>
                       </thead>
                       <tbody>
                         {dashboardFiltered.map(r => {
                           const isDone = r.assignments_done >= assignments.length;
                           const notStarted = r.assignments_done === 0;
-                          const hasSelectedAssignment = !!getSelectedAssignmentResult(r);
-
                           return (
                             <tr key={r.user_id}>
                               <td>
@@ -729,72 +634,32 @@ const GroupPage = ({ user }) => {
                                   {r.username}
                                 </Link>
                               </td>
-
-                              {selectedDashboardAsn === 'all' ? (
-                                <>
-                                  {assignments.map(a => {
-                                    const display = getAssignmentDisplay(r, a.id);
-                                    return (
-                                      <td key={a.id}>
-                                        {display ?? '—'}
-                                      </td>
-                                    );
-                                  })}
-
-                                  <td>
-                                    <strong>{getStudentTotalRaw(r)}/{getStudentTotalPossible(r)}</strong>
-                                  </td>
-
-                                  <td>
-                                    <strong>{getStudentTotal100(r)}%</strong>
-                                  </td>
-
-                                  <td>
-                                    {r.last_activity
-                                      ? new Date(r.last_activity).toLocaleDateString()
-                                      : '—'}
-                                  </td>
-
-                                  <td>
-                                    <span className={`dash-badge ${isDone ? 'dash-badge-done' : notStarted ? 'dash-badge-miss' : 'dash-badge-progress'}`}>
-                                      {isDone
-                                        ? (t('complete') || 'Complete')
-                                        : notStarted
-                                          ? (t('notStarted') || 'Not started')
-                                          : (t('inProgress') || 'In progress')}
-                                    </span>
-                                  </td>
-                                </>
-                              ) : (
-                                <>
-                                  <td>{hasSelectedAssignment ? '1 / 1' : '0 / 1'}</td>
-                                  <td>
-                                    <div className="dash-score-row">
-                                      <div className="dash-score-bar">
-                                        <div
-                                          className="dash-score-fill"
-                                          style={{ width: `${Math.min(getSelectedAssignmentPercent(r), 100)}%` }}
-                                        />
-                                      </div>
-                                      <span className="dash-score-txt">
-                                        {getSelectedAssignmentDisplay(r)} ({getSelectedAssignmentPercent(r)}%)
-                                      </span>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    {r.last_activity
-                                      ? new Date(r.last_activity).toLocaleDateString()
-                                      : '—'}
-                                  </td>
-                                  <td>
-                                    <span className={`dash-badge ${hasSelectedAssignment ? 'dash-badge-done' : 'dash-badge-miss'}`}>
-                                      {hasSelectedAssignment
-                                        ? (t('complete') || 'Complete')
-                                        : (t('notStarted') || 'Not started')}
-                                    </span>
-                                  </td>
-                                </>
-                              )}
+                              <td>{r.assignments_done} / {assignments.length}</td>
+                              <td>
+                                <div className="dash-score-row">
+                                  <div className="dash-score-bar">
+                                    <div
+                                      className="dash-score-fill"
+                                      style={{ width: `${Math.min(r.avg_score || 0, 100)}%` }}
+                                    />
+                                  </div>
+                                  <span className="dash-score-txt">{Math.round(r.avg_score || 0)}%</span>
+                                </div>
+                              </td>
+                              <td>
+                                {r.last_activity
+                                  ? new Date(r.last_activity).toLocaleDateString()
+                                  : '—'}
+                              </td>
+                              <td>
+                                <span className={`dash-badge ${isDone ? 'dash-badge-done' : notStarted ? 'dash-badge-miss' : 'dash-badge-progress'}`}>
+                                  {isDone
+                                    ? (t('complete') || 'Complete')
+                                    : notStarted
+                                      ? (t('notStarted') || 'Not started')
+                                      : (t('inProgress') || 'In progress')}
+                                </span>
+                              </td>
                             </tr>
                           );
                         })}

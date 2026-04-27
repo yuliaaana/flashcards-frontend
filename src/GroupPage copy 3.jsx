@@ -381,42 +381,6 @@ const GroupPage = ({ user }) => {
     return `${earned}/${possible}`;
   };
 
-  const getSelectedAssignmentResult = (row) => {
-    if (selectedDashboardAsn === 'all') return null;
-
-    return row.assignment_results?.find(
-      ar => ar.assignment_id === parseInt(selectedDashboardAsn)
-    ) || null;
-  };
-
-  const getSelectedAssignmentPercent = (row) => {
-    const result = getSelectedAssignmentResult(row);
-    if (!result) return 0;
-
-    if (typeof result.avg_score === 'number') {
-      return Math.round(result.avg_score);
-    }
-
-    const earned = typeof result.earned_score === 'number' ? result.earned_score : 0;
-    const possible = typeof result.possible_score === 'number' ? result.possible_score : 0;
-
-    if (!possible) return 0;
-
-    return Math.round((earned / possible) * 100);
-  };
-
-  const getSelectedAssignmentDisplay = (row) => {
-    const result = getSelectedAssignmentResult(row);
-    if (!result) return '—';
-
-    const earned = typeof result.earned_score === 'number' ? result.earned_score : null;
-    const possible = typeof result.possible_score === 'number' ? result.possible_score : null;
-
-    if (earned === null || possible === null) return '—';
-
-    return `${earned}/${possible}`;
-  };
-
   const getStudentTotalRaw = (row) => {
     return assignments.reduce((sum, assignment) => {
       const result = getAssignmentResult(row, assignment.id);
@@ -561,7 +525,7 @@ const GroupPage = ({ user }) => {
                   className="gp-add-btn btn-dashboard"
                   onClick={handleOpenDashboard}
                 >
-                  {t('groupDashboard') || 'Group dashboard'}
+                  📊 {t('groupDashboard') || 'Group dashboard'}
                 </button>
               </div>
             )}
@@ -645,7 +609,7 @@ const GroupPage = ({ user }) => {
             {isTeacher && showDashboard && (
               <div className="gp-dashboard">
                 <div className="gp-dashboard-header">
-                  <h3>{t('groupDashboard') || 'Group dashboard'}</h3>
+                  <h3>📊 {t('groupDashboard') || 'Group dashboard'}</h3>
                   <button
                     className="gp-remove-btn"
                     onClick={() => setShowDashboard(false)}
@@ -709,8 +673,8 @@ const GroupPage = ({ user }) => {
                         ) : (
                           <tr>
                             <th>{t('student') || 'Student'}</th>
-                            <th>{t('assignmentsDoneSingle') || 'Done'}</th>
-                            <th>{t('score') || 'Score'}</th>
+                            <th>{t('assignmentsDone') || 'Done'}</th>
+                            <th>{t('avgScore') || 'Avg score'}</th>
                             <th>{t('lastActivity') || 'Last activity'}</th>
                             <th>{t('status') || 'Status'}</th>
                           </tr>
@@ -720,7 +684,6 @@ const GroupPage = ({ user }) => {
                         {dashboardFiltered.map(r => {
                           const isDone = r.assignments_done >= assignments.length;
                           const notStarted = r.assignments_done === 0;
-                          const hasSelectedAssignment = !!getSelectedAssignmentResult(r);
 
                           return (
                             <tr key={r.user_id}>
@@ -767,17 +730,17 @@ const GroupPage = ({ user }) => {
                                 </>
                               ) : (
                                 <>
-                                  <td>{hasSelectedAssignment ? '1 / 1' : '0 / 1'}</td>
+                                  <td>{r.assignments_done} / {assignments.length}</td>
                                   <td>
                                     <div className="dash-score-row">
                                       <div className="dash-score-bar">
                                         <div
                                           className="dash-score-fill"
-                                          style={{ width: `${Math.min(getSelectedAssignmentPercent(r), 100)}%` }}
+                                          style={{ width: `${Math.min(r.avg_score || 0, 100)}%` }}
                                         />
                                       </div>
                                       <span className="dash-score-txt">
-                                        {getSelectedAssignmentDisplay(r)} ({getSelectedAssignmentPercent(r)}%)
+                                        {Math.round(r.avg_score || 0)}%
                                       </span>
                                     </div>
                                   </td>
@@ -787,10 +750,12 @@ const GroupPage = ({ user }) => {
                                       : '—'}
                                   </td>
                                   <td>
-                                    <span className={`dash-badge ${hasSelectedAssignment ? 'dash-badge-done' : 'dash-badge-miss'}`}>
-                                      {hasSelectedAssignment
+                                    <span className={`dash-badge ${isDone ? 'dash-badge-done' : notStarted ? 'dash-badge-miss' : 'dash-badge-progress'}`}>
+                                      {isDone
                                         ? (t('complete') || 'Complete')
-                                        : (t('notStarted') || 'Not started')}
+                                        : notStarted
+                                          ? (t('notStarted') || 'Not started')
+                                          : (t('inProgress') || 'In progress')}
                                     </span>
                                   </td>
                                 </>

@@ -27,7 +27,8 @@ export default function EditDeckPage() {
             id: card.id,
             front: card.front_title,
             back: card.back_title,
-            description: card.back_description
+            description: card.back_description,
+            imageUrl: card.image_url || ''
           }))
         );
       })
@@ -52,7 +53,7 @@ export default function EditDeckPage() {
   const addFlashcard = () => {
     setFlashcards(prev => [
       ...prev,
-      { id: Date.now(), front: '', back: '', description: '' }
+      { id: Date.now(), front: '', back: '', description: '', imageUrl: '' }
     ]);
   };
 
@@ -80,7 +81,7 @@ export default function EditDeckPage() {
           front_title: card.front,
           back_title: card.back,
           back_description: card.description,
-          image_url: null
+          image_url: card.imageUrl || null
         }))
       }),
     })
@@ -137,6 +138,7 @@ export default function EditDeckPage() {
                   front={card.front}
                   back={card.back}
                   description={card.description}
+                  imageUrl={card.imageUrl}
                   onDelete={deleteFlashcard}
                 />
               </div>

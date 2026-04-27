@@ -37,7 +37,15 @@
   border: 1px solid #b6b6f7;
   margin-bottom: 12px;
   width: 100%;
-  max-width: 560px;
+  min-width: 460px;
+}
+.written-card-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 12px;
+  margin: 16px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 .written-correct {
   color: #2e7d32;
@@ -55,10 +63,11 @@
   grid-template-columns: 1fr 3fr;
   gap: 16px;
   align-items: start;
+  padding-bottom: 10px;
 }
 .write-mode-container {
   font-family: "Montserrat", sans-serif;
-  margin: 50px auto;
+  margin: 20px auto;
   padding: 12px;
   border-radius: 16px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.08);
@@ -72,6 +81,7 @@
   width: 100%;
   max-width: 900px; 
   box-sizing: border-box;
+  margin-bottom: 100px;
 }
 /* Match Mode Styles */
 .match-mode-container {
@@ -177,9 +187,9 @@
     align-self: auto;
     order: 0;
     margin-top: 25px;
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(229, 27, 27, 0);
     border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.0);
     backdrop-filter: blur(10.7px);
     -webkit-backdrop-filter: blur(16.7px);
     padding: 30px 10px 0px 10px;
@@ -254,17 +264,24 @@
   }
 
   .btn-conf {
+    font-family: "Montserrat", sans-serif;
     background-color: #1f96bed1;
     color: white;
     border: none;
     cursor: pointer;
     border-radius: 10px;
     transition: background-color 0.3s;
-    height: 35px;
-    padding: 0 10px;  
+    height: 50px;
+    padding: 0 10px;
+    font-size: 1rem;
+    font-weight: 500;
     display: flex;  
     align-items: center;  
     justify-content: center;  
+}
+
+.btn-conf-flip{
+    width: 120px;
 }
 
     .btn-conf:hover {
@@ -277,8 +294,84 @@
 }
 
 .flashcard-learning{
-    padding:10px;
-    padding-bottom: 18px;
+    position: relative;
+    width: 100%;
+    max-width: 740px;
+    min-height: 280px;
+    max-height: 280px;
+    margin: 0 auto;
+    padding: 24px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.flashcard-learning.has-image {
+    min-height: 280px;
+    max-height: 280px;
+}
+
+
+.flashcard-learning.flipped-learning.has-image {
+     min-height: 460px;
+}
+
+.flashcard-learning.has-image .card-face {
+    padding-bottom: 25px;
+}
+
+.flashcard-learning .card-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 23px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    padding: 30px;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease, min-height 0.3s ease;
+    text-align: center;
+}
+
+.flashcard-learning .card-front {
+    transform: rotateY(0deg);
+}
+
+.flashcard-learning .card-back {
+    transform: rotateY(180deg);
+}
+
+.flashcard-learning.flipped-learning .card-front {
+    transform: rotateY(-180deg);
+}
+
+.flashcard-learning.flipped-learning .card-back {
+    transform: rotateY(0deg);
+}
+
+.flashcard-learning .learn-front,
+.flashcard-learning .learn-back {
+    width: 100%;
+    text-align: center;
+}
+
+.flashcard-learning .learn-back {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.flashcard-learning .learn-back img {
+    width: 340px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
 }
 
 h5,p{
@@ -396,4 +489,20 @@ h5,p{
 
 .written-input-test {
   max-width: 760px;
+}
+
+.radio-block input[type="radio"] {
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+
+  appearance: auto !important;
+  -webkit-appearance: radio !important;
+
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+
+  margin: 0;
+  flex-shrink: 0;
 }

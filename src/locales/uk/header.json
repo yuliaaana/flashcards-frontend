@@ -94,6 +94,8 @@
     "due": "Термін",
     "noDueDate": "Без терміну",
     "startMode": "Почати",
+    "searchPlaceholder": "Пошук наборів...",
+    "search": "Пошук",
     "score": "Бал",
     "completedAt": "Завершено",
     "student": "Студент",
@@ -128,6 +130,26 @@
     "lowestScore": "Мін.бал",
     "passRate": "Відсоток здачі",
     "byMode"   : "Загальний підсумок",
-    "byDeck"   : "Підсумок за набором"
+    "byDeck"   : "Підсумок за набором",
+  "groupDashboard": "Статистика групи",
+  "students": "Студенти",
+  "avgCompletion": "Середній прогрес",
+
+  "allAssignments": "Усі завдання",
+
+  "assignmentsDone": "Виконано",
+  "lastActivity": "Остання активність",
+  "status": "Статус",
+
+  "sum": "Сума",
+  "sum100": "У 100-бальній шкалі",
+
+  "complete": "Завершено",
+  "notStarted": "Не розпочато",
+  "inProgress": "В процесі",
+
+  "noData": "Немає даних",
+  "assignmentsDoneSingle": "Виконано"
+
 
 }

@@ -20,6 +20,9 @@ export default function Flashcard({ back_description, back_title, confidence_lev
       <div className="back">
         <h5>{back_title}</h5>
         <p>{back_description}</p>
+        {image_url ? (
+          <img src={image_url} alt="card definition" className="flashcard-image" />
+        ) : null}
       </div>
     )}
   </div>

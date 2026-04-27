@@ -5,6 +5,12 @@
     "popularPublicDecks": "Popular public decks",
     "goToDecks": "Go to Decks",
     "goToFolders": "Go to Folders",
+    "searchResultsFor": "Search Results for",
+    "noResultsFound": "No public decks found matching",
+    "tryDifferentKeywords": "Try searching with different keywords or browse popular decks on the home page.",
+    "noDescription": "No description",
+    "terms": "terms",
+    "by": "By",
     "languageEnglish": "English",
     "languageUkrainian": "Ukrainian"
   }
