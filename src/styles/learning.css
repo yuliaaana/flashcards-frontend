@@ -74,7 +74,7 @@
   text-align: center;
   background: rgba(255, 255, 255, 0.35);
   border-radius: 24px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10.7px);
   -webkit-backdrop-filter: blur(16.7px);
   padding: 20px;
@@ -85,6 +85,7 @@
 }
 /* Match Mode Styles */
 .match-mode-container {
+  font-family: "Montserrat", sans-serif;
   margin: 40px auto;
   padding: 32px;
   border-radius: 16px;
@@ -140,13 +141,17 @@
   font-size: 1.1rem;
   border: none;
   border-radius: 8px;
-  background: #59befcc8;
+  /*background: #59bdfc9f;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);*/
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 14px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   color: #333;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
 .match-btn.selected {
-  background: #0e81c8a8;
+  background: #c5c80ea8;
   color: #fff;
 }
 .match-btn.matched {
@@ -226,6 +231,20 @@
     
 
   }
+
+  .confidence-buttons-t {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap:5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: auto;
+    margin-bottom: 0;
+
+    
+
+  }
   
   .btn-conf:nth-child(1) {
     display: block;
@@ -285,12 +304,24 @@
 }
 
     .btn-conf:hover {
-      background-color: #3887c4;
+      background-color: #1775b8;
   }
 
 .back-content {
     display: flex; 
     flex-direction: column; 
+}
+
+.flashcard-learning{
+    position: relative;
+    width: 100%;
+    max-width: 740px;
+    min-height: 280px;
+    max-height: 280px;
+    margin: 0 auto;
+    padding: 24px;
+    perspective: 1000px;
+    cursor: pointer;
 }
 
 .flashcard-learning{
@@ -398,7 +429,7 @@ h5,p{
     -webkit-backdrop-filter: blur(16.7px);
     padding: 20px;
     width: 100%;
-    max-width: 900px; 
+    min-width: 920px; 
     box-sizing: border-box;
   }
 
@@ -408,7 +439,16 @@ h5,p{
     font-size: 24px;
     font-weight: bold;
 }
+.res{
+  text-align: center;
+    font-size: 19px;
 
+
+    margin-bottom: 10px;
+}
+.res2{
+  margin-bottom: 20px;
+}
 .asn-checkbox-label input[type="checkbox"] {
   width: auto;
   min-width: unset;
