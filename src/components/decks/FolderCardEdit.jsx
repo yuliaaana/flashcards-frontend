@@ -89,7 +89,7 @@ export default function FolderCardEdit({ className, created_at, name, decks, fol
             </li>
           ))}
         </ul>
-        <h6>{t("folders:add_new_deck")}</h6>
+        
         <div className="decks-bullet">
           <ListsCheckbox
             className="custom-checkbox"

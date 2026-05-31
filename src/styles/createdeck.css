@@ -9,8 +9,8 @@
 
 .createdeck-items:nth-child(1) {
   display: block;
-  flex-grow: 2;
-  flex-shrink: 1;
+  flex-grow: 4;
+  flex-shrink: 4;
   flex-basis: auto;
   align-self: auto;
   order: 0;
@@ -20,7 +20,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  flex-grow: 2;
+  flex-grow: 1;
   flex-shrink: 1;
   flex-basis: auto;
   align-self: auto;
@@ -33,14 +33,15 @@
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10.7px);
   -webkit-backdrop-filter: blur(16.7px);
-
+  max-width: 1500px;
+  
 
 }
 
 .createdeck-items:nth-child(3) {
   display: block;
-  flex-grow: 2;
-  flex-shrink: 1;
+  flex-grow: 4;
+  flex-shrink: 4;
   flex-basis: auto;
   align-self: auto;
   order: 0;
@@ -67,6 +68,20 @@
   height: 18px;
   cursor: pointer;
   
+}
+
+
+.public-toggle input[type="checkbox"] {
+  grid-column: 1;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+  justify-self: start;
+  cursor: pointer;
+}
+
+.public-toggle input[type="checkbox"] {
+  all: revert;
 }
 
 .public-label-text{

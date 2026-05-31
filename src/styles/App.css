@@ -64,3 +64,11 @@ input {
   padding: 10px;
 
 }
+
+input[type="checkbox"] {
+  all: revert;
+}
+
+input[type="checkbox"] {
+  appearance: auto;
+}

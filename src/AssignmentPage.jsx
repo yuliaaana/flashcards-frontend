@@ -371,7 +371,8 @@ const AssignmentPage = ({ user }) => {
                 <tbody>
                   {Object.entries(stats.byMode).map(([mode, data]) => (
                     <tr key={mode}>
-                      <td>{transliterate(mode)}</td>
+                      {/* <td>{transliterate(mode)}</td> */}
+                      <td>Тест</td>
                       <td>{data.count}</td>
                       <td>{data.avgScore}%</td>
                     </tr>
@@ -519,7 +520,8 @@ const AssignmentPage = ({ user }) => {
                       <tr key={r.id}>
                         {isTeacher && <td>{transliterate(r.username || r.user_id)}</td>}
                         <td>{r.deck_name || (r.deck_id ? r.deck_id : 'All Decks')}</td>
-                        <td>{r.mode}</td>
+                        {/* <td>{r.mode}</td> */}
+                        <td>Тест</td>
                         <td>{r.score}/{r.total}</td>
                         <td>{r.completed_at ? new Date(r.completed_at).toLocaleString() : '-'}</td>
                       </tr>
@@ -564,6 +566,7 @@ const AssignmentPage = ({ user }) => {
           )}
 
           {/* Dashboard Tab */}
+
           {activeTab === 'dashboard' && isTeacher && (
             <div className="asn-dashboard">
               <h3>{t('statistics', 'Statistics')}</h3>
