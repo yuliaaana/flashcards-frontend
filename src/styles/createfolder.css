@@ -1,138 +1,90 @@
 .createfolder-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: stretch;
-    align-content: normal;
-    
-
-  }
-  
-  .createfolder-items:nth-child(1) {
-    display: block;
-    flex-grow: 2;
-    flex-shrink: 1;
-    flex-basis: auto;
-    align-self: auto;
-    order: 0;
-
-  }
-  
-  .createfolder-items:nth-child(2) {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex-grow: 2;
-    flex-shrink: 6;
-    flex-basis: auto;
-    align-self: auto;
-    order: 0;
-    padding: 25px;
-    margin:25px 25px 55px 25px;
-
-    border: 5px; 
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10.7px);
-    -webkit-backdrop-filter: blur(16.7px);
-    gap: 25px; 
-  }
-  
-.inputs{
-  flex-grow: 2;
-  
   display: flex;
-    flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.createfolder-items:nth-child(1),
+.createfolder-items:nth-child(3) {
+  display: none;
+}
+
+.createfolder-items:nth-child(2) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+
+  width: 90%;
+  max-width: 1000px;
+  min-height: 520px;
+
+  padding: 25px;
+  margin: 25px 25px 55px 25px;
+
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10.7px);
+  -webkit-backdrop-filter: blur(16.7px);
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
 }
 
 .title-main {
   font-family: "Montserrat", sans-serif;
-  color: #34678f; 
-  font-size: 2.0rem; 
-  font-weight: bold; 
-  text-align: center; 
+  color: #34678f;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
 }
-
 
 .title-checkbox {
   font-family: "Montserrat", sans-serif;
-  color: #34678f; 
-  font-size: 1.4rem; 
-  font-weight: bold; 
-  
+  color: #34678f;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 25px;
 }
+
 .inputs section {
   margin-top: 25px;
 }
 
-
-.description{
-  height: 20rem;
+.description {
+  height: 36px;
 }
 
-.decks-bullet{
-  flex-grow: 1;
-  
-  margin-top: 15px;
-
-  padding-left: 30px;
-  padding-top: 30px;
-  padding-bottom: 30px;
-
-  background: rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(25.7px);
-    -webkit-backdrop-filter: blur(25.7px);
-
+.did-floating-label-content {
+  position: relative;
+  margin-bottom: 20px;
 }
 
-
-
-
-  .createfolder-items:nth-child(3) {
-    display: block;
-    flex-grow: 2;
-    flex-shrink: 1;
-    flex-basis: auto;
-    align-self: auto;
-    order: 0;
-
-  }
-
-
-.did-floating-label-content { 
-  position:relative; 
-  margin-bottom:20px; 
-  
-}
 .did-floating-label {
- 
-  font-size:13px;
-  font-weight:normal;
-  position:absolute;
-  pointer-events:none;
-  left:15px;
-  top:11px;
-  padding:0 5px;
-  background:#fff;
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
-  -webkit-transition:0.2s ease all;
+  font-size: 13px;
+  position: absolute;
+  pointer-events: none;
+  left: 15px;
+  top: 11px;
+  padding: 0 5px;
+  background: #fff;
+  transition: 0.2s ease all;
   font-family: "Montserrat", sans-serif;
-  color: #333333bc; 
+  color: #333333bc;
   font-weight: bold;
 }
-.did-floating-input, .did-floating-select {
+
+.did-floating-input,
+.did-floating-select {
   font-size: 12px;
   display: block;
-  width: 100%;
+  min-width: 400px;
   height: 36px;
-  padding: 20px 20px;
+  padding: 20px;
   background: #fff;
-  
   color: #323840;
   border: 2px solid #468dc3;
   border-radius: 7px;
@@ -155,40 +107,90 @@
   color: #468dc3;
 }
 
-.checkbox-list {
-  list-style-type: none;  
-  padding: 0;  
-  margin: 0; 
-  
+.create-button {
+  display: flex;
+  margin-top: auto;
 }
 
+.create-button button {
+  padding: 10px 20px;
+  width: 70%;
+  min-width: 450px;
+  max-width: 400px;
+  background-color: #1d8cb1b1;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background-color 0.3s;
+}
+
+.create-button button:hover {
+  background-color: #468dc3;
+}
+
+.decks-bullet {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30px;
+
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(25.7px);
+  -webkit-backdrop-filter: blur(25.7px);
+}
+
+.createfolder-checkbox-block {
+  width: 100%;
+}
+
+.checkbox-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 390px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 
 .checkbox-list li {
-  padding: 8px 0; 
-  font-family: "Montserrat", sans-serif;
-  color: #333; 
-  font-size: 1rem;
+  padding: 12px 0;
+  margin: 0;
 }
 
 .checkbox-label {
-  display: flex;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  column-gap: 12px;
   align-items: center;
+  width: 100%;
   cursor: pointer;
-  padding: 5px;
-  transition: color 0.2s ease;
+  font-family: "Montserrat", sans-serif;
+}
+
+.checkbox-label input[type="checkbox"] {
+  grid-column: 1;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+  justify-self: start;
+  cursor: pointer;
 }
 
 .checkbox-text {
-  margin-left: 8px;
-  transition: color 0.2s ease;
+  grid-column: 2;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.4;
+  text-align: left;
+  word-break: break-word;
 }
 
 .checkbox-label:hover .checkbox-text {
   color: #1d8cb1;
-}
-
-.checkbox-label input[type="checkbox"] {
-  cursor: pointer;
 }
 
 .checkbox-label input[type="checkbox"]:checked + .checkbox-text {
@@ -196,54 +198,15 @@
   font-weight: 500;
 }
 
-
-
 .title {
-
   font-family: "Montserrat", sans-serif;
-  color: #333; 
+  color: #333;
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-
-.checkbox-list input[type="checkbox"] {
-  margin-right: 10px; 
-}
-
-
-.create-button{display:flex;
-  margin-top: auto;
-}
-
-
-.checkbox-list {
-  max-height: 425px; 
-  overflow-y: auto;
-  
-}
-
-.create-button button{
-  padding: 10px 20px;
-  width: 100%;
-    background-color: #1d8cb1b1;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: background-color 0.3s;}
-
-    .create-button button:hover {
-      background-color: #468dc3;
+@keyframes move {
+  100% {
+    transform: translate3d(0, 0, 1px) rotate(360deg);
   }
-  
-
-
-
-
-  @keyframes move {
-    100% {
-        transform: translate3d(0, 0, 1px) rotate(360deg);
-    }
 }
-

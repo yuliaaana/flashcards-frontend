@@ -321,11 +321,11 @@ export default function TestLearningMode() {
           {step === 2 && flashcards.length > 0 && mcqTerms.length > 0 && (
             <div>
               <h3>{t('multipleChoice')}: {mcqIndex + 1} / {mcqTerms.length}</h3>
-              <div className="flashcard-learning flc-cover" style={{margin: '0 auto 16px auto'}}>
+              <div className="flashcard-learning-t flc-cover" style={{margin: '0 auto 16px auto'}}>
                 <div className="learn-front">
                   <h5>{flashcards[mcqTerms[mcqIndex]].front_title}</h5>
                 </div>
-                <div className="confidence-buttons" style={{marginTop: 24}}>
+                <div className="confidence-buttons-t" style={{marginTop: 24}}>
                   {mcqOptions.map((option, idx) => (
                     <button
                       key={option}
@@ -458,9 +458,10 @@ export default function TestLearningMode() {
           {/* Result */}
           {step === 5 && finalScore && (
             <div>
-              <h3>{t('sessionComplete')}</h3>
-              <div>{t('totalPoints')} {finalScore.total} / {finalScore.max}</div>
-              <div>{t('result')} {finalScore.percent}%</div>
+              <h3  className="ch-ttl">{t('sessionComplete')}</h3>
+              <hr className="divider" />
+              <div className="res">{t('totalPoints')} {finalScore.total} / {finalScore.max}</div>
+              <div className="res res2">{t('result')} {finalScore.percent}%</div>
               <button className="mode-btn btn-conf" onClick={() => navigate(`/learn/${deckId}/modes`)}>{t('backToLearningModes')}</button>
             </div>
           )}

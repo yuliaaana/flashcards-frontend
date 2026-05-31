@@ -117,7 +117,7 @@ export default function CreateFolderPage() {
 
           <div className="decks-bullet">
             <ListsCheckbox
-              classname="5"
+              classname="createfolder-checkbox-block"
               title={t("addexistingdecks")}
               items={decks}
               onSelectionChange={setSelectedDecks}
