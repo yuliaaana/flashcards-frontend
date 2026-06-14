@@ -27,7 +27,7 @@
 - **База даних**: [PostgreSQL](https://www.postgresql.org/)
 
 
-## 📌 [Посилання на backend](https://github.com/yuliaaana/coursework-backend)
+## 📌 [Посилання на backend](https://github.com/yuliaaana/flashcards-backend)
 
 
 
